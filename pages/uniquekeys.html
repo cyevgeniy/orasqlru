@@ -1,0 +1,233 @@
+<!--{
+    "Title": "Уникальные ключи",
+    "Links": {
+        "Next": {
+            "Url": "../views/index.html",
+            "Title": "Представления"
+        },
+        "Prev": {
+            "Url": "../foreignkeys/index.html",
+            "Title": "Внешние ключи"
+        }
+        }
+}-->
+
+<div class="doc-head mb-4 container-10">
+    <h5 class="heading-micro heading-muted">Объекты БД</h5>
+    <h1 class="heading-huge heading-heavy">Уникальные ключи</h1>
+</div>
+
+<div class="doc-toc mt-6 mb-6">
+    <nav class="menu menu-underline menu-medium menu-numbered">
+        <ul class="menu-list">
+        <li class="menu-item"><a href="#createkey" class="menu-link">Создание уникальных ключей</a></li>
+        <li class="menu-item"><a href="#multiplecolumns" class="menu-link">Составные уникальные ключи</a></li>
+
+        </ul>
+    </nav>
+</div>
+
+
+<p>
+Возьмем нашу таблицу с сотрудниками
+и добавим туда колонку с номером
+паспорта сотрудника. Может ли
+у двух разных людей быть одинаковый
+номер паспорта? Однозначно нет.
+Если в наших данных возникнет
+такая ситуация, когда у нескольких
+сотрудников по ошибке указали один и тот же
+номер паспорта, это может обернуться
+серьезными ошибками - клиентская программа
+выдаст по поиску несколько записей вместо одной,
+либо вообще выдаст ошибку и закроется. Или
+в бухгалтерии переведут деньги не тому 
+сотруднику, или наоборот, всем.
+</p>
+
+<p>
+В любом случае, подобной ситуации нужно избежать.
+Это помогут сделать уникальные ключи.
+</p>
+
+<p>
+На колонки с уникальными ключами, как и на колонки
+с первичными ключами, можно ссылаться из других таблиц
+по внешним ключам.
+</p>
+
+<p>
+В отличие от первичных, в одной таблице может
+быть несколько уникальных ключей.
+</p>
+
+
+<h2 id="createkey">Создание уникальных ключей</h2>
+
+<pre>
+create table employees(
+    id number primary key,
+    emp_name varchar2(200 char) not null,
+    pas_no varchar2(30),
+    constraint employees_pas_no_uk unique(pas_no)
+)
+</pre>
+
+<p>
+Теперь попробуем добавить нескольких сотрудников
+с одинаковыми номерами паспортов:
+</p>
+
+<pre>
+-- Эта строка добавляется в таблицу без проблем
+insert into employees(id, emp_name, pas_no)
+values (1, 'Евгений Петров', '01012020pb8007');
+
+-- А вот эту уже добавить нельзя - уникальный ключ
+-- в таблице будет нарушен
+insert into employees(id, emp_name, pas_no)
+values (2, 'Алексей Иванов', '01012020pb8007');
+</pre>
+
+<div class="alert alert-info">
+<p>
+Уникальные ключи на строковых данных чувствительны
+к регистру.
+</p>
+</div>
+
+<pre>
+-- Эта строка добавляется без проблем
+insert into employees(id, emp_name, pas_no)
+values (2, 'Алексей Иванов', '01012020PB8007');
+</pre>
+
+
+<p>
+Пробелы вначале и конце строк также учитываются, поэтому
+следующие данные также успешно добавятся в таблицу:
+</p>
+
+<pre>
+insert into employees(id, emp_name, pas_no)
+values (3, 'Петр Иванов', '   01012020PB8007');
+
+insert into employees(id, emp_name, pas_no)
+values (4, 'Иван Петров', '01012020PB8007  ');
+
+insert into employees(id, emp_name, pas_no)
+values (5, 'Светлана Сидорова', '  01012020PB8007  ');
+</pre>
+
+<p>
+Наличие подобных данных в таблице также ошибка - как
+ни крути, номер паспорта у всех этих сотрудников
+все равно совпадает. Поэтому в подобных случаях,
+когда регистр строк и наличие пробелов в начале или
+конце строки не должны учитываться, строки хранят
+в верхнем или нижнем регистре, а пробелы обрезают перед вставкой.
+</p>
+
+<p>
+Т.е. вставка данных в таблицу выглядит подобным образом:
+</p>
+
+<pre>
+-- Сначала удаляем пробелы(TRIM), потом приводим к верхнему
+-- регистру(UPPER)
+insert into employees(id, emp_name, pas_no)
+values (6, 'Светлана Сидорова', UPPER(TRIM('  01012020PB8007  ')));
+</pre>
+
+<p>
+Значения в колонке с уникальным ключом могут содержать <code>NULL</code>,
+причем строк с пустыми значениями может сколько угодно.
+</p>
+
+
+<p>
+Следующий запрос выполнится без ошибок, и добавит
+2 сотрудника с пустыми номерами паспортов:
+</p>
+
+<pre>
+insert into employees(id, emp_name, pas_no)
+values (7, 'Иван Иванов', NULL);
+
+insert into employees(id, emp_name, pas_no)
+values (8, 'Петр Петров', NULL);
+</pre>
+
+<p>
+Следует отметить, что это сработает только в том случае, если
+<code>NULL</code>-значения разрешены в колонке, как в нашем случае.
+Если бы колонка была <code>NOT NULL</code>, то в таком случае, конечно,
+пустые значения туда не положишь.
+</p>
+
+<h2 id="multiplecolumns">Составные уникальные ключи</h2>
+
+<p>
+Создадим таблицу месячных бонусов сотрудников
+с использованием уникального ключа, а не первичного:
+</p>
+
+<pre>
+create table bonuses(
+    emp_id number,
+    mnth date,
+    bonus number,
+    constraint bonuses_uk unique(emp_id, mnth)
+);
+</pre>
+
+
+<p>
+Также, как и с первичным, вставить 2 строки с одинаковыми
+значениями не получится:
+</p>
+
+<pre>
+insert into bonuses(emp_id, mnth, bonus)
+values(1, to_date('2020.01.01', 'yyyy.mm.dd'), 100);
+
+-- Будет нарушена уникальность ключа bonuses_uk
+insert into bonuses(emp_id, mnth, bonus)
+values(1, to_date('2020.01.01', 'yyyy.mm.dd'), 200);
+</pre>
+
+<p>
+Но т.к. в уникальном ключе разрешены <code>NULL</code>-значения
+(и они разрешены в нашей таблице),
+следующие строки добавятся без проблем:
+</p>
+
+<pre>
+insert into bonuses(emp_id, mnth, bonus)
+values(2, to_date('2020.01.01', 'yyyy.mm.dd'), 200);
+
+insert into bonuses(emp_id, mnth, bonus)
+values(null, null, 200);
+
+insert into bonuses(emp_id, mnth, bonus)
+values(null, to_date('2020.01.01', 'yyyy.mm.dd'), 200);
+</pre>
+
+<p>
+Более того, в случае, когда все колонки уникального ключа
+пусты, добавлять строк можно сколько угодно(при условии,
+что не будет нарушена целостность других существующих в 
+таблице ключей):
+</p>
+
+<pre>
+insert into bonuses(emp_id, mnth, bonus)
+values(null, null, 200);
+
+insert into bonuses(emp_id, mnth, bonus)
+values(null, null, 200);
+
+insert into bonuses(emp_id, mnth, bonus)
+values(null, null, 200);
+</pre>
+

@@ -1,0 +1,65 @@
+<!--{
+    "Title": "DBMS_OUTPUT.PUT_LINE. Вывод на экран",
+    "Links": {
+        "Next": {
+            "Url": "../plsql_simpletypes/index.html",
+            "Title": "Переменные, константы. Простые типы"
+        },
+        "Prev": {
+            "Url": "../plsql_first_program/index.html",
+            "Title": "Первая программа"
+        }
+        }
+}-->
+
+<div class="doc-head mb-4 container-10">
+    <h5 class="heading-micro heading-muted">Основы PL/SQL</h5>
+    <h1 class="heading-huge heading-heavy">DBMS_OUTPUT.PUT_LINE. Вывод на экран </h1>
+</div>
+
+<p>
+При изучении любого языка программирования очень важно
+иметь возможность выводить информацию на экран.
+</p>
+
+<p>
+Несмотря на то, что PL/SQL - язык, интегрированный в 
+БД Oracle, он также имеет возможность вывода информации на экран.
+Для этого используется процедура <code>dbms_output.put_line</code>.
+</p>
+
+<p>
+Пример вызова:
+</p>
+
+<pre>
+<code>begin
+    dbms_output.put_line('Hello, World');
+    dbms_output.put_line(23);
+    dbms_output.put_line('Hello, ' || 'World');
+    dbms_output.put_line(sysdate);
+end;
+/</code>
+</pre>
+
+<p>
+Вывод программы:
+</p>
+
+<pre>
+Hello, World
+23
+Hello, World
+29-AUG-21
+</pre>
+
+<p>
+Как видно из примера, <code>dbms_output.put_line</code> позволяет выводить строки, числа и даты - 
+основные типы в Oracle.
+</p>
+
+<p>
+Практически все среды разработки поддерживают вывод через
+dbms_output, включая <a href="https://livesql.oracle.com">Live SQL</a>.
+</p>
+

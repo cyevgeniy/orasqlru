@@ -1,0 +1,205 @@
+<!--{
+    "Title": "Внешние ключи",
+    "Links": {
+        "Next": {
+            "Url": "../uniquekeys/index.html",
+            "Title": "Уникальные ключи"
+        },
+        "Prev": {
+            "Url": "../primarykeys/index.html",
+            "Title": "Первичные ключи"
+        }
+        }
+}-->
+
+<div class="doc-head mb-4 container-10">
+    <h5 class="heading-micro heading-muted">Объекты БД</h5>
+    <h1 class="heading-huge heading-heavy">Внешние ключи</h1>
+</div>
+
+<div class="doc-toc mt-6 mb-6">
+    <nav class="menu menu-underline menu-medium menu-numbered">
+        <ul class="menu-list">
+        <li class="menu-item"><a href="#createkey" class="menu-link">Создание внешних ключей</a></li>
+        </ul>
+    </nav>
+</div>
+
+
+<p>
+Рассмотрим пример из части про <a href="../primarykeys/index.html"> первичные ключи</a>.
+</p>
+
+<p>
+У нас было две таблицы - список сотрудников и единовременные бонусы для
+них. С помощью первичного ключа в таблице сотрудников мы
+решили проблему соотношения между бонусами и сотрудниками.
+</p>
+
+
+<p>
+Схематично наши таблицы выглядят вот так:
+</p>
+
+<img src="../../img/13_relations/foreign_key_problem_1.png">
+
+<p>
+Благодаря наличию первичного ключа мы однозначно
+можем сказать, какому сотруднику какой бонус начисляется.
+</p>
+
+<p>
+А теперь посмотрим на следующую ситуацию: в таблицу
+<code>bonuses</code> добавляется запись со значением <code>emp_id</code>,
+которому нет соответствия в таблице сотрудников.
+</p>
+
+<img src="../../img/13_relations/fk_problem_2.png">
+
+<p>
+Как такое может быть? Мы начисляем бонусы сотруднику,
+которого у нас нет! Если нас попросят сказать,
+на какую сумму было выдано единовременных бонусов,
+или сколько их было выдано, то мы не сможем ответить,
+т.к. не будем уверены, что данные в таблице с бонусами
+вообще корректны.
+</p>
+
+<p>
+Так вот, внешние ключи используются как для
+решения подобной проблемы.
+</p>
+
+<p>
+Внешние ключи используются для того,
+чтобы указать, что данные в колонках одной таблицы
+могут содержать только определенные значения из
+другой таблицы.
+</p>
+
+
+<p>
+В отличие от первичного ключа, значение внешнего
+не обязано быть уникальным. Более того, оно даже
+может содержать <code>NULL</code>. Главное требование - 
+это наличие значения внешнего ключа в ссылаемой
+таблице.
+</p>
+
+<h2 id="createkey">Создание внешних ключей</h2>
+
+<p>
+Общий синтаксис следующий:
+</p>
+
+<pre>
+create table detail(
+    master_id number,
+    value_1 number,
+    value_2 number,
+    -- Внешний ключ из таблицы detail к таблице master
+    constraint detail_master_id_fk
+        foreign key(master_id)
+        references master(id)
+);
+</pre>
+
+<p>
+Здесь <code>detail_master_id_fk</code> - название внешнего ключа.
+</p>
+
+<p>
+Также, как и у первичных ключей, длина имени
+внешнего ключа ограничена 30 символами.
+</p>
+
+<p>
+У внешних ключей есть еще одна особенность - они
+могут ссылаться только на первичные или уникальные ключи.
+Если попытаться создать внешний ключ, который будет
+ссылаться на колонку, которая не является первичным
+или уникальным ключом БД выдаст ошибку.
+</p>
+
+<p>
+Попробуем создать наши таблицы из примера:
+</p>
+
+<pre>
+create table employees(
+    id number primary key,
+    emp_name varchar2(100 char) not null,
+    department varchar2(50 char) not null,
+    position varchar2(50 char) not null
+);
+
+create table bonuses(
+    emp_id number not null,
+    bonus number not null,
+    constraint bonuses_emp_id_fk
+        foreign key(emp_id)
+        references employees(id)
+);
+</pre>
+
+<p>
+В данном случае таблица <code>bonuses</code> является
+дочерней по отношению к таблице <code>employees</code>,
+т.к. содержит внешний ключ, который ссылается
+из <code>bonuses</code> на <code>employees</code>.
+</p>
+
+<p>
+После этого заполним данными эти таблицы:
+</p>
+
+<pre>
+-- Сначала добавляем сотрудников
+
+insert into employees(id, emp_name, department, position)
+values(1, 'Иван Петров', 'IT', 'QA');
+
+insert into employees(id, emp_name, department, position)
+values(2, 'Алексей Иванов', 'SALARY', 'CLERK');
+
+insert into employees(id, emp_name, department, position)
+values(3, 'Евгений Сидоров', 'SALARY', 'MANAGER');
+
+insert into employees(id, emp_name, department, position)
+values(4, 'Екатерина Петрова', 'SECUTIRY', 'MANAGER');
+
+-- После - бонусы для них
+
+insert into bonuses(emp_id, bonus)
+values(1, 100);
+
+insert into bonuses(emp_id, bonus)
+values(2, 400);
+
+insert into bonuses(emp_id, bonus)
+values(3, 700);
+</pre>
+
+<p>
+Порядок добавления данных в таблицы важен: нельзя
+сначала добавить новые данные в таблицу <code>bonuses</code>, а потом
+в таблицу <code>employees</code>, т.к. попытка добавить бонус для сотрудника,
+которого еще нет в таблице <code>employees</code> приведет к ошибке из-за
+наличия внешнего ключа.
+</p>
+
+<pre>
+-- Вот так будет ошибка, т.к. сотрудник с id = 5
+-- еще не добавлен в таблицу employees
+insert into bonuses(emp_id, bonus)
+values(5, 500);
+
+-- А вот так ошибки не будет
+-- Сотрудник с id = 4 уже есть в таблице сотрудников
+insert into bonuses(emp_id, bonus)
+values(4, 500);
+</pre>
+
+
+
+

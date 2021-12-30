@@ -1,0 +1,12 @@
+.navbar .brand {
+    --brand-color: var(--nav-light-link-color);
+    --brand-hover-color: var(--nav-light-link-hover-color);
+}
+
+.bg-toc {
+    --background-color: var(--palette-primary-lightest);
+}
+
+.bg-toc-plsql {
+    --background-color: var(--palette-violet-lightest);
+}

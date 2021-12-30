@@ -1,0 +1,107 @@
+<!--{
+    "Title": "Проверка значения на NULL",
+    "Links": {
+        "Next": {
+            "Url": "../innotin/index.html",
+            "Title": "IN, NOT IN"
+        },
+        "Prev": {
+            "Url": "../andor/index.html",
+            "Title": "Проверка нескольких условий. AND, OR"
+        }
+        }
+}-->
+
+<div class="doc-head mb-4 container-10">
+    <h5 class="heading-micro heading-muted">Основы</h5>
+    <h1 class="heading-huge heading-heavy">Проверка значения на NULL </h1>
+</div>
+
+<p>
+Если обратить внимание на результаты запросов, выше,
+то можно заметить, что строка, содержащая <code>NULL</code> в колонке
+<code>rating</code> не была возвращена ни одним из них.
+</p>
+
+<p>
+Как уже говорилось ранее, <code>NULL</code> - это отсутствие значения. Соответственно, он и не может
+быть больше, меньше, либо даже равняться какому-либо значению, даже себе.
+</p>
+
+<p>
+Например, следующий запрос не вернет ни одной строки, хотя мы вроде как и указываем в запросе необходимый критерий - равенство <code>NULL</code>:
+</p>
+
+<pre>
+select d.*
+from dishes d
+where d.rating = NULL
+</pre>
+
+<img src="../../img/3_select/no_data_found.png">
+
+<p>
+Теперь попробуем получить все блюда, у которых рейтинг указан, т.е. те строки из таблицы, где значение rating не равно <code>NULL</code>:
+</p>
+
+<pre>
+select d.*
+from dishes d
+where d.rating <> NULL
+</pre>
+
+
+<p>
+Получим аналогичный результат - ни одной строки не будет получено:
+</p>
+
+<img src="../../img/3_select/no_data_found.png">
+
+<p>
+Встает вопрос - как определить, что колонка содержит NULL?
+</p>
+
+<p>
+Для этого используются операторы <code>IS NULL</code> и <code>IS NOT NULL</code>.
+<code>IS NULL</code> проверяет, является ли значение равным NULL, в то время
+как <code>IS NOT NULL</code> проверяет, является ли значение любым, но не NULL.
+</p>
+
+<p>
+Работу данных операторов лучше рассмотреть на примерах.
+</p>
+
+<p>
+Получим блюда, которые еще не получили никакой оценки, т.е. те блюда,
+которые в колонке <code>rating</code> содержат NULL:
+</p>
+
+<pre>
+select d.*
+from dishes d
+where d.rating IS NULL
+</pre>
+
+
+<img src="../../img/3_select/rating_is_null.png">
+
+<p>
+А теперь получим все блюда, которые уже получили оценку:
+</p>
+
+<pre>
+select d.*
+from dishes d
+where d.rating IS NOT NULL
+</pre>
+
+<p>
+Как видно, <code>IS NOT NULL</code> возвращает все
+строки, кроме тех, которые содержат <code>NULL</code>:
+</p>
+
+<img src="../../img/3_select/rating_is_not_null.png">
+
+<p>
+В Oracle пустая строка эквивалентна <code>NULL</code>.
+</p>

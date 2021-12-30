@@ -1,0 +1,300 @@
+<!--{
+    "Title": "Древовидные структуры данных. Рекурсивные запросы",
+    "Links": {
+        "Next": {
+            "Url": "../subqueries/index.html",
+            "Title": "Подзапросы"
+        },
+        "Prev": {
+            "Url": "../joins/index.html",
+            "Title": "Соединения таблиц"
+        }
+        }
+}-->
+
+<div class="doc-head mb-4 container-10">
+    <h5 class="heading-micro heading-muted">Основы</h5>
+    <h1 class="heading-huge heading-heavy">Древовидные структуры данных. Рекурсивные запросы </h1>
+</div>
+
+<div class="doc-toc mt-6 mb-6">
+    <nav class="menu menu-underline menu-medium menu-numbered">
+        <ul class="menu-list">
+        <li class="menu-item"><a href="#org" class="menu-link">Реализация древовидных структур в РСУБД</a></li>
+        <li class="menu-item"><a href="#level" class="menu-link">Псевдостолбец <code>level</code></a></li>
+        <li class="menu-item"><a href="#connectby" class="menu-link"><code>Connect by</code></a></li>
+        <li class="menu-item"><a href="#connectbyisleaf" class="menu-link">Псевдостолбец <code>CONNECT_BY_ISLEAF</code></a></li>
+        <li class="menu-item"><a href="#orderby" class="menu-link">Сортировка в рекурсивных запросах</a></li>
+		<li class="menu-item"><a href="#break" class="menu-link">Нарушение древовидной структуры при выборке</a></li>
+        </ul>
+    </nav>
+</div>
+
+
+<p>
+Достаточно часто приходится иметь дело с древовидными
+структурами данных. Классическим примером является структура
+подразделений организации, где один отдел является частью
+другого, и при этом также состоит из нескольких подразделений.
+Также можно в виде дерева описать отношения между
+сотрудниками - кто кому приходится начальником;
+некий список документов, где один документ появляется
+на основании другого, а тот
+в свою очередь был создан на основании третьего, и т.п.
+</p>
+
+<h2 id="org">Реализация древовидных структур в РСУБД</h2>
+
+<p>
+Для того, чтобы можно было листья дерева собрать воедино,
+нужно знать, как они соотносятся друг с другом.
+Как правило, все данные, которые нужно хранить в виде
+дерева, хранятся в одной таблице. Для того, чтобы по
+определенной строке определить ее родителя, в таблицу
+добавляется колонка, которая ссылается на родителя
+в этой же таблице. У корневого узла в дереве колонка
+с id родительского узла остается пустой.
+</p>
+
+<p>
+Для разбора создадим таблицу, которая будет содержать список подразделений.
+</p>
+
+<pre>
+create table departments(
+id number primary key,
+dept_name varchar2(100),
+parent_id number,
+constraint departments_parent_id_fk foreign key(parent_id)
+references departments(id));
+
+comment on table departments is 'Подразделения';
+
+comment on column departments.parent_id is
+'Ссылка на родительский узел';
+
+insert into departments values(1, 'ЗАО ИнвестКорп', null);
+insert into departments values(2, 'Бухгалтерия', 1);
+insert into departments values(3, 'Отдел продаж', 1);
+insert into departments values(4, 'IT-отдел', 1);
+insert into departments values(5, 'Дирекция', 1);
+insert into departments values(6, 'Бухгалтерия по участку 1', 2);
+insert into departments values(7, 'Бухгалтерия по участку 2', 2);
+insert into departments values(8, 'Отдел QA', 4);
+insert into departments values(9, 'Отдел разработки', 4);
+</pre>
+
+<h2 id="connectby">Connect by</h2>
+
+<p>
+Oracle имеет свой собственный синтаксис для написания
+рекурсивных запросов. Сначала пример:
+</p>
+
+<pre>
+select d.*
+from departments d
+start with d.id = 1
+connect by prior id = d.parent_id
+</pre>
+
+
+<img src="../../img/6_recursive/simple_example.png">
+
+<p>
+Данный запрос проходит по дереву вниз начиная с узла, имеющего <code>id = 1</code>.
+</p>
+
+<p>
+<code>connect by</code> задает правило, по которому дерево будет обходиться.
+В данном примере мы указываем, что у строк, которые должны
+будут выбираться на следующем шаге, значение столбца
+<code>parent_id</code> должно быть таким же, как значение столбца <code>id</code> на текущем.
+</p>
+
+<p>
+В конструкции <code>start with</code> не обязательно указывать некие
+значения для <code>id</code> строк. Там можно указывать любое
+выражение. Те строки, для которых оно будет истинным,
+и будут являть собой стартовые узлы в выборке.
+</p>
+
+<h2 id="level">Псевдостолбец level</h2>
+
+<p>
+При использовании рекурсивных запросов, написанных
+с использованием <code>connect by</code>, становится доступен
+такой псевдостолбец, как <code>level</code>. Этот псевдостолбец
+возвращает 1 для корневых узлов в дереве, 2 для их дочерних узлов и т.д.
+</p>
+
+<pre>
+select dp.*, level
+from departments dp
+start with dp.parent_id is null
+connect by prior id = dp.parent_id
+</pre>
+
+
+<img src="../../img/6_recursive/level_example.png">
+
+<p>
+В приведенном выше примере мы начинаем строить наше дерево
+с корневых узлов, не зная их конкретных <code>id</code>. Но мы знаем,
+что у корневых узлов нет родителей, что и указали в
+конструкции <code>start with</code> - <code>parent_id is null</code>.
+В этом случае корневые узлы дерева, которое вернет
+запрос, будут совпадать с корневыми узлами дерева, которое хранится в БД.
+</p>
+
+<p>
+Можно, например, используя <code>level</code>, вывести
+дерево в более красивом виде:
+</p>
+
+
+<pre>
+select lpad(dp.dept_name, length(dp.dept_name) + (level * 4) - 4, ' ') dept_name, level
+from departments dp
+start with dp.parent_id is null
+connect by prior id = dp.parent_id
+</pre>
+
+
+<img src="../../img/6_recursive/level_pretty.png">
+
+<p>
+Здесь используется функция <code>lpad</code>, которая дополняет
+передаваемую строку(наименование подразделения) до
+определенной длины(длина наименования + уровень вложенности * 4) пробелами слева.
+Кстати, функция <code>rpad</code> работает так же, только дополняет символы справа.
+</p>
+
+<h2 id="connectbyisleaf">Псевдостолбец CONNECT_BY_ISLEAF</h2>
+
+<p>
+Данный псевдостолбец вернет 1 в том случае,
+когда у узла в дереве больше нет потомков,
+и 0 в противном случае.
+</p>
+
+
+<pre>
+select dp.dept_name, CONNECT_BY_ISLEAF
+from departments dp
+start with dp.parent_id is null
+connect by prior id = dp.parent_id
+</pre>
+
+
+<img src="../../img/6_recursive/connect_by_isleaf.png">
+
+<h2 id="orderby">Сортировка в рекурсивных запросах</h2>
+
+<p>
+В запросах с использованием <code>CONNECT BY</code> нельзя
+использовать <code>ORDER BY</code> и <code>GROUP BY</code>, т.к. они нарушат древовидную структуру.
+</p>
+
+<p>
+Это можно увидеть на примере:
+</p>
+
+<pre>
+select dp.dept_name, level
+from departments dp
+start with dp.parent_id is null
+connect by prior id = dp.parent_id
+order by dp.dept_name asc
+</pre>
+
+<img src="../../img/6_recursive/order_by_wrong.png">
+
+<p>
+Как видно, корневой узел теперь шестой в выборке,
+а на первом месте подразделение, которое находится
+на втором уровне вложенности в дереве.
+</p>
+
+<p>
+Для того, чтобы отсортировать данные, не
+нарушая их древовидной структуры, используется
+конструкция <code>ORDER SIBLINGS BY</code>. В этом случае
+сортировка будет применяться отдельно для каждой
+группы потомков в дереве:
+</p>
+
+<img src="../../img/6_recursive/order_siblings_by.png">
+
+<p>
+Теперь узлы, находящиеся на одном уровне, сортируются
+в алфавитном порядке, при этом структура дерева не нарушена.
+</p>
+
+<h2 id="break">Нарушение древовидной структуры при выборке</h2>
+
+<p>
+Предположим, что мы хотим получить структуру
+подразделений начиная с тех, чьи названия содержат
+в себе слово "отдел":
+</p>
+
+<pre>
+select *
+from departments
+start with upper(dept_name) like upper('%Отдел%')
+connect by prior id = parent_id
+</pre>
+
+
+<img src="../../img/6_recursive/wrong_tree_1.png">
+
+<p>
+Некоторые строки дублируются, хотя в таблице имена
+подразделений не повторяются.
+</p>
+
+<p>
+Теперь выполним тот же запрос, только добавим к списку колонок
+псевдостолбец <code>level</code>:
+</p>
+
+<pre>
+select id, dept_name, parent_id, level
+from departments
+start with upper(dept_name) like upper('%Отдел%')
+connect by prior id = parent_id
+</pre>
+
+<img src="../../img/6_recursive/wrong_tree_2.png">
+
+<p>
+Теперь понятно, что строки дублируются из-за того,
+что они находятся на разных уровнях в дереве.
+</p>
+
+<p>
+Разберем, почему так происходит, пройдя путь построения
+дерева:
+</p>
+
+<ol>
+<li>В качестве корней дерева добавляются узлы, которые
+удовлетворяют условию, находящемуся в <code>START WITH</code>.
+Это "Отдел продаж", "IT-отдел", "Отдел QA" и "Отдел разработки".
+Все они находятся на первом уровне вложенности в дереве.</li>
+
+<li>Рекурсивно ищем потомков для всех выбранных на первом
+шаге узлов. Из всех них вложенность есть только
+у отдела IT - и внутри него как раз находятся
+"Отдел QA" и "Отдел разработки", поэтому они добавляются
+со вторым уровнем вложенности.</li>
+</ol>
+
+<p>
+Следует различать фактическое дерево, которое хранится
+в таблице, и то, которое получается при выборке, так как они
+могут не совпадать. На практике такая необходимость почти не
+встречается, и если при выборке данные не отражают той структуры,
+которая хранится в БД, то скорее всего запрос написан с ошибкой.
+</p>

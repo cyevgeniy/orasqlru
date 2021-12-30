@@ -1,0 +1,460 @@
+<!--{
+    "Title": "Изменение структуры таблицы. ALTER TABLE",
+    "Links": {
+        "Next": {
+            "Url": "../primarykeys/index.html",
+            "Title": "Первичные ключи"
+        },
+        "Prev": {
+            "Url": "../dmlmerge/index.html",
+            "Title": "Слияние данных. MERGE"
+        }
+        }
+}-->
+
+<div class="doc-head mb-4 container-10">
+    <h5 class="heading-micro heading-muted">DML. Изменение данных и структуры БД</h5>
+    <h1 class="heading-huge heading-heavy">Изменение структуры таблицы. ALTER TABLE</h1>
+</div>
+
+<div class="doc-toc mt-6 mb-6">
+    <nav class="menu menu-underline menu-medium menu-numbered">
+        <ul class="menu-list">
+        <li class="menu-item"><a href="#prepare" class="menu-link">Подготовка данных</a></li>
+        <li class="menu-item"><a href="#addcolumn" class="menu-link">Добавление колонки в таблицу</a></li>
+        <li class="menu-item"><a href="#deletecolumn" class="menu-link">Удаление колонки из таблицы</a></li>
+        <li class="menu-item"><a href="#renamecolumn" class="menu-link">Переименование колонки</a></li>
+        <li class="menu-item"><a href="#changecolumntype" class="menu-link">Изменение типа данных колонки</a></li>
+        <li class="menu-item"><a href="#changenotnull" class="menu-link">Изменение атрибута NOT NULL в колонке</a></li>
+        <li class="menu-item"><a href="#renametable" class="menu-link">Переименование таблицы</a></li>
+        </ul>
+    </nav>
+</div>
+
+
+<p>
+Уже созданные таблицы можно изменять. Для
+этого используется команда SQL <code>ALTER</code>.
+Данная команда относится к группе DDL.
+</p>
+
+<h2 id="prepare">Подготовка данных</h2>
+
+<p>
+Тестировать будем на таблице <code>employees</code>.
+Изначально она будет состоять только из
+одной колонки <code>id</code>:
+</p>
+
+<pre>
+create table employees(
+    id number not null primary key
+);
+
+insert into employees(id)
+values(1);
+
+insert into employees(id)
+values(2);
+
+insert into employees(id)
+values(3);
+
+insert into employees(id)
+values(4);
+</pre>
+
+<h2 id="addcolumn">Добавление колонки в таблицу</h2>
+
+<p>
+Добавим в таблицу сотрудников колонку для
+хранения дня рождения:
+</p>
+
+<pre>
+alter table employees
+add (birthday date)
+</pre>
+
+<p>
+По умолчанию все строки таблицы будут иметь <code>null</code>
+в новой колонке. Но если при ее добавлении указать
+значение по-умолчанию, то все строки будут содержать
+его в новой колонке.
+</p> 
+
+<p>
+Добавим колонку <code>notify_by_email</code>, которая будет по-умолчанию
+содержать в себе "1", если сотруднику нужно отправлять уведомления
+по почте, и "0", если нет:
+</p>
+
+<pre>
+alter table employees
+add (
+    notify_by_email number default 0
+);
+
+comment on column employees.notify_by_email is
+'Уведомлять по почте(1-да, 0-нет)';
+</pre>
+		
+<p>
+Посмотрим, как сейчас выглядят данные в таблице:
+</p>
+
+<img src="../../img/15_ddl/alter_table_1.png">
+
+<p>
+Как видно, каждая строка содержит "0" в колонке
+<code>notify_by_email</code>.
+</p>
+
+<p>
+Нельзя добавить колонку <code>NOT NULL</code> в таблицу
+с данными без значения по-умолчанию.
+</p>
+
+
+<pre>
+-- Ошибка! Нельзя добавить колонку
+-- без default-значения
+alter table employees
+add(
+    not_null_col number(1) not null
+)
+</pre>
+
+<p>
+В результате получим ошибку
+<code>ORA-01758: table must be empty to add mandatory (NOT NULL) column</code>.
+</p>
+
+<p>
+Но если указать значение по-умолчанию, ошибки не будет:
+</p>
+
+<pre>
+-- Ошибки не будет, каждая строка будет
+-- содержать 1 в колонке
+alter table employees
+add(
+    not_null_col number(1) default 1 not null    
+)
+</pre>
+
+<p>
+Колонка добавляется без ошибок:
+</p>
+
+<img src="../../img/15_ddl/add_not_null_column.png">
+
+<h3>Добавление нескольких колонок в таблицу</h3>
+
+<p>
+Чтобы добавить несколько колонок в таблицу,
+нужно просто перечислить их через запятую:
+</p>
+
+<pre>
+alter table employees
+add ( emp_lastname varchar2(100 char),
+      emp_firstname varchar2(100 char),
+      dept_id number(2) default 10 not null,
+      is_out varchar2(1) default 'Y' not null);
+
+comment on column employees.emp_lastname is
+'Фамилия';
+
+comment on column employees.emp_firstname is
+'Имя';
+
+comment on column employees.dept_id is
+'id подразделения';
+
+comment on column employees.is_out is
+'Больше не работает?';
+</pre>
+
+<h2 id="deletecolumn">Удаление колонки из таблицы</h2>
+
+<p>
+Удалим только что добавленную колонку <code>emp_lastname</code>
+из таблицы:
+</p>
+
+<pre>
+alter table employees
+drop column emp_lastname
+</pre>
+
+
+<p>
+Следует учитывать, что если
+на удаляемую колонку ссылаются строки
+из другой таблицы(посредством <a href="../foreignkeys/index.html">внешнего ключа</a>),
+то удалить колонку не получится.
+</p>
+
+<p>
+Убедимся в этом, создав таблицу <code>emp_bonuses</code>,
+которая будет ссылаться на колонку <code>id</code>
+в таблице <code>employees</code>:
+</p>
+
+<pre>
+create table emp_bonuses(
+    emp_id number not null,
+    bonus number not null,
+    constraint emp_bonuses_emp_fk
+        foreign key(emp_id) references employees(id)
+)
+</pre>
+
+
+<p>
+Теперь попробуем удалить колонку <code>id</code>:
+</p>
+
+
+<pre>
+alter table employees
+drop column id
+</pre>
+
+
+<p>
+В результате мы получим ошибку <code>ORA-12992: cannot drop parent key column</code>,
+которая говорит о том, что удаляемая колонка является родительской
+для другой таблицы.
+</p>
+
+<h3>Удаление нескольких колонок в таблице</h3>
+
+<p>
+Удалим колонки <code>emp_firstname</code> и <code>is_out</code> из таблицы:
+</p>
+
+<pre>
+alter table employees
+drop (emp_firstname, is_out)
+</pre>
+
+
+<p>
+Удалять все колонки из таблицы нельзя, получим ошибку
+<code>ORA-12983: cannot drop all columns in a table</code>.
+</p>
+
+<h3> Логическое удаление колонок </h3>
+
+<p>
+Удаление колонок в очень больших таблицах может занять
+достаточно большое количество времени. В таких
+случаях можно для начала пометить нужные колонки как
+неиспользуемые:
+</p>
+
+<pre>
+alter table employees
+set unused (emp_firstname, is_out)
+</pre>
+
+<p>
+После выполнения данной команды Oracle удалит
+эти колонки логически, попросту пометив их
+как неиспользуемые. При запросе из таблицы они
+не будут видны, и в таблицу можно даже 
+добавлять колонки с такими же названиями.
+</p>
+
+<p>
+Чтобы удалить неиспользуемые колонки
+физически, используется следующий запрос:
+</p>
+
+<pre>
+alter table employees
+drop unused columns
+</pre>
+
+<p>
+Конечно, выполнять его желательно во время
+наименьшей нагрузки на сервер.
+</p>
+
+<h2 id="renamecolumn">Переименование колонки</h2>
+
+<p>
+Переименуем колонку <code>birthday</code> в <code>bd</code>:
+</p>
+
+<pre>
+alter table employees
+rename column birthday to bd
+</pre>
+
+
+<h2 id="changecolumntype">Изменение типа данных колонки</h2>
+
+<p>
+Изменим тип колонки <code>dept_id</code> с числового
+на строковый:
+</p>
+
+<pre>
+alter table employees
+modify(
+    dept_id varchar2(10)
+)
+</pre>
+
+<p>
+Здесь нужно обратить внимание на то, что при изменении
+типа мы не добавляли <code>NOT NULL</code>.
+В <code>MODIFY</code> мы должны указать действия, которые действительно что-то
+изменят. Колонка <code>dept_id</code> и так была <code>not null</code>, и при изменении
+типа это свойство не нужно указывать.
+</p>
+
+<p>
+Если попробовать добавить <code>not null</code>, получим ошибку
+<code>ORA-01442: column to be modified to NOT NULL is already NOT NULL</code>:
+</p>
+
+<pre>
+alter table employees
+modify(
+    dept_id varchar2(10) not null -- получим ошибку
+)
+</pre>
+
+<p>
+Следует учитывать одну важную деталь при изменении типа
+данных - изменяемая колонка должна быть пуста. 
+</p>
+
+<p>
+Рассмотрим более подробно процесс изменения типа колонки, если в ней
+уже содержатся данные.
+</p>
+
+<p>
+Спустя какое-то время мы решили, что не хотим использовать
+числовое поле для <code>boolean</code> значений. Вместо этого было решено
+использовать более понятный строковый тип.
+</p>
+
+<p>
+Итак, для начала добавим колонку с нужным нам типом данных.
+Так как мы не можем назвать ее <code>notify_by_email</code>(такая уже
+есть на данный момент), то назовем ее <code>notify_by_email_new</code>:
+</p>
+
+<pre>
+alter table employees
+add(
+    notify_by_email_new varchar2(1)
+     default 'N' not null
+)
+</pre>
+
+<p>
+После этого нужно заполнить эту колонку данными. Алгоритм
+прост - значение "1" в колонке <code>notify_by_email</code>
+должно быть перенесено как значение "Y" в колонку
+<code>notify_by_email_new</code>,
+а значение "0" нужно перенести в виде "N".
+Так как при добавлении колонки мы указали значение по-умолчанию,
+то в таблице каждая строка содержит значение "N" в этой колонке.
+Все, что осталось - это изменить значение на "Y", где
+<code>notify_by_email</code> равен 1:
+</p>
+
+<pre>
+update employees e
+set e.notify_by_email_new = 'Y'
+where e.notify_by_email = 1
+</pre>
+
+
+<p>
+Затем удаляем колонку <code>notify_by_email</code>:
+</p>
+
+
+<pre>
+alter table employees
+drop column notify_by_email
+</pre>
+
+
+<p>
+Теперь можно переименовать <code>notify_by_email_new</code> в 
+<code>notify_by_email</code>:
+</p>
+
+<pre>
+alter table employees
+rename column notify_by_email_new to
+notify_by_email
+</pre>
+
+
+<p>
+Смотрим на результат:
+</p>
+
+<img src="../../img/15_ddl/change_column_type.png">
+
+<h2 id="changenotnull">Изменение атрибута NOT NULL в колонке</h2>
+
+<p>
+Сделаем так, чтобы в колонку <code>dept_id</code> можно
+было сохранять <code>null</code>:
+</p>
+
+<pre>
+alter table employees
+modify(dept_id null);
+</pre>
+
+
+<p>
+А теперь снова сделаем ее <code>NOT NULL</code>:
+</p>
+
+
+<pre>
+alter table employees
+modify(dept_id not null);
+</pre>
+
+<p>
+Нельзя изменить колонку на NOT NULL,
+если в ней уже содержатся NULL-значения.
+</p>
+
+
+<h2 id="renametable">Переименование таблицы</h2>
+
+<p>
+Следующий запрос переименует
+таблицу <code>employees</code> в <code>emps</code>:
+</p>
+
+
+<pre>
+rename employees to emps
+</pre>
+
+
+<p>
+Стоит отметить, что переименование таблицы не
+приведет к ошибке при наличии ссылок на нее.
+В нашем примере таблица успешно переименуется,
+несмотря на дочернюю таблицу <code>emp_bonuses</code>.
+Внешний ключ при этом никуда не девается,
+в таблицу <code>emp_bonuses</code> по-прежнему нельзя
+добавить значения, нарушающие условия внешнего ключа.
+</p>

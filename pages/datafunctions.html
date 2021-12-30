@@ -1,0 +1,342 @@
+<!--{
+    "Title": "Работа с датами в Oracle",
+    "Links": {
+        "Next": {
+            "Url": "../analytics/index.html",
+            "Title": "Aналитические функции"
+        },
+        "Prev": {
+            "Url": "../aggregation/index.html",
+            "Title": "Агрегирующие функции"
+        }
+        }
+}-->
+
+<div class="doc-head mb-4 container-10">
+    <h5 class="heading-micro heading-muted">Стандарные функции</h5>
+    <h1 class="heading-huge heading-heavy">Работа с датами в Oracle</h1>
+</div>
+
+<div class="doc-toc mt-6 mb-6">
+    <nav class="menu menu-underline menu-medium menu-numbered">
+        <ul class="menu-list">
+        <li class="menu-item"><a href="#prepare" class="menu-link">Тип <code>DATE</code></a></li>
+        <li class="menu-item"><a href="#strtodate" class="menu-link">Приведение строки к дате</a></li>
+        <li class="menu-item"><a href="#sysdate" class="menu-link">Функция SYSDATE</a></li>
+        <li class="menu-item"><a href="#datetostr" class="menu-link">Приведение строки к дате</a></li>
+        <li class="menu-item"><a href="#trunc" class="menu-link"><code>TRUNC</code></a></li>
+        <li class="menu-item"><a href="#addmonths" class="menu-link"><code>ADD_MONTHS</code></a></li>
+        <li class="menu-item"><a href="#datediff" class="menu-link">Разница между датами</a></li>
+        <li class="menu-item"><a href="#timestamp" class="menu-link">Тип <code>TIMESTAMP</code></a></li>
+        <li class="menu-item"><a href="#extract" class="menu-link"><code>EXTRACT</code></a></li>
+        </ul>
+    </nav>
+</div>
+
+
+<p>
+В БД Oracle для работы с датами предназначены 2
+типа - <code>DATE</code> и <code>TIMESTAMP</code>.
+</p>
+
+<p>
+Отдельно можно упомянуть <code>INTERVAL</code> - интервальный тип,
+который хранит диапазон между двумя датами.
+</p>
+
+<h2 id="date">Тип DATE</h2>
+
+<p>
+Тип DATE используется чаще всего, когда необходимо
+работать с датами в БД Oracle. Он позволяет хранить
+даты с точностью до секунд.
+</p>
+
+<p>
+Некоторые БД, например MySQL, также имеют тип DATE,
+но там может храниться дата лишь с точностью до дня.
+</p>
+
+<h2 id="strtodate"> Приведение строки к дате</h2>
+
+<p>
+Одна из часто встречающихся ситуаций - необходимость представить
+строку в виде типа данных <code>DATE</code>.
+Делается это при помощи функции <code>to_date</code>.
+Данная функция принимает 2 параметра - строку,
+содержащую в себе собственно дату, и строку,
+которая указывает, как нужно интерпретировать
+первый параметр, т.е. где в этой дате год, где месяц, число и т.п.
+</p>
+
+<pre>
+-- 1 марта 2020 года
+select to_date('2020-03-01', 'yyyy-mm-dd') d1,
+-- 3 января 2020 года
+to_date('2020-03-01', 'yyyy-dd-mm') d2 -- <2>
+from dual
+</pre>
+
+<p>
+На самом деле, функция <code>to_date</code> может работать и без
+строки с форматом даты, а также с еще одним
+дополнительным параметром, который будет указывать
+формат языка, но мы будем рассматривать
+вариант с двумя параметрами. Более детально
+ознакомиться с функцией <code>to_date</code> можно
+вот <a href="https://docs.oracle.com/cd/B19306_01/server.102/b14200/functions183.htm">здесь</a>.
+</p>
+
+<p>
+Как видно, строка, определяющая формат даты, имеет очень большое значение.
+В примере выше, мы получили две разные даты, изменив лишь их формат
+в функции <code>to_date</code>.
+</p>
+
+<h2 id="sysdate">Функция SYSDATE</h2>
+
+<p>
+Данная функция возвращает текущую дату.
+В зависимости от того, когда следующий запрос
+выполнится, значение <code>SYSDATE</code> 
+будет всегда разным.
+</p>
+
+<pre>
+select sysdate -- вернет текущую дату
+from dual
+</pre>
+
+<h2 id="datetostr"> Приведение даты к строке</h2>
+
+<p>
+Чтобы отобразить дату в нужном нам формате,
+используется функция <code>to_char</code>.
+</p>
+
+<pre>
+select to_char(sysdate, 'yyyy-mm-dd') d1,
+       to_char(sysdate, 'dd.mm.yyyy') d2,
+       to_char(sysdate, 'dd.mm.yyyy hh24:mi') d3,
+       to_char(sysdate, 'hh24:ss yyyy.mm.dd') d4
+from dual
+</pre>
+
+<img src="../../img/10_dates/dates_to_char.png">
+
+<h2 id="trunc">Trunc</h2>
+
+<p>
+Функция <code>trunc</code> округляет дату до определенной
+точности. Под точностью в округлении даты следует
+понимать ту ее часть(день, месяц, год, час, минута),
+которая не будет приведена к единице, а будет такой же,
+как и в исходной дате.
+</p>
+
+<pre>
+select trunc(sysdate, 'hh24'),
+       trunc(sysdate, 'dd'), -- <2>
+       trunc(sysdate), -- <3>
+       trunc(sysdate, 'mm'),
+       trunc(sysdate, 'yyyy')
+from dual
+</pre>
+
+<p>
+Если не указывать формат округления, то
+trunc округлит до дней, т.е. колонки "2" и "3"
+будут содержать одинаковое значение.
+</p>
+
+<h2 id="addmonths">ADD_MONTHS</h2>
+
+<p>
+Функция <code>add_months</code> добавляет указанное количество
+месяцев к дате. Для того, чтобы отнять месяцы от
+даты, нужно передать в качестве второго параметра
+отрицательное число:
+</p>
+
+<pre>
+select add_months(sysdate, 1) d1,
+       -- полгода после текущей даты
+       add_months(sysdate, 6) d2, -- <1>
+       -- полгода до текущей даты
+       add_months(sysdate, -6) d3 -- <2>
+from dual
+</pre>
+
+<img src="../../img/10_dates/add_months.png">
+
+<h2 id="datediff">Разница между датами</h2>
+
+<p>
+Если просто отнять от одной даты другую,
+то мы получим разницу между ними в днях. Также, к датам можно прибавлять
+и отнимать обычные числа, и Oracle будет оперировать ими как днями:
+</p>
+
+<pre>
+select to_date('2020-03-05', 'yyyy-mm-dd') - to_date('2020-03-01', 'yyyy-mm-dd') a,
+       to_date('2020-03-05 01:00', 'yyyy-mm-dd hh24:mi') - to_date('2020-03-05', 'yyyy-mm-dd')  b,
+       sysdate + 1 tomorrow, -- на 1 день большe
+       sysdate - 1 yesterday-- на 1 день меньше
+from dual
+</pre>
+
+
+<img src="../../img/10_dates/dates_days.png">
+
+<h3>Months_between</h3>
+
+<p>
+Функция <code>months_between</code> возвращает разницу между датами в месяцах:
+</p>
+
+<pre>
+select months_between(
+    to_date('2020-04-01', 'yyyy-mm-dd'),
+    to_date('2020-02-01', 'yyyy-mm-dd')) months_diff_1,
+
+    months_between(
+    to_date('2020-04-01', 'yyyy-mm-dd'),
+    to_date('2020-02-10', 'yyyy-mm-dd')) months_diff_2
+from dual
+</pre>
+
+
+<img src="../../img/10_dates/months_between.png">
+
+<h2 id="timestamp">Тип TIMESTAMP</h2>
+
+<p>
+Тип <code>TIMESTAMP</code> является расширением типа <code>DATE</code>.
+Он также, как и тип <code>DATE</code>, позволяет хранить год, месяц, день, часы, минуты
+и секунды. Но пимимо всего этого в <code>TIMESTAMP</code> можно хранить доли секунды.
+</p>
+
+<p>
+<code>TIMESTAMP</code> - максимально точный тип данных для хранения даты, точнее в
+ORACLE уже нет.
+</p>
+
+<p>
+При описании колонки с типом <code>TIMESTAMP</code> можно указать точность, с которой
+будут храниться доли секунды. Это может быть число от 0 до 9. По умолчанию
+это значение равно 6.
+</p>
+
+<p>
+Пример создания таблицы с колонкой типа <code>TIMESTAMP</code>:
+</p>
+
+<pre>
+create table user_log(
+  username varchar2(50 char) not null,
+  login_time timestamp(8) not null,
+  logout_time timestamp -- эквивалентно TIMESTAMP(6)
+);
+</pre>
+
+<p>
+Колонка <code>logout_time</code> может хранить доли секунды с точностью до 6 знаков
+после запятой, а колонка <code>login_time</code> - с точностью до 8 знаков.
+</p>
+
+<h3>SYSTIMESTAMP</h3>
+
+<p>
+Данная функция работает так же, как и  <code>SYSDATE</code>, только она возвращает
+текущую дату в формате <code>TIMESTAMP</code>:
+</p>
+
+<pre>
+select systimestamp
+from dual
+</pre>
+
+
+<img src="../../img/10_dates/systimestamp.png">
+
+<h2 id="extract">EXTRACT</h2>
+
+<p>
+Функция extract позволяет извлечь из даты определенные составные части,
+например получить только год, или только месяц и т.п.
+</p>
+
+<pre>
+select extract (year from to_date('01.01.2020', 'dd.mm.yyyy')) year,
+       extract (month from to_date('01.01.2020', 'dd.mm.yyyy')) month,
+       extract (day from to_date('01.01.2020', 'dd.mm.yyyy')) day
+from dual
+</pre>
+
+
+<img src="../../img/10_dates/extract_1.png">
+
+<p>
+Извлекаемые части имеют числовой тип данных, т.е. колонки
+<code>year</code>, <code>month</code> и <code>day</code>
+всего лишь числа.
+</p>
+
+<p>
+Несмотря на то, что тип <code>DATE</code> хранит также время вплоть до секунд, получить
+часы, минуты или секунды нельзя:
+</p>
+
+<pre>
+select extract (hour from to_date('01.01.2020 21:40:13', 'dd.mm.yyyy hh24:mi:ss'))
+from dual
+</pre>
+
+<p>
+В ответ мы получим ошибку <code>ORA-30076: invalid extract field for extract source</code>.
+</p>
+
+<p>
+Но если использовать тип <code>TIMESTAMP</code>, то помимо года, месяца и дня с помощью
+функции <code>EXTRACT</code> можно по отдельности получить значение часов, минут и секунд:
+</p>
+
+
+<pre>
+select extract(hour from systimestamp) hour,
+       extract(minute from systimestamp) minute,
+       extract(second from systimestamp) second
+from dual
+</pre>
+
+
+<img src="../../img/10_dates/extract_2.png">
+
+<h3>Приведение строки к timestamp</h3>
+
+<p>
+Для приведения строки к типу <code>timestamp</code> используется фукнция
+<code>TO_TIMESTAMP</code>:
+</p>
+
+
+<pre>
+select TO_TIMESTAMP('2020-01-01 14:43:00.99', 'yyyy-mm-dd hh24:mi:ss.ff') d1,
+       TO_TIMESTAMP('2020-01-01 14:43:00.997836765', 'yyyy-mm-dd hh24:mi:ss.ff9') d2
+from dual
+</pre>
+
+
+<p>
+В запросе выше следует обратить внимание на то, как указывается точность
+долей секунды. <code>ff3</code> будет сохранять точность до тысячных долей секунды,
+<code>ff9</code> - до максимальных 9-и разрядов.
+</p>
+
+<p>
+Форматы строк для приведения к датам очень разнообразны. Здесь
+приведены варианты, которые чаще всего понадобятся на практике.
+Ознакомиться со всеми форматами строк можно в
+<a href="https://docs.oracle.com/cd/B19306_01/server.102/b14200/sql_elements004.htm#i34924">докумениации</a>.
+</p>
+

@@ -1,0 +1,422 @@
+<!--{
+    "Title": "Условные функции",
+    "Links": {
+        "Next": {
+            "Url": "../bit/index.html",
+            "Title": "Битовые операции"
+        },
+        "Prev": {
+            "Url": "../isnull/index.html",
+            "Title": "Функции для работы с NULL"
+        }
+        }
+}-->
+
+<div class="doc-head mb-4 container-10">
+    <h5 class="heading-micro heading-muted">Стандарные функции</h5>
+    <h1 class="heading-huge heading-heavy">Условные функции</h1>
+</div>
+
+<div class="doc-toc mt-6 mb-6">
+    <nav class="menu menu-underline menu-medium menu-numbered">
+        <ul class="menu-list">
+        <li class="menu-item"><a href="#decode" class="menu-link"><code>DECODE</code></a></li>
+        <li class="menu-item"><a href="#case" class="menu-link"><code>CASE</code></a></li>
+        <li class="menu-item"><a href="#condinwhere" class="menu-link">Условные функции в WHERE части</a></li>
+        </ul>
+    </nav>
+</div>
+
+<p>
+Условные функции - это такие функции, которые могут возвращать
+разные результаты в зависимости от выполнения тех или иных
+условий.
+</p>
+
+<p>
+В качестве тестовых данным будем использовать таблицу из части про
+<a href="../nullfunctions/index.html">функции для работы с NULL</a>.
+</p>
+
+
+<h2 id="decode">DECODE</h2>
+
+<p>
+Функция DECODE в общем случае имеет следующий вид:
+</p>
+
+<pre>
+DECODE(что сравниваем,
+       значение1, результат1,
+       значение2, результат2,
+       значение3, результат3,
+       ....
+       значениеN, результатN,
+       значение по-умолчанию)               
+</pre>
+
+<p>
+Первым DECODE принимает параметр, значение
+которого будет сравниваться по очереди со списком
+значений, и в случае, когда он совпадет
+с одним из перечисленных, будет возвращен соответствующий
+результат. Если совпадений не найдено, будет возвращено значение
+по-умолчанию. Если значение по-умолчанию не указано, будет возвращен
+<code>NULL</code>.
+</p>
+
+<p>
+Аргументы могут быть числового, строкового типа, или датой.
+</p>
+
+<p>
+DECODE может сравнивать NULL значения:
+</p>
+
+<pre>
+select login,
+       status,
+       decode(status, -- <- Что сравниваем
+              null, 'Статус не указан', -- <- пара Значение-Результат
+              'Статус указан') has_status -- <- Значение по-умолчанию
+from profiles
+</pre>
+
+
+<pre>
+| LOGIN   | STATUS                      | HAS_STATUS       |
+| johndoe | -                           | Статус не указан |
+| admin   | Я админ. Все вопросы ко мне | Статус указан    |
+| nelsol  | -                           | Статус не указан |
+</pre>
+
+<p>
+Перед сравнением Oracle автоматически приводит первый параметр
+и все значения к типу первого значения в списке параметров. Результат
+функции автоматически приводится к типу первого результата
+в списке параметров. Если первый результат в списке - <code>NULL</code>,
+результат функции <code>DECODE</code> будет приведен к строковому
+типу <code>VARCHAR2</code>.
+</p>
+
+<p>
+Например, следующий запрос не выполнится из-за ошибки
+<code>ORA-01722: invalid number</code>:
+</p>
+
+<pre>
+select decode(login,
+              'admin', 10,
+              'Администратор') has_status
+from profiles
+</pre>
+
+<p>
+Тип возвращаемого значения определяется первым результатом в списке параметров,
+в данном случае - числом "10". Но значение по-умолчанию имеет строковый тип,
+что и приводит к ошибке. Чтобы ошибки не было, нужно либо значение по-умолчанию
+заменить на число, либо заменить число 10 на любой строковый тип.
+</p>
+
+<p>
+Любой из следующих запросов отработает без ошибок:
+</p>
+
+<pre>
+select decode(login,
+              'admin', 'Администратор',
+              'Не администратор') admin_login
+from profiles;
+
+select decode(login,
+              'admin', 10,
+              20) admin_login_flag
+from profiles;
+</pre>
+
+<p>
+В качестве проверяемого значения не обязательно должна быть колонка
+таблицы. В следующем примере проверяем длину логина пользователя:
+</p>
+
+<pre>
+select login,
+       length(login) login_length,
+       decode(length(login),
+              5, 'Пять',
+              6, 'Шесть',
+              'Не пять и не шесть') admin_login_length
+from profiles
+</pre>
+
+<pre>
+| LOGIN   | LOGIN_LENGTH | ADMIN_LOGIN_LENGTH |
+| admin   |            5 | Пять               |
+| johndoe |            7 | Не пять и не шесть |
+| nelsol  |            6 | Шесть              |
+</pre>
+
+<p>
+Максимальное количество параметров в функции <code>DECODE</code> - 255.
+</p>
+
+
+<p>
+Предыдущий пример, только с использованием вложенного
+<code>DECODE</code>:
+</p>
+
+<pre>
+select login,
+       length(login) login_length,
+        decode(length(login),
+              5, 'Пять',
+              decode(length(login),
+                     6, 'Шесть',
+                     'Не пять и не шесть')) admin_login_length
+from profiles
+</pre>
+
+<p>
+Здесь в качестве значения по-умолчанию выступает еще
+один <code>DECODE</code>.
+</p>
+
+<p>
+На практике вложенных <code>decode</code> следует избегать, ровно как и 
+<code>decode</code> с большим количеством параметров.
+</p>
+
+<p>
+Одна из распространенных ошибок - использовать <code>DECODE</code> для того,
+чтобы преобразовать какие-либо флаги в их строковые эквиваленты (при их
+большом количестве):
+</p>
+
+<pre>
+select a.*,
+       decode(a.status,
+              1, 'Закрыт',
+              2, 'Отменен',
+              3, 'Новый',
+              4, 'В обработке'
+       ) status_name
+from some_table a
+</pre>
+
+<p>
+Для подобных ситуаций лучше создать отдельную таблицу
+с кодом статуса и его строковым значением, и использовать
+<a href="../joins/index.html">соединения</a>:
+</p>
+
+<pre>
+select a.*,
+       st.status_name
+from some_table a
+join statuses st on st.status_code = a.status
+</pre>
+
+<h2 id="case">CASE</h2>
+
+<p>
+Выражение <code>CASE</code> во многом похоже на <code>DECODE</code>, но обладает большими
+возможностями. Данное выражение позволяет реализовать полноценную
+условную логику в SQL запросе.
+</p>
+
+<p>
+<code>CASE</code> может использоваться в двух вариантах - простом(англ. simple case expression)
+и поисковом(англ. searched case expression).
+</p>
+
+<p>
+Простой <code>CASE</code> по принципу работы идентичен <code>DECODE</code>:
+</p>
+
+<pre>
+select login,
+       case login -- <- что сравниваем
+           when 'admin' then 'Администратор' -- Результат 1
+           when 'johndoe' then 'Джон До' -- Результат 2
+           else 'Другой пользователь' -- Значение по-умолчанию
+       end user_flag    
+from profiles
+</pre>
+
+<pre>
+| LOGIN   | USER_FLAG           |
+| admin   | Администратор       |
+| johndoe | Джон До             |
+| nelsol  | Другой пользователь |
+</pre>
+
+<p>
+<code>user_flag</code> здесь - псевдоним для столбца. Само выражение начинается
+с ключевого слова <code>case</code> и заканчивается ключевым словом <code>end</code>.
+</p>
+
+<p>
+Как и в <code>DECODE</code>, для проверяемого значения начинают производиться
+сравнения со значениями в блоках <code>WHEN</code>. При первом же совпадении
+функция завершает работу и возвращает соответствующий результат
+(указанный после <code>then</code>). В случае, если ни одного совпадения не было
+найдено, возвращается значение, указанное в блоке <code>ELSE</code>. Если значение
+по-умолчанию не указано, будет возвращен <code>NULL</code>.
+</p>
+
+<p>
+Searched case expression, в отличие от simple case expression,
+является куда более мощным инструментом. В отличие от последнего,
+в searched case expression в блоках when указываются условия, а не
+просто значения для сравнения:
+</p>
+
+<pre>
+select login,
+       case
+           when login = 'admin' then 'Администратор'
+           else 'Не администратор'
+       end is_admin
+from profiles
+</pre>
+
+
+<pre>
+| LOGIN   | IS_ADMIN         |
+| admin   | Администратор    |
+| johndoe | Не администратор |
+| nelsol  | Не администратор |
+</pre>
+
+<pre>
+select login,
+       case
+           when length(login) = 5 then 'Пять'
+           when length(login) > 5 then 'Больше пяти'
+           when length(login) between 0 and 4 then 'От 0 до 4'
+       end login_length_stats
+from profiles
+</pre>
+
+<pre>
+| LOGIN   | LOGIN_LENGTH_STATS |
+| admin   | Пять               |
+| johndoe | Больше пяти        |
+| nelsol  | Больше пяти        |
+</pre>
+
+<p>
+В общем и целом, лучше использовать <code>DECODE</code> для небольших, простых сравнений,
+и <code>CASE</code> для более сложных, т.к. он лучше читается.
+</p> 
+
+<h2 id="condinwhere">Условные функции в WHERE части</h2>
+
+<p>
+Условные функции спокойно могут использоваться в WHERE-части запроса,
+как и другие функции:
+</p>
+
+<pre>
+
+-- Выведет профили пользователей, которые
+-- не являются администраторами
+select *
+from profiles
+where case
+          when login = 'admin' then 1
+          else 0
+       end = 0
+</pre>
+
+<pre>
+| LOGIN   | LAST_UPDATED | STATUS |
+| johndoe | 01-JAN-09    | -      |
+| nelsol  | -            | -      |
+</pre>
+
+<p>
+В примере выше выражение case вернет 0 в тех случаях, когда
+логин пользователя не будет логином администратора. Сразу
+после окончания выражения мы сравниваем его с нулем, тем самым
+получая только не-администраторов. Подобные способы, конечно, лучше
+не использовать, а вместо них прибегать к классическому варианту
+написания запроса, который будет более понятным:
+</p>
+
+<pre>
+select *
+from profiles
+where login <> 'admin'
+</pre>
+
+<p>
+При группировке условные функции, как и все другие,
+должны быть полностью продублированы в <code>GROUP BY</code>,
+использовать псевдоним колонки не получится:
+</p>
+
+<pre>
+-- Этот запрос не сработает
+select case
+           when length(login) > 5 then '> 5'
+           when length(login) < 5 then '< 5'
+           when length(login) = 5 then '= 5'
+       end login_length,
+       count(*) cnt
+from profiles
+group by login_length;
+
+-- А вот этот отработает корректно
+select case
+           when length(login) > 5 then '> 5'
+           when length(login) < 5 then '< 5'
+           when length(login) = 5 then '= 5'
+       end login_length,
+       count(*) cnt
+from profiles
+group by case
+           when length(login) > 5 then '> 5'
+           when length(login) < 5 then '< 5'
+           when length(login) = 5 then '= 5'
+       end
+</pre>
+
+
+<pre>
+| LOGIN_LENGTH | CNT |
+| = 5          |   1 |
+| > 5          |   2 |
+</pre>
+
+<p>
+Запрос выше выведет статистику о количестве логинов пользователей
+с определенной длиной - меньше пяти символов, больше пяти символов, или
+с длиной логина ровно в пять символов.
+</p>
+
+<p>
+Последний запрос можно переписать с использованием
+<a href="../subqueries/index.html">подзапроса</a>, чтобы
+не дублировать <code>CASE</code> в <code>GROUP BY</code>:
+</p>
+
+<pre>
+select login_length,
+       count(*)
+from (
+    select case
+               when length(login) > 5 then '> 5'
+               when length(login) < 5 then '< 5'
+               when length(login) = 5 then '= 5'
+           end login_length,
+           login,
+           status,
+           last_updated
+    from profiles
+)
+group by login_length
+</pre>
+
+

@@ -1,0 +1,79 @@
+<!--{
+    "Title": "Удаление данных. DELETE",
+    "Links": {
+        "Next": {
+            "Url": "../dmlmerge/index.html",
+            "Title": "Слияние данных. MERGE"
+        },
+        "Prev": {
+            "Url": "../dmlupdate/index.html",
+            "Title": "Изменение данных. UPDATE"
+        }
+        }
+}-->
+
+<div class="doc-head mb-4 container-10">
+    <h5 class="heading-micro heading-muted">DML. Изменение данных и структуры БД</h5>
+    <h1 class="heading-huge heading-heavy">Удаление данных. DELETE</h1>
+</div>
+
+
+<p>
+Данный оператор предназначен для удаления строк из таблицы.
+</p>
+
+<p>
+В самом простом варианте
+он используется для удаления всех данных из таблицы:
+</p>
+
+
+<pre>
+-- Удалить все данные из таблицы employees
+delete
+from employees
+</pre>
+
+
+<p>
+Для удаления строк, попадающих под определенный критерий, как и в случае
+с оператором <code>UPDATE</code>, прописываем эти условия в <code>WHERE</code> части:
+</p>
+
+<pre>
+
+-- Удалить данные по сотруднику с id = 20
+delete
+from employees emp
+where emp.id = 20;
+
+-- Удалить данные по сотрудникам старше 70 лет
+delete
+from employees emp
+where emp.age > 70;
+</pre>
+
+<h2>Удаление данных из связанных таблиц</h2>
+
+<p>
+Если в БД есть таблицы, которые содержат строки, ссылающиеся на удаляемые,
+Oracle выдаст ошибку <code>ORA-02292 Constraint violation - child records found</code>.
+</p>
+
+<p>
+В таком случае нужно сначала удалить данные из всех дочерних таблиц,
+и только потом удалить данные из главной таблицы:
+</p>
+
+<pre>
+-- Сначала удаляем данные страховой карточки по сотруднику с id = 10
+delete
+from insurance_card ic
+where ic.emp_id = 10;
+
+-- И только после этого удаляем данные по самому сотруднику
+delete
+from employees emp
+where emp.id = 10;
+</pre>
+

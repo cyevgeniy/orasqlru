@@ -1,0 +1,132 @@
+<!--{
+    "Title": "Вложенные и именованные блоки",
+    "Links": {
+        "Next": {
+            "Url": "../plsql_first_program/index.html",
+            "Title": "Первая программа"
+        },
+        "Prev": {
+            "Url": "../plsql_anonymous_blocks/index.html",
+            "Title": "Анонимные блоки"
+        }
+        }
+}-->
+
+<div class="doc-head mb-4 container-10">
+    <h5 class="heading-micro heading-muted">Основы PL/SQL</h5>
+    <h1 class="heading-huge heading-heavy">Вложенные и именованные блоки </h1>
+</div>
+
+<div class="doc-toc mt-6 mb-6">
+    <nav class="menu menu-underline menu-medium menu-numbered">
+        <ul class="menu-list">
+        <li class="menu-item"><a href="#nestedblocks" class="menu-link">Вложенные блоки </a></li>
+        <li class="menu-item"><a href="#labels" class="menu-link">Метки блоков</a></li>
+        </ul>
+    </nav>
+</div>
+
+<p>
+В <a href="../plsql_anonymous_blocks/index.html">прошлый раз</a> был
+рассмотрен самый простой вариант блоков в PL/SQL - анонимные блоки.
+</p>
+
+<p>
+В этой части мы рассмотрим возможность вкладывать блоки
+внутрь других блоков, а также давать блокам имена.
+</p>
+
+
+<h2 id="nestedblocks">Вложенные блоки</h2>
+
+<pre>
+<code>declare
+    l_a number := 10;
+begin
+    -- Начало вложенного блока
+    declare
+        l_b number;
+    begin
+        l_b := 20;
+        dbms_output.put_line(l_a);
+        dbms_output.put_line(l_b);
+    end;
+end;
+/</code>
+</pre>
+
+<p>
+Вложенные блоки могут обращаться ко всем объектам, которые
+были объявлены во внешних блоках. Именно поэтому в примере
+выше  мы свободно
+можем обращаться из к переменной <code>l_a</code>, которая была
+объявлена во внешнем блоке.
+</p>
+
+<p>
+Обратное неверно - мы не можем обращаться из внешнего блока к
+объектам, которые были объявлены во внутреннем блоке:
+</p>
+
+<pre>
+<code>declare
+    l_a number := 10;
+begin
+    declare
+        l_b number;
+    begin
+        l_b := 20;
+        dbms_output.put_line(l_b);
+        dbms_output.put_line(l_a);
+    end;
+
+    -- Мы не можем обращаться к переменной l_b
+    if l_b = 10 then
+        dbms_output.put_line('l_b равно 10')
+    else
+        dbms_output.put_line('l_b не равно 10');
+    end if;
+end;
+/</code>
+</pre>
+
+
+<h2 id="labels">Метки блоков</h2>
+
+<p>
+Мы можем именовать блоки метками, чтобы можно было
+отличить несколько объектов с одним и тем же
+именем во внешних блоках:
+</p>
+
+
+<pre>
+<code>&lt&ltmain&gt&gt
+declare
+    l_a number := 10;
+begin
+    &lt&ltchild&gt&gt
+    declare
+        l_a number := 20;
+    begin
+        dbms_output.put_line(main.l_a);
+        dbms_output.put_line(child.l_a);
+    end;
+end;
+/</code>
+</pre>
+
+<p>
+В примере выше во внешнем и внутреннем блоках объявлены
+переменные <code>l_a</code>, и используя метки
+блоков <code>&lt&ltmain&gt&gt</code> и <code>&lt&ltchild&gt&gt</code>, мы можем указывать, какую
+же именно переменную использовать - из внешнего, либо
+из внутреннего блока.
+</p>
+
+<div class="alert alert-error">
+<p>
+По возможности, подобных случаев следует избегать, так
+как они усложняют чтение программы.
+</p>
+</div>
