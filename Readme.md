@@ -1,19 +1,17 @@
 ## Учебник Oracle SQL
 
-Собирается наколенным скриптом на Go:
+Работает на Hugo.
+Для запуска понадобится тема [orasqlru-theme](https://github.com/cyevgeniy/orasqlru-theme).
 
-Билдим:
+Для запуска:
 
 ```bash
-go build build.go
+hugo server --themesDir=pathToOrasqlruTheme
 ```
 
-```bash
-./build
-```
-
-Или сразу, без билдов:
+Например, если тема находится на том же уровне, что и сам сайт,
+команда для запуска сервера следующая:
 
 ```bash
-go run build.go
+hugo server --themesDir=../
 ```
