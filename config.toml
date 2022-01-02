@@ -1,0 +1,31 @@
+baseURL = "https://orasql.ru/"
+languageCode = "en-us"
+title = "Учебник Oracle SQL, PL/SQL"
+theme= "orasqlru-theme"
+
+[menu]
+  [[menu.main]]
+    name = "Книга"
+    url = "/book/"
+    weight = 1
+  [[menu.main]]
+    name = "Github"
+    url = "https://github.com/cyevgeniy/orasqlru"
+    weight = 2
+
+[params]
+  brand="Orasql.ru"
+
+[markup]
+[markup.highlight]
+anchorLineNos = false
+codeFences = true
+guessSyntax = false
+hl_Lines = ''
+lineAnchors = ''
+lineNoStart = 1
+lineNos = false
+lineNumbersInTable = true
+noClasses = true
+style = 'github'
+tabWidth = 4
