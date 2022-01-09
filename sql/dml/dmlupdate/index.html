@@ -1,0 +1,128 @@
+<!doctype html><html><head>
+<meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<link rel=stylesheet href=/css/superkube.min.css>
+<link rel=stylesheet href=/css/main.css>
+<title>Учебник Oracle SQL, PL/SQL | Изменение данных. UPDATE</title>
+</head>
+<body><div class="navbar bg-dark mb-10">
+<div class="navbar-container container edges centered">
+<div class=navbar-brand>
+<a href=/ class=brand>
+Orasql.ru
+</a>
+</div>
+<div class="navbar-nav ml-6">
+<nav class="nav nav-light nav-semibold">
+<ul class=nav-list>
+<li class=nav-item><a href=/book/ class=nav-link>Книга</a></li>
+</ul>
+</nav>
+<nav class="nav nav-light nav-semibold">
+<ul class=nav-list>
+<li class=nav-item><a href=https://github.com/cyevgeniy/orasqlru class=nav-link>Github</a></li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div id=container class="container-medium edges centered">
+<div class="doc-head mb-4 container-10">
+<h5 class="heading-micro heading-muted">DML. Изменение данных и структуры БД</h5>
+<h1 class="heading-huge heading-heavy">Изменение данных. UPDATE</h1>
+</div>
+<p>Данный оператор изменяет уже существующие данные в таблице.</p>
+<p>Общий синтаксис выглядит следующим образом:</p>
+<pre><code>UPDATE table_1 t
+SET t.column_1 = val_1,
+    t.columm_2 = val_2
+WHERE 
+</code></pre>
+<p>При обновлении можно ссылаться на текущие значения в таблице. Например,
+увеличим возраст всех сотрудников на 1 год:</p>
+<pre><code>update employees emp
+set emp.age = emp.age + 1
+</code></pre>
+<p>Можно добавлять любые условия в <code>where</code>, как и в select- запросах, чтобы
+обновить не все строки в таблице, а только те, которые удовлетворяют
+определенным условиям.</p>
+<pre><code>-- Увеличить возраст сотруднику с именем Антон Иванов
+update employees emp
+set emp.age = emp.age + 1
+where emp.name = 'Антон Иванов';
+
+-- Увеличить возраст сотруднику с id = 10 и привести имя к верхнему регистру
+update employees emp
+set emp.age = emp.age + 1,
+    emp.name = upper(emp.name)
+where emp.id = 10;
+</code></pre>
+<p>При обновлении мы можем использовать подзапросы для получения новых
+значений:</p>
+<pre><code>update employees emp
+-- для каждого сотрудника получаем возраст из таблицы страховой карточки
+-- и присваиваем это значение в колонку emp таблицы employees
+set emp.age = (select age from insurance_card ic where ic.emp_id = emp.id)
+where emp.age is null
+</code></pre>
+<p>В данном случае использовался коррелированный подзапрос, чтобы получить
+возраст сотрудника из его страховой карточки.</p>
+<p>С использованием подзапросов можно обновлять сразу несколько колонок в
+таблице:</p>
+<pre><code>update employees emp
+set(
+    emp.age,
+    emp.passport_no
+) = (select ic.age, ic.passport_no from insurance_card ic
+     where ic.emp_id = emp.id) 
+</code></pre>
+<p>Подобное обновление сразу нескольких колонок работает только с
+подзапросами, вручную установить значения не получится:</p>
+<pre><code>-- Получим ошибку!
+update employees emp
+set(
+    emp.age,
+    emp.passport_no
+) = (20, '324589')
+</code></pre>
+<p>В результате получим ошибку
+<code>ORA-01767: UPDATE ... SET expression must be a subquery</code>.</p>
+<p>Но зато можно вот так:</p>
+<pre><code>update employees emp
+set(
+    emp.age,
+    emp.passport_no
+) = (select 20, '324589' from dual)
+</code></pre>
+<p>Последний запрос более демонстрационный, если нужно обновить несколько
+колонок заранее известными константами, то лучше прибегнуть к
+&ldquo;классическому&rdquo; варианту обновления таблицы - так запрос будет проще
+читаться.</p>
+<nav class="pagination mb-3">
+<ul class=pagination-list>
+<li class=pagination-item>
+<a href=https://orasql.ru/sql/dml/dmlinsert/ class="pagination-link pagination-prev"> &lt; Оператор INSERT </a>
+</li>
+<li class="pagination-item ml-auto">
+<a href=https://orasql.ru/sql/dml/dmldelete/ class="pagination-link pagination-next"> Удаление данных. DELETE > </a>
+</li>
+</ul>
+</nav>
+</div>
+<footer class="footer b-dark-low b-top">
+<div class="footer-container container centered edges">
+<div class="footer-body mt-10">
+<nav class="nav nav-muted nav-menu-sm"><ul class=nav-list>
+<li class=nav-item><a href=/ class=nav-link>Orasql.ru</a></li>
+<li class=nav-item><a href=/ class=nav-link>Учебник</a></li>
+<li class=nav-item><p class="text-medium text-moderated">Email: orasqlru@gmail.com</p></li>
+</ul>
+</nav>
+</div>
+<div class="footer-copy mt-6 pt-6 b-dark-7 b-top">
+<p class="text-medium text-moderated">© Orasql.ru <br> 2019-2021</p>
+</div>
+</div>
+</footer>
+</body>
+</html>

@@ -1,0 +1,150 @@
+<!doctype html><html><head>
+<meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<link rel=stylesheet href=/css/superkube.min.css>
+<link rel=stylesheet href=/css/main.css>
+<title>Учебник Oracle SQL, PL/SQL | Основные типы данных</title>
+</head>
+<body><div class="navbar bg-dark mb-10">
+<div class="navbar-container container edges centered">
+<div class=navbar-brand>
+<a href=/ class=brand>
+Orasql.ru
+</a>
+</div>
+<div class="navbar-nav ml-6">
+<nav class="nav nav-light nav-semibold">
+<ul class=nav-list>
+<li class=nav-item><a href=/book/ class=nav-link>Книга</a></li>
+</ul>
+</nav>
+<nav class="nav nav-light nav-semibold">
+<ul class=nav-list>
+<li class=nav-item><a href=https://github.com/cyevgeniy/orasqlru class=nav-link>Github</a></li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div id=container class="container-medium edges centered">
+<div class="doc-head mb-4 container-10">
+<h5 class="heading-micro heading-muted">Основы</h5>
+<h1 class="heading-huge heading-heavy">Основные типы данных</h1>
+</div>
+<div class="doc-toc mt-6 mb-6">
+<nav class="menu menu-underline menu-medium menu-numbered">
+<ul class=menu-list>
+<li class=menu-item>
+<a href=#varchar2 class=menu-link>Varchar2</a>
+</li><li class=menu-item>
+<a href=#number class=menu-link>Number</a>
+</li><li class=menu-item>
+<a href=#date class=menu-link>Date</a>
+</li><li class=menu-item>
+<a href=#boolean class=menu-link>Boolean</a>
+</li></ul></nav>
+</div>
+<p>Таблицы могут содержать не только строки. Рассмотрим основные типы
+данных в БД Oracle.</p>
+<h2 id=varchar2>Varchar2</h2>
+<p>Строковый тип. При создании таблицы всегда нужно указывать размер
+строки. Размер может указываться в байтах либо в символах. По-умолчанию
+максимальный размер строки равен 4000 байт, либо 4000 символов. Этот
+размер может быть изменен дополнительной настройкой БД.</p>
+<pre><code>country(100);-- строка из 100 байт
+country(100 char); -- строка из 100 символов
+</code></pre>
+<h2 id=number>Number</h2>
+<p>Числовой тип данных. Используется для хранения как целых чисел, так и
+дробных чисел. Тип Number может хранить положительные или отрицательные
+числа, размер которых ограничен 38 цифрами. Размер числового типа можно
+ограничивать:</p>
+<pre><code>age number(3); -- максимальное число = 999; минимальное= -999
+price number(5,3);  -- максимальное число = 99.999; минимальное= -99,999
+must_print number(1); -- максимальное число = 9; минимальное= -9
+rounded_price number(5, -2); -- Число, округленное до 2-символа влево, начиная от разделителя дроби
+</code></pre>
+<p>Рассмотрим последний пример: <code>rounded_price number(5, -2)</code>. Значение -2
+здесь означает, что любое дробное число, которое будет записываться в
+эту колонку, будет округлено, включая две предшествующих резделителю
+дроби цифры. Ниже показаны примеры входных чисел и числа, в которые они
+будут преобразованы при сохранении их в колонке <code>rounded_price</code>:</p>
+<pre><code>Входное число | Выходное число
+3245.3        |   3200
+12.345        |   0
+</code></pre>
+<h2 id=date>Date</h2>
+<p>Тип Date предназначен для хранения даты и времени. Данный тип данных
+хранить в себе следующую информацию:</p>
+<ul>
+<li>Год</li>
+<li>Месяц</li>
+<li>День(Число)</li>
+<li>Часы</li>
+<li>Минуты</li>
+<li>Секунды</li>
+</ul>
+<p>Не всегда бизнес-логика приложения требует хранения даты вплоть до
+секунды или до дня - иногда нас может интересовать лишь конкретный месяц
+в году, или только год. В таких случаях незначимая информация как
+правило устанавливается в некое начальное значение, например:</p>
+<pre><code>|Что нам нужно хранить      |Что мы сохраняем в БД
+----------------------------+----------------------
+| Дату вплоть до числа      | 20.05.2019
+| Определенный месяц в году | 01.10.2019
+| Время, до минут           | 01.01.1900 20:48
+</code></pre>
+<p>Во втором случае нас интересует только месяц и год, но мы не можем
+игнорировать число, поэтому мы сами решили использовать в качестве дня
+первый день месяца. Здесь могло быть и 3, и 30, и 20 число месяца.
+Просто при работе с такими колонками следует знать, для чего они
+используются и использовать только ту часть даты, которая должна
+использоваться согласно бизнес-логике.</p>
+<p>В третьем случае дата как таковая нас вообще не интересует - нам важно
+знать только время, поэтому год, месяц и число можно выбрать любые.
+Конечно, чтобы использовать только время, нужно будет производить
+определенные манипуляции со значением такого столбца(например отделение
+значения часов и/или минут, приведение числа, месяца и года к
+определенным значениям, и т.п.). Также, если известно, что придется
+работать только определенной частью даты, можно использовать тип number.
+Как пример - колонка <code>release_year</code>, которая хранит в себе год выпуска
+определенной модели авто. Здесь месяц, число и время скорее всего не
+понадобятся совсем.</p>
+<h2 id=boolean>Boolean</h2>
+<p>Логического типа данных в БД Oracle нет. Но вместо него можно
+использовать уже знакомые типы <code>number или </code>varchar2:</p>
+<pre><code>create table questions(
+    is_right_n number(1), --&lt;1&gt;
+    is_right_c varchar2(1) --&lt;2&gt;
+);
+</code></pre>
+<p>&lt;1> - значение, равное 1 трактуем как истину, иначе - ложь(или
+наоборот) &lt;2> значение, равное символу &lsquo;Y&rsquo; - истинно, &lsquo;N&rsquo; - ложно</p>
+<nav class="pagination mb-3">
+<ul class=pagination-list>
+<li class=pagination-item>
+<a href=https://orasql.ru/sql/basics/tables/ class="pagination-link pagination-prev"> &lt; Таблицы </a>
+</li>
+<li class="pagination-item ml-auto">
+<a href=https://orasql.ru/sql/basics/selectstruct/ class="pagination-link pagination-next"> Пример SELECT запроса > </a>
+</li>
+</ul>
+</nav>
+</div>
+<footer class="footer b-dark-low b-top">
+<div class="footer-container container centered edges">
+<div class="footer-body mt-10">
+<nav class="nav nav-muted nav-menu-sm"><ul class=nav-list>
+<li class=nav-item><a href=/ class=nav-link>Orasql.ru</a></li>
+<li class=nav-item><a href=/ class=nav-link>Учебник</a></li>
+<li class=nav-item><p class="text-medium text-moderated">Email: orasqlru@gmail.com</p></li>
+</ul>
+</nav>
+</div>
+<div class="footer-copy mt-6 pt-6 b-dark-7 b-top">
+<p class="text-medium text-moderated">© Orasql.ru <br> 2019-2021</p>
+</div>
+</div>
+</footer>
+</body>
+</html>

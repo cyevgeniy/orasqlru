@@ -1,0 +1,134 @@
+<!doctype html><html><head>
+<meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<link rel=stylesheet href=/css/superkube.min.css>
+<link rel=stylesheet href=/css/main.css>
+<title>Учебник Oracle SQL, PL/SQL | Виртуальные колонки</title>
+</head>
+<body><div class="navbar bg-dark mb-10">
+<div class="navbar-container container edges centered">
+<div class=navbar-brand>
+<a href=/ class=brand>
+Orasql.ru
+</a>
+</div>
+<div class="navbar-nav ml-6">
+<nav class="nav nav-light nav-semibold">
+<ul class=nav-list>
+<li class=nav-item><a href=/book/ class=nav-link>Книга</a></li>
+</ul>
+</nav>
+<nav class="nav nav-light nav-semibold">
+<ul class=nav-list>
+<li class=nav-item><a href=https://github.com/cyevgeniy/orasqlru class=nav-link>Github</a></li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div id=container class="container-medium edges centered">
+<div class="doc-head mb-4 container-10">
+<h5 class="heading-micro heading-muted">Объекты БД</h5>
+<h1 class="heading-huge heading-heavy">Виртуальные колонки</h1>
+</div>
+<div class="doc-toc mt-6 mb-6">
+<nav class="menu menu-underline menu-medium menu-numbered">
+<ul class=menu-list>
+<li class=menu-item>
+<a href=#%d1%81%d0%be%d0%b7%d0%b4%d0%b0%d0%bd%d0%b8%d0%b5-%d0%b2%d0%b8%d1%80%d1%82%d1%83%d0%b0%d0%bb%d1%8c%d0%bd%d1%8b%d1%85-%d0%ba%d0%be%d0%bb%d0%be%d0%bd%d0%be%d0%ba class=menu-link>Создание виртуальных колонок</a>
+</li><li class=menu-item>
+<a href=#%d0%b4%d0%be%d0%b1%d0%b0%d0%b2%d0%bb%d0%b5%d0%bd%d0%b8%d0%b5-%d0%b2%d0%b8%d1%80%d1%82%d1%83%d0%b0%d0%bb%d1%8c%d0%bd%d0%be%d0%b9-%d0%ba%d0%be%d0%bb%d0%be%d0%bd%d0%ba%d0%b8-%d0%ba-%d1%83%d0%b6%d0%b5-%d1%81%d1%83%d1%89%d0%b5%d1%81%d1%82%d0%b2%d1%83%d1%8e%d1%89%d0%b5%d0%b9-%d1%82%d0%b0%d0%b1%d0%bb%d0%b8%d1%86%d0%b5 class=menu-link>Добавление виртуальной колонки к уже существующей таблице</a>
+</li><li class=menu-item>
+<a href=#%d0%ba%d0%be%d0%b3%d0%b4%d0%b0-%d0%b8%d1%81%d0%bf%d0%be%d0%bb%d1%8c%d0%b7%d0%be%d0%b2%d0%b0%d1%82%d1%8c-%d0%b2%d0%b8%d1%80%d1%82%d1%83%d0%b0%d0%bb%d1%8c%d0%bd%d1%8b%d0%b5-%d0%ba%d0%be%d0%bb%d0%be%d0%bd%d0%ba%d0%b8 class=menu-link>Когда использовать виртуальные колонки</a>
+</li></ul></nav>
+</div>
+<h2 id=создание-виртуальных-колонок>Создание виртуальных колонок</h2>
+<p>Виртуальные колонки были добавлены в 11 версии Oracle.</p>
+<p>Виртуальные колонки - это колонки, которые вычисляются на основе других
+колонок таблицы. Например:</p>
+<pre><code>create table cars(
+    id number primary key,
+    model varchar2(100) not null,
+    engine_volume number,
+    max_speed_km number not null,
+    max_speed_ml generated always as
+         (max_speed_km / 1.609));
+
+comment on column cars.max_speed_km is
+    'Максимальная скорость, км/ч';
+comment on column cars.max_speed_ml is
+    'Максимальная скорость, миль/ч';
+</code></pre>
+<p>Здесь максимальная скорость в милях вычисляется на основании данных о
+максимальной скорости автомобиля в километрах.</p>
+<p>Фраза <code>generated always</code> используется для улучшения читаемости - чтобы
+было понятнее, что колонка будет вычисляемой. Объявить колонку
+<code>max_speed_ml</code> можно было и без нее:</p>
+<pre><code>max_speed_ml as (max_speed_km / 1609.344)
+</code></pre>
+<p>Указывать тип данных в колонке необязательно - Oracle сможет определить
+его на основании выражения, которое ее описывает.</p>
+<p>Когда мы добавляем данные в таблицу, виртуальные колонки не должны нигде
+указываться, т.к. они будут вычислены автоматически:</p>
+<pre><code>insert into cars(id, model, engine_volume, max_speed_km)
+values(1, 'Tesla', NULL, 250);
+</code></pre>
+<p>Теперь посмотрим на данные в таблице:</p>
+<pre><code>| ID | MODEL | ENGINE_VOLUME | MAX_SPEED_KM | MAX_SPEED_ML |
+|  1 | Tesla | -             |          250 | 155.37       |
+</code></pre>
+<p>На самом деле значение в вычисляемой колонке будет другим, т.к. мы не
+использовали округление при его вычислении. Для удобства отображения мы
+оставили лишь 2 знака после запятой.</p>
+<h2 id=добавление-виртуальной-колонки-к-уже-существующей-таблице>Добавление виртуальной колонки к уже существующей таблице</h2>
+<pre><code>alter table cars
+add(
+    max_speed_m generated always as
+        (max_speed_km * 1000)
+);
+</code></pre>
+<p>Теперь в таблице хранится и скорость автомобиля в метрах в час:</p>
+<pre><code>select id,
+       max_speed_km,
+       round(max_speed_ml, 2) msm,
+       max_speed_m
+from cars
+
+| ID | MAX_SPEED_KM |    MSM | MAX_SPEED_M |
+|  1 |          250 | 155.38 |      250000 |
+</code></pre>
+<h2 id=когда-использовать-виртуальные-колонки>Когда использовать виртуальные колонки</h2>
+<p>Виртуальные колонки позволяют не использовать
+<a href=/sql/dbobjects/views/>представления</a> в тех случаях, когда колонки,
+которые часто требуются наравне с &ldquo;чистыми&rdquo; данными таблицы, можно
+вычислить на основании этих самых чистых данных.</p>
+<p>В таком случае ваша схема БД будет проще - за всеми необходимыми данными
+обращаемся напрямую к таблице.</p>
+<nav class="pagination mb-3">
+<ul class=pagination-list>
+<li class=pagination-item>
+<a href=https://orasql.ru/sql/dbobjects/indexes/ class="pagination-link pagination-prev"> &lt; Индексы </a>
+</li>
+<li class="pagination-item ml-auto">
+<a href=https://orasql.ru/sql/dbobjects/pseudocolumns/ class="pagination-link pagination-next"> Псевдостолбцы в Oracle > </a>
+</li>
+</ul>
+</nav>
+</div>
+<footer class="footer b-dark-low b-top">
+<div class="footer-container container centered edges">
+<div class="footer-body mt-10">
+<nav class="nav nav-muted nav-menu-sm"><ul class=nav-list>
+<li class=nav-item><a href=/ class=nav-link>Orasql.ru</a></li>
+<li class=nav-item><a href=/ class=nav-link>Учебник</a></li>
+<li class=nav-item><p class="text-medium text-moderated">Email: orasqlru@gmail.com</p></li>
+</ul>
+</nav>
+</div>
+<div class="footer-copy mt-6 pt-6 b-dark-7 b-top">
+<p class="text-medium text-moderated">© Orasql.ru <br> 2019-2021</p>
+</div>
+</div>
+</footer>
+</body>
+</html>

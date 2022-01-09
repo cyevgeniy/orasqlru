@@ -1,0 +1,200 @@
+<!doctype html><html><head>
+<meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<link rel=stylesheet href=/css/superkube.min.css>
+<link rel=stylesheet href=/css/main.css>
+<title>Учебник Oracle SQL, PL/SQL | Переменные, константы. Простые типы данных</title>
+</head>
+<body><div class="navbar bg-dark mb-10">
+<div class="navbar-container container edges centered">
+<div class=navbar-brand>
+<a href=/ class=brand>
+Orasql.ru
+</a>
+</div>
+<div class="navbar-nav ml-6">
+<nav class="nav nav-light nav-semibold">
+<ul class=nav-list>
+<li class=nav-item><a href=/book/ class=nav-link>Книга</a></li>
+</ul>
+</nav>
+<nav class="nav nav-light nav-semibold">
+<ul class=nav-list>
+<li class=nav-item><a href=https://github.com/cyevgeniy/orasqlru class=nav-link>Github</a></li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div id=container class="container-medium edges centered">
+<div class="doc-head mb-4 container-10">
+<h5 class="heading-micro heading-muted">Основы PL/SQL</h5>
+<h1 class="heading-huge heading-heavy">Переменные, константы. Простые типы данных</h1>
+</div>
+<div class="doc-toc mt-6 mb-6">
+<nav class="menu menu-underline menu-medium menu-numbered">
+<ul class=menu-list>
+<li class=menu-item>
+<a href=#%d1%87%d0%b8%d1%81%d0%bb%d0%b0 class=menu-link>Числа</a>
+</li><li class=menu-item>
+<a href=#%d0%b4%d0%b0%d1%82%d1%8b class=menu-link>Даты</a>
+</li><li class=menu-item>
+<a href=#%d1%81%d1%82%d1%80%d0%be%d0%ba%d0%b8 class=menu-link>Строки</a>
+</li><li class=menu-item>
+<a href=#%d0%bb%d0%be%d0%b3%d0%b8%d1%87%d0%b5%d1%81%d0%ba%d0%b8%d0%b9-%d1%82%d0%b8%d0%bf class=menu-link>Логический тип</a>
+</li><li class=menu-item>
+<a href=#%d0%bf%d0%b5%d1%80%d0%b5%d0%bc%d0%b5%d0%bd%d0%bd%d1%8b%d0%b5 class=menu-link>Переменные</a>
+</li><li class=menu-item>
+<a href=#%d0%ba%d0%be%d0%bd%d1%81%d1%82%d0%b0%d0%bd%d1%82%d1%8b class=menu-link>Константы</a>
+</li></ul></nav>
+</div>
+<p>Рассмотрим типы, которые позволяют хранить три сущности - числа, строки
+и даты.</p>
+<h2 id=числа>Числа</h2>
+<p>Тип для хранения чисел в PL/SQL используется тот же тип данных, что и
+при создании таблиц. Почитать про него можно
+<a href=/sql/basics/maintypes/>здесь</a>.</p>
+<p>Существуют и другие типы для работы с числами, например <code>PLS_INTEGER</code>,
+<code>SIMPLE_INTEGER</code> и др. Они будут рассмотрены позже.</p>
+<h2 id=даты>Даты</h2>
+<p>Для дат используются те же типы, что и в SQL - <code>Date</code> и <code>Timestamp</code>.</p>
+<h2 id=строки>Строки</h2>
+<p>Для хранения строк используются типы <code>Varchar2</code> и <code>CLOB</code>. Последний
+расшифровывается как <em>Char Large Object</em>, и предназначен для хранения
+очень больших объемов текстовой информации.</p>
+<p>Стоит отметить разницу типов <code>Varchar2</code> в SQL и PL/SQL: в первом случае
+максимальная длина ограничена 32767 байтами, во втором - 4000 байтами.</p>
+<h2 id=логический-тип>Логический тип</h2>
+<p>Логический тип данных используется для хранения значений True(истина)
+или False(ложь). В PL/SQL такой тип данных называется <code>BOOLEAN</code>. Он еще
+будет рассмотрен подробнеее далее в учебнике.</p>
+<h2 id=переменные>Переменные</h2>
+<p>Переменные в PL/SQL должны объявляться в секции объявления переменных.
+Так как мы пока рассмотрели только
+<a href=/plsql/basics/plsql_anonymous_blocks/>анонимные блоки</a>, работать будем с ними.</p>
+<p>Напишем анонимный блок, в котором задействуем переменные:</p>
+<pre><code>declare
+    age number;
+    name varchar2(100 char);
+begin
+    age := 45;
+    name := 'Alex';
+
+    dbms_output.put_line(age);
+    dbms_output.put_line(name);
+end;
+/
+</code></pre>
+<p>Вывод на экран:</p>
+<pre><code>45
+Alex
+</code></pre>
+<p>Выше мы объявили две переменные, <code>age</code> и <code>name</code>, которым позднее
+присвоили значения.</p>
+<p>Присваивание значений переменным допускается сразу после их определения:</p>
+<pre><code>declare
+    age number := 45;
+    name varchar2(100 char) := 'Alex';
+begin
+    null;
+end;
+/
+</code></pre>
+<p>Следует обратить внимание на то, что при объявлении строкового типа
+нужно указываеть размер, как в примере выше.</p>
+<p>Команда null ничего полезного не делает, в PL/SQL она используется для
+того, чтобы подставлять ее в те места, где компилятор требует наличия
+команды. Так и в нашем примере - исполняемый блок должен что-то иметь
+внутри себя.</p>
+<p>После объявления переменных с ними можно производить различные операции</p>
+<ul>
+<li>
+<p>арифметические, логические, булевы и так далее. Не будем все
+рассматривать детально, так как сложностей здесь возникать не должно.</p>
+<p>declare
+age number := 10;
+name varchar2(100 char) := &lsquo;Alex&rsquo;;
+begin
+age := age + 20;
+name := &lsquo;Hello, ' || name;</p>
+<pre><code>  dbms_output.put_line(age);
+  dbms_output.put_line(name);
+</code></pre>
+<p>end;
+/</p>
+</li>
+</ul>
+<p>Вывод:</p>
+<pre><code>30
+Hello, Alex
+</code></pre>
+<h2 id=константы>Константы</h2>
+<p>Константа - это переменная, значение которой нельзя изменять.</p>
+<p>Пример объявления константы:</p>
+<pre><code>declare
+    MIN_AGE constant number := 21;
+begin
+    dbms_output.put_line('Минимальный возраст для входа: ' || MIN_AGE);
+end;
+/
+</code></pre>
+<p>Вывод:</p>
+<pre><code>Минимальный возраст для входа: 21
+</code></pre>
+<p>Константе должно присваиваться значение сразу после ее объявления.</p>
+<p>Значение констант нельзя изменять, но во всем остальном они работают
+точно также, как и переменные:</p>
+<pre><code>declare
+    DEFAULT_NAME VARCHAR2(10) := 'Anonymous';
+    MIN_AGE constant number := 21;
+    user_name varchar2(50);
+    user_age number;
+begin
+    -- Присваиваем значение константы переменной
+    user_name := DEFAULT_NAME;
+    user_age := MIN_AGE;
+
+    dbms_output.put_line(user_name);
+    dbms_output.put_line(user_age);
+
+    -- Увеличиваем значение переменной на значение константы
+    user_age := user_age + MIN_AGE;
+    
+    dbms_output.put_line(user_age);
+
+end;
+/
+</code></pre>
+<p>Вывод:</p>
+<pre><code>Anonymous
+21
+42
+</code></pre>
+<nav class="pagination mb-3">
+<ul class=pagination-list>
+<li class=pagination-item>
+<a href=https://orasql.ru/plsql/basics/plsql_dbms_put_line/ class="pagination-link pagination-prev"> &lt; DBMS_OUTPUT.PUT_LINE. Вывод на экран </a>
+</li>
+<li class="pagination-item ml-auto">
+<a href=https://orasql.ru/plsql/basics/plsql_ifelse/ class="pagination-link pagination-next"> Условное ветвление. If...else...elsif > </a>
+</li>
+</ul>
+</nav>
+</div>
+<footer class="footer b-dark-low b-top">
+<div class="footer-container container centered edges">
+<div class="footer-body mt-10">
+<nav class="nav nav-muted nav-menu-sm"><ul class=nav-list>
+<li class=nav-item><a href=/ class=nav-link>Orasql.ru</a></li>
+<li class=nav-item><a href=/ class=nav-link>Учебник</a></li>
+<li class=nav-item><p class="text-medium text-moderated">Email: orasqlru@gmail.com</p></li>
+</ul>
+</nav>
+</div>
+<div class="footer-copy mt-6 pt-6 b-dark-7 b-top">
+<p class="text-medium text-moderated">© Orasql.ru <br> 2019-2021</p>
+</div>
+</div>
+</footer>
+</body>
+</html>

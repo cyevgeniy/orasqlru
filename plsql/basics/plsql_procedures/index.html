@@ -1,0 +1,226 @@
+<!doctype html><html><head>
+<meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<link rel=stylesheet href=/css/superkube.min.css>
+<link rel=stylesheet href=/css/main.css>
+<title>Учебник Oracle SQL, PL/SQL | Процедуры в PL/SQL</title>
+</head>
+<body><div class="navbar bg-dark mb-10">
+<div class="navbar-container container edges centered">
+<div class=navbar-brand>
+<a href=/ class=brand>
+Orasql.ru
+</a>
+</div>
+<div class="navbar-nav ml-6">
+<nav class="nav nav-light nav-semibold">
+<ul class=nav-list>
+<li class=nav-item><a href=/book/ class=nav-link>Книга</a></li>
+</ul>
+</nav>
+<nav class="nav nav-light nav-semibold">
+<ul class=nav-list>
+<li class=nav-item><a href=https://github.com/cyevgeniy/orasqlru class=nav-link>Github</a></li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div id=container class="container-medium edges centered">
+<div class="doc-head mb-4 container-10">
+<h5 class="heading-micro heading-muted">Основы PL/SQL</h5>
+<h1 class="heading-huge heading-heavy">Процедуры в PL/SQL</h1>
+</div>
+<div class="doc-toc mt-6 mb-6">
+<nav class="menu menu-underline menu-medium menu-numbered">
+<ul class=menu-list>
+<li class=menu-item>
+<a href=#%d0%bf%d1%80%d0%b8%d0%bc%d0%b5%d1%80-%d1%81%d0%be%d0%b7%d0%b4%d0%b0%d0%bd%d0%b8%d1%8f-%d0%bf%d1%80%d0%be%d1%81%d1%82%d0%be%d0%b9-%d0%bf%d1%80%d0%be%d1%86%d0%b5%d0%b4%d1%83%d1%80%d1%8b class=menu-link>Пример создания простой процедуры</a>
+</li><li class=menu-item>
+<a href=#%d0%be%d0%b1%d1%89%d0%b5%d0%bf%d1%80%d0%b8%d0%bd%d1%8f%d1%82%d1%8b%d0%b5-%d1%80%d0%b0%d0%b7%d0%bb%d0%b8%d1%87%d0%b8%d1%8f-%d0%bc%d0%b5%d0%b6%d0%b4%d1%83-%d1%84%d1%83%d0%bd%d0%ba%d1%86%d0%b8%d1%8f%d0%bc%d0%b8-%d0%b8-%d0%bf%d1%80%d0%be%d1%86%d0%b5%d0%b4%d1%83%d1%80%d0%b0%d0%bc%d0%b8 class=menu-link>Общепринятые различия между функциями и процедурами</a>
+</li><li class=menu-item>
+<a href=#in-out-in-out-%d0%bf%d0%b0%d1%80%d0%b0%d0%bc%d0%b5%d1%82%d1%80%d1%8b class=menu-link>IN, OUT, IN OUT параметры</a>
+</li><li class=menu-item>
+<a href=#%d1%83%d0%b4%d0%b0%d0%bb%d0%b5%d0%bd%d0%b8%d0%b5-%d0%bf%d1%80%d0%be%d1%86%d0%b5%d0%b4%d1%83%d1%80%d1%8b class=menu-link>Удаление процедуры</a>
+</li></ul></nav>
+</div>
+<h2 id=пример-создания-простой-процедуры>Пример создания простой процедуры</h2>
+<pre><code>create or replace procedure validate_age(
+    page number
+)
+is
+begin
+    if page &lt; 18 then
+        dbms_output.put_line('Вам должно быть 18 или больше');
+    else
+        dbms_output.put_line('Всё хорошо');
+    end if;
+end;
+</code></pre>
+<p>Вызовем процедуру c несколькими параметрами:</p>
+<pre><code>begin
+    validate_age(17);
+    validate_age(40);
+end;
+/
+</code></pre>
+<p>Вывод:</p>
+<pre><code>Вам должно быть 18 или больше
+Всё хорошо
+</code></pre>
+<p>Как видно, особых отличий от создания функций нет. Основное отличие -
+процедуры не возвращают значений в таком виде, как это делают функции
+(через вызов <code>return</code>).</p>
+<h2 id=общепринятые-различия-между-функциями-и-процедурами>Общепринятые различия между функциями и процедурами</h2>
+<p>См. <a href=/plsql/basics/plsql_schema/>Различия между функциями и процедурами</a>.</p>
+<h2 id=in-out-in-out-параметры>IN, OUT, IN OUT параметры</h2>
+<p>Каждый параметр функции или процедуры может иметь модификатор,
+отвечающий за характер данного параметра:</p>
+<ul>
+<li><code>IN</code>- входной параметр</li>
+<li><code>OUT</code>- выходной параметр</li>
+<li><code>IN OUT</code>- входной и выходной параметр</li>
+</ul>
+<p>По умолчанию все параметры являются входными, так что явно указывать
+<code>IN</code> необязательно. Такие параметры нельзя изменять в теле процедуры или
+функции.</p>
+<p><code>OUT</code>-параметры, наоборот, предназначены для того, чтобы быть
+измененными. Часто их используют в процедурах для того, чтобы вернуть
+некоторое значение(или даже несколько значений).</p>
+<pre><code>create or replace procedure get_const_values(
+    min_date out date,
+    max_date out date,
+    default_date out date
+)
+is
+begin
+    min_date := to_date('1800-01-01', 'yyyy-mm-dd');
+    max_date := to_date('4021-01-01', 'yyyy-mm-dd');
+    default_date := sysdate;
+end;
+/
+</code></pre>
+<p>После этого выполним следующий код:</p>
+<pre><code>declare
+    l_min_date date;
+    l_max_date date;
+    l_default_date date;
+begin
+    get_const_values(l_min_date, l_max_date, l_default_date);
+
+    dbms_output.put_line(l_min_date);
+    dbms_output.put_line(l_max_date);
+    dbms_output.put_line(l_default_date);
+end;
+/
+</code></pre>
+<p>Вывод:</p>
+<pre><code>01-JAN-00
+01-JAN-21
+05-DEC-21
+</code></pre>
+<p>OUT параметры не могут иметь значений по умолчанию:</p>
+<pre><code>create or replace procedure get_const_values(
+    min_date out date := to_date('1800-01-01', 'yyyy-mm-dd'),
+    max_date out date := to_date('4021-01-01', 'yyyy-mm-dd')
+)
+is
+begin
+    null;
+end;
+/
+</code></pre>
+<p>В результате функция будет создана с ошибкой
+<code>OUT and IN OUT formal parameters may not have default expressions</code>.</p>
+<p>Как определять ошибки при создании хранимых процедур, будет рассказано в
+отдельной части.</p>
+<p><code>IN OUT</code> параметры доступны для чтения внутри хранимой процедуры, но в
+то же время они доступны и для изменения.</p>
+<pre><code>create or replace procedure get_const_values(
+    min_date in out date,
+    max_date in out date 
+)
+is
+begin
+    -- Читаем значения переменных
+    dbms_output.put_line(min_date);
+    dbms_output.put_line(min_date);
+
+    -- Изменяем значения переменных
+    min_date := to_date('3000-02-02', 'yyyy-mm-dd');
+    max_date := to_date('3001-02-02', 'yyyy-mm-dd');
+
+end;
+/
+</code></pre>
+<p>Запустим эту процедуру и выведем на экран значение переменных после её
+выполнения:</p>
+<pre><code>declare
+    l_min date := to_date('1900.01.01', 'yyyy-mm-dd');
+    l_max date := to_date('1900.01.01', 'yyyy-mm-dd');
+begin
+    get_const_values(l_min, l_max);
+
+    dbms_output.put_line(l_min);
+    dbms_output.put_line(l_max);
+end;
+/
+</code></pre>
+<p>Вывод:</p>
+<pre><code>01-JAN-00
+01-JAN-00
+02-FEB-00
+02-FEB-01
+</code></pre>
+<p>Как можно заметить, значения переменных были изменены после вызова
+процедуры.</p>
+<p>Важной особенностью <code>OUT</code> и <code>IN OUT</code> параметров является то, что они
+должны быть переданы в виде переменных, задать их значения литералом
+нельзя:</p>
+<pre><code>create or replace procedure myproc(
+    page out number
+)
+is
+begin
+    dbms_output.put_line(page);
+end;
+/
+</code></pre>
+<p>И теперь попробуем вызвать процедуру, используя литерал, а не
+переменную:</p>
+<pre><code>begin
+    myproc(12);
+end;
+/
+</code></pre>
+<p>В результате получим ошибку
+<code>expression '12' cannot be used as an assignment target</code>.</p>
+<h2 id=удаление-процедуры>Удаление процедуры</h2>
+<p>Чтобы удалить процедуру из схемы, используется команда <code>drop procedure</code>:</p>
+<pre><code>drop procedure myproc;
+</code></pre>
+<nav class="pagination mb-3">
+<ul class=pagination-list>
+<li class=pagination-item>
+<a href=https://orasql.ru/plsql/basics/plsql_functions/ class="pagination-link pagination-prev"> &lt; Функции в PL/SQL </a>
+</li>
+</ul>
+</nav>
+</div>
+<footer class="footer b-dark-low b-top">
+<div class="footer-container container centered edges">
+<div class="footer-body mt-10">
+<nav class="nav nav-muted nav-menu-sm"><ul class=nav-list>
+<li class=nav-item><a href=/ class=nav-link>Orasql.ru</a></li>
+<li class=nav-item><a href=/ class=nav-link>Учебник</a></li>
+<li class=nav-item><p class="text-medium text-moderated">Email: orasqlru@gmail.com</p></li>
+</ul>
+</nav>
+</div>
+<div class="footer-copy mt-6 pt-6 b-dark-7 b-top">
+<p class="text-medium text-moderated">© Orasql.ru <br> 2019-2021</p>
+</div>
+</div>
+</footer>
+</body>
+</html>

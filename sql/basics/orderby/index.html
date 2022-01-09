@@ -1,0 +1,211 @@
+<!doctype html><html><head>
+<meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<link rel=stylesheet href=/css/superkube.min.css>
+<link rel=stylesheet href=/css/main.css>
+<title>Учебник Oracle SQL, PL/SQL | Сортировка результатов. Order by</title>
+</head>
+<body><div class="navbar bg-dark mb-10">
+<div class="navbar-container container edges centered">
+<div class=navbar-brand>
+<a href=/ class=brand>
+Orasql.ru
+</a>
+</div>
+<div class="navbar-nav ml-6">
+<nav class="nav nav-light nav-semibold">
+<ul class=nav-list>
+<li class=nav-item><a href=/book/ class=nav-link>Книга</a></li>
+</ul>
+</nav>
+<nav class="nav nav-light nav-semibold">
+<ul class=nav-list>
+<li class=nav-item><a href=https://github.com/cyevgeniy/orasqlru class=nav-link>Github</a></li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div id=container class="container-medium edges centered">
+<div class="doc-head mb-4 container-10">
+<h5 class="heading-micro heading-muted">Основы</h5>
+<h1 class="heading-huge heading-heavy">Сортировка результатов. Order by</h1>
+</div>
+<div class="doc-toc mt-6 mb-6">
+<nav class="menu menu-underline menu-medium menu-numbered">
+<ul class=menu-list>
+<li class=menu-item>
+<a href=#%d0%bf%d0%be%d0%b4%d0%b3%d0%be%d1%82%d0%be%d0%b2%d0%ba%d0%b0-%d1%82%d0%b5%d1%81%d1%82%d0%be%d0%b2%d1%8b%d1%85-%d0%b4%d0%b0%d0%bd%d0%bd%d1%8b%d1%85 class=menu-link>Подготовка тестовых данных</a>
+</li><li class=menu-item>
+<a href=#%d1%81%d0%be%d1%80%d1%82%d0%b8%d1%80%d0%be%d0%b2%d0%ba%d0%b0-%d0%bf%d0%be-%d0%b2%d0%be%d0%b7%d1%80%d0%b0%d1%81%d1%82%d0%b0%d0%bd%d0%b8%d1%8e-asc class=menu-link>Сортировка по возрастанию. Asc</a>
+</li><li class=menu-item>
+<a href=#%d1%81%d0%be%d1%80%d1%82%d0%b8%d1%80%d0%be%d0%b2%d0%ba%d0%b0-%d0%bf%d0%be-%d1%83%d0%b1%d1%8b%d0%b2%d0%b0%d0%bd%d0%b8%d1%8e-desc class=menu-link>Сортировка по убыванию. Desc</a>
+</li><li class=menu-item>
+<a href=#%d0%bf%d0%be%d1%80%d1%8f%d0%b4%d0%be%d0%ba-%d1%81%d0%be%d1%80%d1%82%d0%b8%d1%80%d0%be%d0%b2%d0%ba%d0%b8-%d0%bf%d0%be-%d1%83%d0%bc%d0%be%d0%bb%d1%87%d0%b0%d0%bd%d0%b8%d1%8e class=menu-link>Порядок сортировки по-умолчанию</a>
+</li><li class=menu-item>
+<a href=#%d1%81%d0%be%d1%80%d1%82%d0%b8%d1%80%d0%be%d0%b2%d0%ba%d0%b0-%d0%bf%d0%be-%d0%bf%d0%be%d1%80%d1%8f%d0%b4%d0%ba%d0%be%d0%b2%d0%be%d0%bc%d1%83-%d0%bd%d0%be%d0%bc%d0%b5%d1%80%d1%83 class=menu-link>Сортировка по порядковому номеру</a>
+</li><li class=menu-item>
+<a href=#nulls-last-nulls-first class=menu-link>Nulls last. Nulls first</a>
+</li></ul></nav>
+</div>
+<p>При выборке данных из БД мы можем сортировать извлекаемые данные в
+нужном нам порядке. Использование сортировки поможет сделать получаемые
+данные более удобочитаемыми и воспринимаемыми для анализа человеком.</p>
+<h2 id=подготовка-тестовых-данных>Подготовка тестовых данных</h2>
+<p>Создадим таблицу, которая будет содержать список блюд ресторана:</p>
+<pre><code>create table dishes(
+    name varchar2(100) not null,
+    price number(5,2) not null,
+    rating number(5)
+);
+
+comment on column dishes.name is 'Наименование блюда';
+comment on column dishes.price is 'Стоимость за одну порцию';
+comment on column dishes.rating is 'Популярность блюда';
+
+insert into dishes(name, price, rating)
+values ('Макароны с сыром', 20.56, 320);
+
+insert into dishes(name, price, rating)
+values ('Борщ', 10, 130);
+
+insert into dishes(name, price, rating)
+values ('Чай с лимоном', 1.34, 270);
+
+insert into dishes(name, price, rating)
+values ('Чай с молоком', 1.20, 280);
+
+insert into dishes(name, price, rating)
+values ('Свиная отбивная', 30.50, 320);
+
+insert into dishes(name, price, rating)
+values ('Овощной салат', 5.70, null);
+</code></pre>
+<p>Овощной салат - новинка в меню, и его еще не успели оценить посетители;
+Именно поэтому в колонке <code>rating</code> содержится <code>null</code>. Конечно, здесь
+возможны варианты - например, можно было хранить значение 0 для
+обозначения отсутствия оценок блюда посетителями, но для
+демонстрационных целей мы здесь будем хранить <code>null</code>.</p>
+<h2 id=сортировка-по-возрастанию-asc>Сортировка по возрастанию. Asc</h2>
+<p>Для того, чтобы получить данные в определенном порядке, используется
+конструкция <code>order by</code>. Для того, чтобы сортировка выполнялась по
+возрастанию, к конструкции <code>order by</code> добавляется атрибут <code>asc</code>.</p>
+<p>Получим все блюда в из меню и отсортируем их по стоимости начиная с
+дешевых и заканчивая самыми дорогими:</p>
+<pre><code>select *
+from dishes
+order by price asc
+</code></pre>
+<p><img src=/img/3_select/price_asc.png alt></p>
+<p>Сортировка может выполняться одновременно по нескольким полям. Давайте
+добавим сортировку по рейтингу блюд начиная от самых непопулярных и
+заканчивая самыми популярными блюдами. При этом, кроме рейтинга мы будем
+сортировать блюда по стоимости - от дешевых к дорогим:</p>
+<pre><code>select *
+from dishes
+order by rating asc, price asc
+</code></pre>
+<p><img src=/img/3_select/rating_asc_price_asc.png alt></p>
+<p>Как видно, блюда, которые имеют одинаковый рейтинг, расположились в
+порядке возрастания их цен.</p>
+<h2 id=сортировка-по-убыванию-desc>Сортировка по убыванию. Desc</h2>
+<p>Для сортировки по убыванию используется <code>desc</code>.</p>
+<p>Например, для получения списка блюд начиная от самых популярных и
+заканчивая самыми непопулярными, можно написать следующий запрос:</p>
+<pre><code>select *
+from dishes
+order by rating desc
+</code></pre>
+<p><img src=/img/3_select/rating_desc.png alt></p>
+<h2 id=порядок-сортировки-по-умолчанию>Порядок сортировки по-умолчанию</h2>
+<p>Если в конструкции order by не указывать порядок сортировки, то oracle
+будет производить сортировку по возрастанию.</p>
+<p>Т.е. следующий запрос:</p>
+<pre><code>select *
+from dishes
+order by price asc, rating asc
+</code></pre>
+<p>Аналогичен следующему:</p>
+<pre><code>select *
+from dishes
+order by price, rating
+</code></pre>
+<h2 id=сортировка-по-порядковому-номеру>Сортировка по порядковому номеру</h2>
+<p>Вместо указания колонки, по которой должна производиться сортировка,
+можно указать ее порядковый номер в выборке. Следующие 2 запроса
+идентичны:</p>
+<pre><code>select price, rating
+from dishes
+order by price, rating
+
+select price, rating
+from dishes
+order by 1, 2
+</code></pre>
+<p>Однако, такого подхода следует избегать, и вот почему.</p>
+<p>Предположим, мы написали следующий запрос:</p>
+<pre><code>select name, price
+from dishes
+order by 2 desc
+</code></pre>
+<p>Этот запрос выводит список блюд начиная от самых дорогих и заканчивая
+самыми дешевыми:</p>
+<p><img src=/img/3_select/2_desc.png alt></p>
+<p>Проходит несколько месяцев, и мы решаем извлекать кроме наименования
+блюда и его цены еще и рейтинг. Пишется следующий запрос:</p>
+<pre><code>select name, rating, price
+from dishes
+order by 2 desc
+</code></pre>
+<p><img src=/img/3_select/2_desc_v2.png alt></p>
+<p>Но эти данные идут не в том порядке, который нам нужен! Они
+отсортированы по рейтингу, а не по стоимости. Это произошло потому, что
+колонка с ценой теперь третья по счету, а не вторая, и при добавлении в
+выборку еще одной колонки нужно было проверить <code>order by</code> - блок и
+изменить порядковый номер для сортировки.</p>
+<h2 id=nulls-last-nulls-first>Nulls last. Nulls first</h2>
+<p>Сортировка производится по определенным значениям. Но что делать, если
+значение в колонке отсутствует, т.е. в нем содержится <code>null</code>?</p>
+<p>Здравый смысл подсказывает, что сортировка по null-значениям невозможна.</p>
+<p>Но мы можем указать, где должны располагаться <code>null</code> -значения при
+сортировке в начале или конце. Достигается это путем использования
+конструкций <code>nulls last</code> и <code>nulls first</code>. Использование первой разместит
+все <code>null</code> - значения в конце, а второй - в начале.</p>
+<pre><code>select *
+from dishes
+order by rating nulls first
+</code></pre>
+<p><img src=/img/3_select/rating_nulls_first.png alt></p>
+<pre><code>select *
+from dishes
+order by rating nulls last
+</code></pre>
+<p><img src=/img/3_select/rating_nulls_last.png alt></p>
+<nav class="pagination mb-3">
+<ul class=pagination-list>
+<li class=pagination-item>
+<a href=https://orasql.ru/sql/basics/scripts/ class="pagination-link pagination-prev"> &lt; Написание SQL- кода </a>
+</li>
+<li class="pagination-item ml-auto">
+<a href=https://orasql.ru/sql/basics/comparison/ class="pagination-link pagination-next"> Оператор WHERE. Операторы сравнения > </a>
+</li>
+</ul>
+</nav>
+</div>
+<footer class="footer b-dark-low b-top">
+<div class="footer-container container centered edges">
+<div class="footer-body mt-10">
+<nav class="nav nav-muted nav-menu-sm"><ul class=nav-list>
+<li class=nav-item><a href=/ class=nav-link>Orasql.ru</a></li>
+<li class=nav-item><a href=/ class=nav-link>Учебник</a></li>
+<li class=nav-item><p class="text-medium text-moderated">Email: orasqlru@gmail.com</p></li>
+</ul>
+</nav>
+</div>
+<div class="footer-copy mt-6 pt-6 b-dark-7 b-top">
+<p class="text-medium text-moderated">© Orasql.ru <br> 2019-2021</p>
+</div>
+</div>
+</footer>
+</body>
+</html>

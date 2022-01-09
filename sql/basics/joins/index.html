@@ -1,0 +1,212 @@
+<!doctype html><html><head>
+<meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<link rel=stylesheet href=/css/superkube.min.css>
+<link rel=stylesheet href=/css/main.css>
+<title>Учебник Oracle SQL, PL/SQL | Соединения таблиц</title>
+</head>
+<body><div class="navbar bg-dark mb-10">
+<div class="navbar-container container edges centered">
+<div class=navbar-brand>
+<a href=/ class=brand>
+Orasql.ru
+</a>
+</div>
+<div class="navbar-nav ml-6">
+<nav class="nav nav-light nav-semibold">
+<ul class=nav-list>
+<li class=nav-item><a href=/book/ class=nav-link>Книга</a></li>
+</ul>
+</nav>
+<nav class="nav nav-light nav-semibold">
+<ul class=nav-list>
+<li class=nav-item><a href=https://github.com/cyevgeniy/orasqlru class=nav-link>Github</a></li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div id=container class="container-medium edges centered">
+<div class="doc-head mb-4 container-10">
+<h5 class="heading-micro heading-muted">Основы</h5>
+<h1 class="heading-huge heading-heavy">Соединения таблиц</h1>
+</div>
+<div class="doc-toc mt-6 mb-6">
+<nav class="menu menu-underline menu-medium menu-numbered">
+<ul class=menu-list>
+<li class=menu-item>
+<a href=#%d0%bf%d0%be%d0%b4%d0%b3%d0%be%d1%82%d0%be%d0%b2%d0%ba%d0%b0-%d0%b4%d0%b0%d0%bd%d0%bd%d1%8b%d1%85 class=menu-link>Подготовка данных</a>
+</li><li class=menu-item>
+<a href=#join class=menu-link>Join</a>
+</li><li class=menu-item>
+<a href=#left-join class=menu-link>Left join</a>
+</li><li class=menu-item>
+<a href=#%d1%81%d0%be%d0%b5%d0%b4%d0%b8%d0%bd%d0%b5%d0%bd%d0%b8%d0%b5-%d1%82%d0%b0%d0%b1%d0%bb%d0%b8%d1%86-%d0%b1%d0%b5%d0%b7-join class=menu-link>Соединение таблиц без join</a>
+</li></ul></nav>
+</div>
+<p>Работать с одной таблицей в БД приходится редко. Как правило, данные
+распределены по нескольким таблицам, которые связаны между собой.</p>
+<h2 id=подготовка-данных>Подготовка данных</h2>
+<p>Для демонстрации соединений понадобится несколько таблиц.</p>
+<pre><code>create table app_users(
+    login varchar2(50 char) primary key,
+    registration_date date default sysdate not null,
+    email varchar2(200 char) not null
+);
+
+comment on table app_users is 'Пользователи';
+
+create table app_roles(
+    role_id number(10) primary key,
+    role_name varchar2(50) not null
+);
+
+comment on table app_roles is 'Роли в системе';
+
+create table user_roles(
+    login varchar2(50 char) not null,
+    role_id number(10) not null,
+    constraint user_roles_login_fk foreign key(login)
+    references app_users(login),
+    constraint user_roles_role_id_fk foreign key(role_id)
+    references app_roles(role_id)
+);
+
+insert into app_users 
+values('johndoe', sysdate, 'johndoe@johndoemail.com');
+
+insert into app_users 
+values('alex', sysdate, 'alexman@mail.com');
+
+insert into app_users 
+values('kate', sysdate, 'kate@somemaill.com');
+
+insert into app_users 
+values('mike', sysdate, 'mike@mikemailll.com');
+
+insert into app_users 
+values('dmitry', sysdate, 'dmitry@somemaill.com');
+
+insert into app_users 
+values('mr_dude', sysdate, 'mr_dude@email.dude');
+
+insert into app_roles values(1, 'admin');
+insert into app_roles values(2, 'boss');
+insert into app_roles values(3, 'employee');
+insert into app_roles values(4, 'support');
+
+insert into user_roles values('johndoe', 1);
+insert into user_roles values('johndoe', 2);
+insert into user_roles values('johndoe', 3);
+insert into user_roles values('alex', 3);
+insert into user_roles values('kate', 3);
+insert into user_roles values('mike', 2);
+insert into user_roles values('dmitry', 3);
+</code></pre>
+<p>Информация о пользователях хранится в нескольких таблицах. Для того,
+чтобы получить данные &ldquo;вместе&rdquo;, придется использовать соединения.</p>
+<h2 id=join>Join</h2>
+<p>Получим список пользователей вместе с ролями, которыми они обладают в
+системе:</p>
+<pre><code>select au.login, au.email, ar.role_name
+from app_users au
+JOIN user_roles ur on au.login = ur.login
+JOIN app_roles ar on ar.role_id = ur.role_id
+</code></pre>
+<p>Получим следующий результат:</p>
+<p><img src=/img/5_joins/joins_intro.png alt></p>
+<p>Приведенный запрос можно читать по порядку:</p>
+<ol>
+<li>Берем все записи из таблицы <code>user_roles</code></li>
+<li>Теперь &ldquo;приклеиваем&rdquo; справа к нашему набору данных строки из таблицы
+<code>app_roles</code>, у которых в колонке <code>role_id</code> содержатся такие же
+значения, как и в колонке <code>role_id</code> таблицы <code>user_roles</code>. При этом
+строки, у которых эти значения не совпадают, убираются из
+результирующего набора</li>
+<li>К получившемуся на шаге 2 набору данных &ldquo;приклеиваем&rdquo; справа строки
+из таблицы app_users, у которых значение в колонке login совпадает
+со значением колонки <code>login</code> в таблице <code>user_roles</code>. Опять же,
+строки, у которых эти значение не совпадают, удаляются из
+результирующего набора данных.</li>
+<li>Из получившегося набора данных, выбираем только колонки <code>login</code>,
+<code>email</code>, <code>role_name</code>. После &ldquo;склейки&rdquo; данных наш набор содержит все
+колонки, которые содержатся в используемых таблицах, так что мы
+могли показать значения вообще любых колонок из любой из этих трех
+таблиц(либо вообще все).</li>
+</ol>
+<h2 id=left-join>Left join</h2>
+<p>Предыдущий запрос выводил только тех пользователей, у которых
+действительно были назначены некие роли в приложении. Теперь покажем
+всех пользователей и их роли. Для этого будет использоваться
+<code>LEFT JOIN</code>. Он отличается от обычного <code>JOIN</code> тем, что он не убирает
+строки из уже имеющегося набора данных когда &ldquo;приклеивает&rdquo; справа новые
+данные.</p>
+<pre><code>select au.login, au.email, ar.role_name
+from app_users au
+LEFT JOIN user_roles ur on au.login = ur.login
+LEFT JOIN app_roles ar on ar.role_id = ur.role_id
+</code></pre>
+<p><img src=/img/5_joins/left_join_result.png alt></p>
+<p>Как видно, теперь к результирующей выборке добавился пользователь
+<code>mr_dude</code>, которому не были назначены права.</p>
+<p>Схематично процесс &ldquo;приклеивания&rdquo; показан на рисунке:</p>
+<p><img src=/img/5_joins/simple_join.png alt></p>
+<p>Исходная таблица и первый <code>JOIN</code>(или <code>LEFT JOIN</code>) дают некий набор
+данных, который обозначен цифрой &ldquo;1&rdquo;. Все, далее стоит этот набор данных
+рассматривать как одну таблицу, к которой еще раз &ldquo;приклеиваются&rdquo; данные
+с помощью еще одного соединения.</p>
+<p>Еще одна схема соединений:</p>
+<p><img src=/img/5_joins/JOIN.png alt></p>
+<p>Она показывает, что если одной записи в левой части нашего &ldquo;текущего&rdquo;
+набора данных соответствует несколько строк в &ldquo;добавляемой&rdquo; таблице, то
+количество строк после соединения увеличится - для одна строка из левой
+части набора данных будет соединена *с каждой* строкой из правой части
+данных.</p>
+<h2 id=соединение-таблиц-без-join>Соединение таблиц без join</h2>
+<p>Пример из части, где описывалось соединение <code>join</code>, может быть записан и
+без использования этого самого <code>join</code>.</p>
+<pre><code>select au.login, au.email, ar.role_name
+from app_users au
+JOIN user_roles ur on au.login = ur.login
+JOIN app_roles ar on ar.role_id = ur.role_id
+
+select au.login, au.email, ar.role_name
+from app_users au,
+user_roles ur,
+app_roles ar
+where au.login = ur.login
+and   ar.role_id = ur.role_id
+</code></pre>
+<p>Эти два запроса идентичны.</p>
+<p>Вообще, Oracle позволяет записать и left/right join - соединения
+подобным образом, указывая правила соединения в части <code>where</code> запроса.
+Данный синтаксис использовался до версии БД = 9i и здесь рассматриваться
+не будет.</p>
+<nav class="pagination mb-3">
+<ul class=pagination-list>
+<li class=pagination-item>
+<a href=https://orasql.ru/sql/basics/between/ class="pagination-link pagination-prev"> &lt; Вхождение в диапазон. BETWEEN. NOT BETWEEN </a>
+</li>
+<li class="pagination-item ml-auto">
+<a href=https://orasql.ru/sql/basics/recursive/ class="pagination-link pagination-next"> Древовидные структуры данных. Рекурсивные запросы > </a>
+</li>
+</ul>
+</nav>
+</div>
+<footer class="footer b-dark-low b-top">
+<div class="footer-container container centered edges">
+<div class="footer-body mt-10">
+<nav class="nav nav-muted nav-menu-sm"><ul class=nav-list>
+<li class=nav-item><a href=/ class=nav-link>Orasql.ru</a></li>
+<li class=nav-item><a href=/ class=nav-link>Учебник</a></li>
+<li class=nav-item><p class="text-medium text-moderated">Email: orasqlru@gmail.com</p></li>
+</ul>
+</nav>
+</div>
+<div class="footer-copy mt-6 pt-6 b-dark-7 b-top">
+<p class="text-medium text-moderated">© Orasql.ru <br> 2019-2021</p>
+</div>
+</div>
+</footer>
+</body>
+</html>

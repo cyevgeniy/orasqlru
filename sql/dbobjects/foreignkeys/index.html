@@ -1,0 +1,171 @@
+<!doctype html><html><head>
+<meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<link rel=stylesheet href=/css/superkube.min.css>
+<link rel=stylesheet href=/css/main.css>
+<title>Учебник Oracle SQL, PL/SQL | Внешние ключи</title>
+</head>
+<body><div class="navbar bg-dark mb-10">
+<div class="navbar-container container edges centered">
+<div class=navbar-brand>
+<a href=/ class=brand>
+Orasql.ru
+</a>
+</div>
+<div class="navbar-nav ml-6">
+<nav class="nav nav-light nav-semibold">
+<ul class=nav-list>
+<li class=nav-item><a href=/book/ class=nav-link>Книга</a></li>
+</ul>
+</nav>
+<nav class="nav nav-light nav-semibold">
+<ul class=nav-list>
+<li class=nav-item><a href=https://github.com/cyevgeniy/orasqlru class=nav-link>Github</a></li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div id=container class="container-medium edges centered">
+<div class="doc-head mb-4 container-10">
+<h5 class="heading-micro heading-muted">Объекты БД</h5>
+<h1 class="heading-huge heading-heavy">Внешние ключи</h1>
+</div>
+<div class="doc-toc mt-6 mb-6">
+<nav class="menu menu-underline menu-medium menu-numbered">
+<ul class=menu-list>
+<li class=menu-item>
+<a href=#%d1%81%d0%be%d0%b7%d0%b4%d0%b0%d0%bd%d0%b8%d0%b5-%d0%b2%d0%bd%d0%b5%d1%88%d0%bd%d0%b8%d1%85-%d0%ba%d0%bb%d1%8e%d1%87%d0%b5%d0%b9 class=menu-link>Создание внешних ключей</a>
+</li></ul></nav>
+</div>
+<p>Рассмотрим пример из части про
+<a href=/sql/dbobjects/primarykeys/>первичные ключи</a>.</p>
+<p>У нас было две таблицы - список сотрудников и единовременные бонусы для
+них. С помощью первичного ключа в таблице сотрудников мы решили проблему
+соотношения между бонусами и сотрудниками.</p>
+<p>Схематично наши таблицы выглядят вот так:</p>
+<p><img src=/img/13_relations/foreign_key_problem_1.png alt></p>
+<p>Благодаря наличию первичного ключа мы однозначно можем сказать, какому
+сотруднику какой бонус начисляется.</p>
+<p>А теперь посмотрим на следующую ситуацию: в таблицу <code>bonuses</code>
+добавляется запись со значением <code>emp_id</code>, которому нет соответствия в
+таблице сотрудников.</p>
+<p><img src=/img/13_relations/fk_problem_2.png alt></p>
+<p>Как такое может быть? Мы начисляем бонусы сотруднику, которого у нас
+нет! Если нас попросят сказать, на какую сумму было выдано
+единовременных бонусов, или сколько их было выдано, то мы не сможем
+ответить, т.к. не будем уверены, что данные в таблице с бонусами вообще
+корректны.</p>
+<p>Так вот, внешние ключи используются как для решения подобной проблемы.</p>
+<p>Внешние ключи используются для того, чтобы указать, что данные в
+колонках одной таблицы могут содержать только определенные значения из
+другой таблицы.</p>
+<p>В отличие от первичного ключа, значение внешнего не обязано быть
+уникальным. Более того, оно даже может содержать <code>NULL</code>. Главное
+требование - это наличие значения внешнего ключа в ссылаемой таблице.</p>
+<h2 id=создание-внешних-ключей>Создание внешних ключей</h2>
+<p>Общий синтаксис следующий:</p>
+<pre><code>create table detail(
+    master_id number,
+    value_1 number,
+    value_2 number,
+    -- Внешний ключ из таблицы detail к таблице master
+    constraint detail_master_id_fk
+        foreign key(master_id)
+        references master(id)
+);
+</code></pre>
+<p>Здесь <code>detail_master_id_fk</code> - название внешнего ключа.</p>
+<p>Также, как и у первичных ключей, длина имени внешнего ключа ограничена
+30 символами.</p>
+<p>У внешних ключей есть еще одна особенность - они могут ссылаться только
+на первичные или уникальные ключи. Если попытаться создать внешний ключ,
+который будет ссылаться на колонку, которая не является первичным или
+уникальным ключом БД выдаст ошибку.</p>
+<p>Попробуем создать наши таблицы из примера:</p>
+<pre><code>create table employees(
+    id number primary key,
+    emp_name varchar2(100 char) not null,
+    department varchar2(50 char) not null,
+    position varchar2(50 char) not null
+);
+
+create table bonuses(
+    emp_id number not null,
+    bonus number not null,
+    constraint bonuses_emp_id_fk
+        foreign key(emp_id)
+        references employees(id)
+);
+</code></pre>
+<p>В данном случае таблица <code>bonuses</code> является дочерней по отношению к
+таблице <code>employees</code>, т.к. содержит внешний ключ, который ссылается из
+<code>bonuses</code> на <code>employees</code>.</p>
+<p>После этого заполним данными эти таблицы:</p>
+<pre><code>-- Сначала добавляем сотрудников
+
+insert into employees(id, emp_name, department, position)
+values(1, 'Иван Петров', 'IT', 'QA');
+
+insert into employees(id, emp_name, department, position)
+values(2, 'Алексей Иванов', 'SALARY', 'CLERK');
+
+insert into employees(id, emp_name, department, position)
+values(3, 'Евгений Сидоров', 'SALARY', 'MANAGER');
+
+insert into employees(id, emp_name, department, position)
+values(4, 'Екатерина Петрова', 'SECUTIRY', 'MANAGER');
+
+-- После - бонусы для них
+
+insert into bonuses(emp_id, bonus)
+values(1, 100);
+
+insert into bonuses(emp_id, bonus)
+values(2, 400);
+
+insert into bonuses(emp_id, bonus)
+values(3, 700);
+</code></pre>
+<p>Порядок добавления данных в таблицы важен: нельзя сначала добавить новые
+данные в таблицу <code>bonuses</code>, а потом в таблицу <code>employees</code>, т.к. попытка
+добавить бонус для сотрудника, которого еще нет в таблице <code>employees</code>
+приведет к ошибке из-за наличия внешнего ключа.</p>
+<pre><code>-- Вот так будет ошибка, т.к. сотрудник с id = 5
+-- еще не добавлен в таблицу employees
+insert into bonuses(emp_id, bonus)
+values(5, 500);
+
+-- А вот так ошибки не будет
+-- Сотрудник с id = 4 уже есть в таблице сотрудников
+insert into bonuses(emp_id, bonus)
+values(4, 500);
+</code></pre>
+<nav class="pagination mb-3">
+<ul class=pagination-list>
+<li class=pagination-item>
+<a href=https://orasql.ru/sql/dbobjects/primarykeys/ class="pagination-link pagination-prev"> &lt; Первичные ключи </a>
+</li>
+<li class="pagination-item ml-auto">
+<a href=https://orasql.ru/sql/dbobjects/uniquekeys/ class="pagination-link pagination-next"> Уникальные ключи > </a>
+</li>
+</ul>
+</nav>
+</div>
+<footer class="footer b-dark-low b-top">
+<div class="footer-container container centered edges">
+<div class="footer-body mt-10">
+<nav class="nav nav-muted nav-menu-sm"><ul class=nav-list>
+<li class=nav-item><a href=/ class=nav-link>Orasql.ru</a></li>
+<li class=nav-item><a href=/ class=nav-link>Учебник</a></li>
+<li class=nav-item><p class="text-medium text-moderated">Email: orasqlru@gmail.com</p></li>
+</ul>
+</nav>
+</div>
+<div class="footer-copy mt-6 pt-6 b-dark-7 b-top">
+<p class="text-medium text-moderated">© Orasql.ru <br> 2019-2021</p>
+</div>
+</div>
+</footer>
+</body>
+</html>

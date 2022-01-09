@@ -1,0 +1,96 @@
+<!doctype html><html><head>
+<meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<link rel=stylesheet href=/css/superkube.min.css>
+<link rel=stylesheet href=/css/main.css>
+<title>Учебник Oracle SQL, PL/SQL | Удаление данных. DELETE</title>
+</head>
+<body><div class="navbar bg-dark mb-10">
+<div class="navbar-container container edges centered">
+<div class=navbar-brand>
+<a href=/ class=brand>
+Orasql.ru
+</a>
+</div>
+<div class="navbar-nav ml-6">
+<nav class="nav nav-light nav-semibold">
+<ul class=nav-list>
+<li class=nav-item><a href=/book/ class=nav-link>Книга</a></li>
+</ul>
+</nav>
+<nav class="nav nav-light nav-semibold">
+<ul class=nav-list>
+<li class=nav-item><a href=https://github.com/cyevgeniy/orasqlru class=nav-link>Github</a></li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div id=container class="container-medium edges centered">
+<div class="doc-head mb-4 container-10">
+<h5 class="heading-micro heading-muted">DML. Изменение данных и структуры БД</h5>
+<h1 class="heading-huge heading-heavy">Удаление данных. DELETE</h1>
+</div>
+<p>Данный оператор предназначен для удаления строк из таблицы.</p>
+<p>В самом простом варианте он используется для удаления всех данных из
+таблицы:</p>
+<pre><code>-- Удалить все данные из таблицы employees
+delete
+from employees
+</code></pre>
+<p>Для удаления строк, попадающих под определенный критерий, как и в случае
+с оператором <code>UPDATE</code>, прописываем эти условия в <code>WHERE</code> части:</p>
+<pre><code>-- Удалить данные по сотруднику с id = 20
+delete
+from employees emp
+where emp.id = 20;
+
+-- Удалить данные по сотрудникам старше 70 лет
+delete
+from employees emp
+where emp.age &gt; 70;
+</code></pre>
+<h2 id=удаление-данных-из-связанных-таблиц>Удаление данных из связанных таблиц</h2>
+<p>Если в БД есть таблицы, которые содержат строки, ссылающиеся на
+удаляемые, Oracle выдаст ошибку
+<code>ORA-02292 Constraint violation - child records found</code>.</p>
+<p>В таком случае нужно сначала удалить данные из всех дочерних таблиц, и
+только потом удалить данные из главной таблицы:</p>
+<pre><code>-- Сначала удаляем данные страховой карточки по сотруднику с id = 10
+delete
+from insurance_card ic
+where ic.emp_id = 10;
+
+-- И только после этого удаляем данные по самому сотруднику
+delete
+from employees emp
+where emp.id = 10;
+</code></pre>
+<nav class="pagination mb-3">
+<ul class=pagination-list>
+<li class=pagination-item>
+<a href=https://orasql.ru/sql/dml/dmlupdate/ class="pagination-link pagination-prev"> &lt; Изменение данных. UPDATE </a>
+</li>
+<li class="pagination-item ml-auto">
+<a href=https://orasql.ru/sql/dml/dmlmerge/ class="pagination-link pagination-next"> Слияние данных. MERGE > </a>
+</li>
+</ul>
+</nav>
+</div>
+<footer class="footer b-dark-low b-top">
+<div class="footer-container container centered edges">
+<div class="footer-body mt-10">
+<nav class="nav nav-muted nav-menu-sm"><ul class=nav-list>
+<li class=nav-item><a href=/ class=nav-link>Orasql.ru</a></li>
+<li class=nav-item><a href=/ class=nav-link>Учебник</a></li>
+<li class=nav-item><p class="text-medium text-moderated">Email: orasqlru@gmail.com</p></li>
+</ul>
+</nav>
+</div>
+<div class="footer-copy mt-6 pt-6 b-dark-7 b-top">
+<p class="text-medium text-moderated">© Orasql.ru <br> 2019-2021</p>
+</div>
+</div>
+</footer>
+</body>
+</html>

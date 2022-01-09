@@ -1,0 +1,164 @@
+<!doctype html><html><head>
+<meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<link rel=stylesheet href=/css/superkube.min.css>
+<link rel=stylesheet href=/css/main.css>
+<title>Учебник Oracle SQL, PL/SQL | Агрегирующие функции</title>
+</head>
+<body><div class="navbar bg-dark mb-10">
+<div class="navbar-container container edges centered">
+<div class=navbar-brand>
+<a href=/ class=brand>
+Orasql.ru
+</a>
+</div>
+<div class="navbar-nav ml-6">
+<nav class="nav nav-light nav-semibold">
+<ul class=nav-list>
+<li class=nav-item><a href=/book/ class=nav-link>Книга</a></li>
+</ul>
+</nav>
+<nav class="nav nav-light nav-semibold">
+<ul class=nav-list>
+<li class=nav-item><a href=https://github.com/cyevgeniy/orasqlru class=nav-link>Github</a></li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div id=container class="container-medium edges centered">
+<div class="doc-head mb-4 container-10">
+<h5 class="heading-micro heading-muted">Стандарные функции</h5>
+<h1 class="heading-huge heading-heavy">Агрегирующие функции</h1>
+</div>
+<div class="doc-toc mt-6 mb-6">
+<nav class="menu menu-underline menu-medium menu-numbered">
+<ul class=menu-list>
+<li class=menu-item>
+<a href=#%d0%bf%d0%be%d0%b4%d0%b3%d0%be%d1%82%d0%be%d0%b2%d0%ba%d0%b0-%d0%b4%d0%b0%d0%bd%d0%bd%d1%8b%d1%85 class=menu-link>Подготовка данных</a>
+</li><li class=menu-item>
+<a href=#having class=menu-link>Having</a>
+</li></ul></nav>
+</div>
+<p>Агрегирующие функции - это такие функции, которые выполняются не для
+каждой строки отдельно, а для определенных групп данных.</p>
+<h2 id=подготовка-данных>Подготовка данных</h2>
+<pre><code>create table employees(
+    id number not null,
+    first_name varchar2(50 char) not null,
+    last_name varchar2(100 char),
+    bd date not null,
+    job varchar2(100)
+);
+
+insert into employees
+values(1, 'Василий', 'Петров',
+    to_date('07.10.1990', 'dd.mm.yyyy'), 'Машинист');
+
+insert into employees
+values(2, 'Александр', 'Сидоров',
+    to_date('18.07.1980', 'dd.mm.yyyy'), 'Бухгалтер');
+
+insert into employees
+values(3, 'Евгения', 'Цветочкина',
+    to_date('18.07.1978', 'dd.mm.yyyy'), 'Бухгалтер');
+
+insert into employees
+values(4, 'Владимир', 'Столяров', 
+    to_date('18.07.1977', 'dd.mm.yyyy'), 'Слесарь');
+</code></pre>
+<p>Например, следующий запрос найдет минимальную дату рождения среди всех
+сотрудников:</p>
+<pre><code>select min(bd)
+from employees
+</code></pre>
+<p><img src=/img/9_aggregations/minbd.png alt></p>
+<pre><code>select min(bd) minbd, max(bd) maxbd
+from employees
+</code></pre>
+<p><img src=/img/9_aggregations/minbd_maxbd.png alt></p>
+<p>Здесь также были добавлены псевдонимы <code>minbd</code> и <code>maxbd</code> для колонок.</p>
+<p>Агрегирующие функции могут быть использованы в выражениях:</p>
+<pre><code>select min(bd) + 1 minbd,
+       add_months(max(bd), 2) maxbd
+from employees
+</code></pre>
+<p><img src=/img/9_aggregations/minbd_maxbd_modified.png alt></p>
+<p>Но получение одной-единственной даты мало что дает, хотелось бы видеть
+больше данных, соответствующих минимальной или максимальной дате в
+наборе данных.</p>
+<pre><code>select min(bd), max(bd), first_name
+from employees
+group by first_name
+</code></pre>
+<p><img src=/img/9_aggregations/groupby_1.png alt></p>
+<p>Если посмотреть на результат запроса, то все равно трудновато понять,
+что дают в этом примере добавление имени и группировка записей по нему.
+Для лучшего понимания добавим в таблицу еще пару записей:</p>
+<pre><code>insert into employees
+values(5, 'Евгения', 'Кукушкина',
+    to_date('18.07.1989', 'dd.mm.yyyy'), 'Арт-директор');
+
+insert into employees
+values(6, 'Владимир', 'Кукушкин', 
+    to_date('22.05.1959', 'dd.mm.yyyy'), 'Начальник департамента охраны');
+</code></pre>
+<p>Теперь выполним запрос еще раз:</p>
+<pre><code>select min(bd), max(bd), first_name
+from employees
+group by first_name
+</code></pre>
+<p><img src=/img/9_aggregations/groupby_2.png alt></p>
+<p>Теперь можно заметить несколько особенностей:</p>
+<ul>
+<li>Количество строк не изменилось</li>
+<li>В строке с именем &ldquo;Евгения&rdquo; изменилась максимальная дата рождения</li>
+<li>В строке с именем &ldquo;Владимир&rdquo; изменилась минимальная дата рождения</li>
+</ul>
+<p>Видно, что агрегирующие функции могут применяться не ко всему набору
+данных, а к определенным частям этого набора. В данном случае группы
+были разбиты по именам, т.е. 2 записи с именем &ldquo;Евгения&rdquo;, 2 записи с
+именем &ldquo;Владимир&rdquo;, а остальные записи представляют собой отдельные
+группы из одного элемента.</p>
+<p>При этом следует обратить внимание, что несмотря на то, что остальные
+колонки в строках с именем &ldquo;Евгения&rdquo; или &ldquo;Владимир&rdquo; отличаются между
+собой, они все равно попадают в одну группу, т.к. группировка
+производится только по имени.</p>
+<h2 id=having>Having</h2>
+<p>Выведем список имен, которые встречаются более одного раза:</p>
+<pre><code>select first_name, count(*)
+from employees
+group by first_name
+having count(*) &gt; 1
+</code></pre>
+<p><img src=/img/9_aggregations/having.png alt></p>
+<p><code>Having</code> работает аналогично условию <code>where</code>, но только для значений
+агрегатных функций.</p>
+<nav class="pagination mb-3">
+<ul class=pagination-list>
+<li class=pagination-item>
+<a href=https://orasql.ru/sql/standfunc/bit/ class="pagination-link pagination-prev"> &lt; Битовые операции </a>
+</li>
+<li class="pagination-item ml-auto">
+<a href=https://orasql.ru/sql/standfunc/datefunctions/ class="pagination-link pagination-next"> Работа с датами в Oracle > </a>
+</li>
+</ul>
+</nav>
+</div>
+<footer class="footer b-dark-low b-top">
+<div class="footer-container container centered edges">
+<div class="footer-body mt-10">
+<nav class="nav nav-muted nav-menu-sm"><ul class=nav-list>
+<li class=nav-item><a href=/ class=nav-link>Orasql.ru</a></li>
+<li class=nav-item><a href=/ class=nav-link>Учебник</a></li>
+<li class=nav-item><p class="text-medium text-moderated">Email: orasqlru@gmail.com</p></li>
+</ul>
+</nav>
+</div>
+<div class="footer-copy mt-6 pt-6 b-dark-7 b-top">
+<p class="text-medium text-moderated">© Orasql.ru <br> 2019-2021</p>
+</div>
+</div>
+</footer>
+</body>
+</html>
