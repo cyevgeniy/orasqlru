@@ -1,4 +1,4 @@
-baseURL = "https://orasql.ru/"
+baseURL = "https://cyevgeniy.github.io/orasqlru"
 languageCode = "en-us"
 title = "Учебник Oracle SQL, PL/SQL"
 theme= "orasqlru-theme"
