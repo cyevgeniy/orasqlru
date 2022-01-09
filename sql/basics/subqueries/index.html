@@ -15,7 +15,7 @@ Orasql.ru
 <div class="navbar-nav ml-6">
 <nav class="nav nav-light nav-semibold">
 <ul class=nav-list>
-<li class=nav-item><a href=/orasqlru/book/ class=nav-link>Книга</a></li>
+<li class=nav-item><a href=/book/ class=nav-link>Книга</a></li>
 </ul>
 </nav>
 <nav class="nav nav-light nav-semibold">
@@ -184,7 +184,7 @@ where b_orders.quantity &gt; 1
 <p>Здесь мы написали отдельный запрос, дали ему псевдоним <code>b_orders</code>,
 поместили его во <code>FROM</code> часть, как будто это обычная таблица, и дальше
 работаем с псевдонимом данного подзапроса.</p>
-<p>В подзапросе использовались <a href=/orasqlru/sql/basics/joins/ title=соединения>соединения</a>.</p>
+<p>В подзапросе использовались <a href=/sql/basics/joins/ title=соединения>соединения</a>.</p>
 <p>Сам подзапрос можно выполнить отдельно:</p>
 <pre><code>select b.book_id, b.book_name, bo.quantity, bo.order_date
 from books b
@@ -197,7 +197,7 @@ join book_orders bo on bo.book_id = b.book_id
 <code>where b_orders.quantity > 1</code>.</p>
 <p>Подзапросов во <code>FROM</code> части может быть несколько, т.е. мы можем
 соединять их, как обычные таблицы(опять, про соединения таблиц можно
-почитать <a href=/orasqlru/sql/basics/joins/>вот здесь</a>.</p>
+почитать <a href=/sql/basics/joins/>вот здесь</a>.</p>
 <p>В отличие от подзапросов, которые используются в select-части, данные
 подзапросы могут возвращать более одной строки (более того, как правило,
 они и возвращают много строк, иначе зачем их использовать?).</p>
@@ -263,14 +263,14 @@ where b.book_id  not in (
 </code></pre>
 <p><img src=/img/3_select/no_data_found.png alt></p>
 <p>TODO: FIX URL TO UNIONS PAGE
-Здесь при помощи <a href=/orasqlru/sql/sets/unions/>объединения</a>
+Здесь при помощи <a href=/sql/sets/unions/>объединения</a>
 запросов в выборку
 подзапроса была добавлена строка с одним <code>NULL</code>-значением, и как
 следствие, запрос не вернул никаких данных.</p>
 <nav class="pagination mb-3">
 <ul class=pagination-list>
 <li class=pagination-item>
-<a href=https://cyevgeniy.github.io/orasqlru/sql/basics/recursive/ class="pagination-link pagination-prev"> &lt; Древовидные структуры данных. Рекурсивные запросы </a>
+<a href=http://orasql.ru/sql/basics/recursive/ class="pagination-link pagination-prev"> &lt; Древовидные структуры данных. Рекурсивные запросы </a>
 </li>
 </ul>
 </nav>
