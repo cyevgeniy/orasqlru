@@ -1,0 +1,3 @@
+[submodule "orasqlru-theme"] 
+  path = themes/orasqlru-theme 
+  url = https://github.com/cyevgeniy/orasqlru-theme
