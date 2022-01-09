@@ -15,7 +15,7 @@ Orasql.ru
 <div class="navbar-nav ml-6">
 <nav class="nav nav-light nav-semibold">
 <ul class=nav-list>
-<li class=nav-item><a href=/book/ class=nav-link>Книга</a></li>
+<li class=nav-item><a href=/orasqlru/book/ class=nav-link>Книга</a></li>
 </ul>
 </nav>
 <nav class="nav nav-light nav-semibold">
@@ -52,7 +52,7 @@ Orasql.ru
 почитать в
 <a href=https://docs.oracle.com/cd/B19306_01/server.102/b14200/pseudocolumns.htm>докумениации</a>.</p>
 <p>Мы будем использовать таблицу <code>dishes</code>, которая создается в части про
-<a href=/sql/basics/comparison/>операторы сравнения</a>.</p>
+<a href=/orasqlru/sql/basics/comparison/>операторы сравнения</a>.</p>
 <h2 id=rownum>ROWNUM</h2>
 <p>Данный псевдостолбец возвращает порядковый номер, под которым Oracle
 выбирает строку из таблицы. Для первой строки значение <code>ROWNUM</code> будет
@@ -77,7 +77,7 @@ order by price asc
 <p>Что же делать, если мы хотим пронумеровать наши строки начиная от 1
 таким образом, чтобы у самого дешевого блюда был номер 1, у более
 дорогого - 2 и т.п.?</p>
-<p>Для этого можно использовать <a href=/sql/basics/subqueries/>подзапросы</a>:</p>
+<p>Для этого можно использовать <a href=/orasqlru/sql/basics/subqueries/>подзапросы</a>:</p>
 <pre><code>select dishes_ordered.*, rownum
 from (
   select d.*
@@ -137,11 +137,11 @@ from dishes d
 <h2 id=level>LEVEL</h2>
 <p>Данный псевдостолбец доступен только в рекурсивных запросах. Подробнее
 про него можно почитать в части про
-<a href=/sql/basics/recursive/>рекурсивные запросы</a>.</p>
+<a href=/orasqlru/sql/basics/recursive/>рекурсивные запросы</a>.</p>
 <nav class="pagination mb-3">
 <ul class=pagination-list>
 <li class=pagination-item>
-<a href=https://orasql.ru/sql/dbobjects/virtualcolumns/ class="pagination-link pagination-prev"> &lt; Виртуальные колонки </a>
+<a href=https://cyevgeniy.github.io/orasqlru/sql/dbobjects/virtualcolumns/ class="pagination-link pagination-prev"> &lt; Виртуальные колонки </a>
 </li>
 </ul>
 </nav>

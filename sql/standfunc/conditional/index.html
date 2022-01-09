@@ -15,7 +15,7 @@ Orasql.ru
 <div class="navbar-nav ml-6">
 <nav class="nav nav-light nav-semibold">
 <ul class=nav-list>
-<li class=nav-item><a href=/book/ class=nav-link>Книга</a></li>
+<li class=nav-item><a href=/orasqlru/book/ class=nav-link>Книга</a></li>
 </ul>
 </nav>
 <nav class="nav nav-light nav-semibold">
@@ -45,7 +45,7 @@ Orasql.ru
 <p>Условные функции - это такие функции, которые могут возвращать разные
 результаты в зависимости от выполнения тех или иных условий.</p>
 <p>В качестве тестовых данным будем использовать таблицу из части про
-<a href=/sql/standfunc/nullfunctions/>функции для работы с NULL</a>.</p>
+<a href=/orasqlru/sql/standfunc/nullfunctions/>функции для работы с NULL</a>.</p>
 <h2 id=decode>DECODE</h2>
 <p>Функция DECODE в общем случае имеет следующий вид:</p>
 <pre><code>DECODE(что сравниваем,
@@ -146,7 +146,7 @@ from some_table a
 </code></pre>
 <p>Для подобных ситуаций лучше создать отдельную таблицу с кодом статуса и
 его строковым значением, и использовать
-<a href=/sql/basics/joins/>соединения</a>:</p>
+<a href=/orasqlru/sql/basics/joins/>соединения</a>:</p>
 <pre><code>select a.*,
        st.status_name
 from some_table a
@@ -272,7 +272,7 @@ group by case
 определенной длиной - меньше пяти символов, больше пяти символов, или с
 длиной логина ровно в пять символов.</p>
 <p>Последний запрос можно переписать с использованием
-<a href=/sql/basics/subqueries/>подзапроса</a>, чтобы не дублировать <code>CASE</code> в
+<a href=/orasqlru/sql/basics/subqueries/>подзапроса</a>, чтобы не дублировать <code>CASE</code> в
 <code>GROUP BY</code>:</p>
 <pre><code>select login_length,
        count(*)
@@ -292,10 +292,10 @@ group by login_length
 <nav class="pagination mb-3">
 <ul class=pagination-list>
 <li class=pagination-item>
-<a href=https://orasql.ru/sql/standfunc/nullfunctions/ class="pagination-link pagination-prev"> &lt; Функции для работы с NULL </a>
+<a href=https://cyevgeniy.github.io/orasqlru/sql/standfunc/nullfunctions/ class="pagination-link pagination-prev"> &lt; Функции для работы с NULL </a>
 </li>
 <li class="pagination-item ml-auto">
-<a href=https://orasql.ru/sql/standfunc/bit/ class="pagination-link pagination-next"> Битовые операции > </a>
+<a href=https://cyevgeniy.github.io/orasqlru/sql/standfunc/bit/ class="pagination-link pagination-next"> Битовые операции > </a>
 </li>
 </ul>
 </nav>
