@@ -19,42 +19,48 @@ toc: true
 нужно хранить в виде дерева, хранятся в одной таблице. Для того, чтобы
 по определенной строке определить ее родителя, в таблицу добавляется
 колонка, которая ссылается на родителя в этой же таблице. У корневого
-узла в дереве колонка с id родительского узла остается пустой.
+узла в дереве колонка с id родительского узла остается пустой:
+
+![](/img/6_recursive/tree.svg)
 
 Для разбора создадим таблицу, которая будет содержать список
 подразделений.
 
-    create table departments(
-    id number primary key,
-    dept_name varchar2(100),
-    parent_id number,
-    constraint departments_parent_id_fk foreign key(parent_id)
-    references departments(id));
+```sql
+create table departments(
+id number primary key,
+dept_name varchar2(100),
+parent_id number,
+constraint departments_parent_id_fk foreign key(parent_id)
+references departments(id));
 
-    comment on table departments is 'Подразделения';
+comment on table departments is 'Подразделения';
 
-    comment on column departments.parent_id is
-    'Ссылка на родительский узел';
+comment on column departments.parent_id is
+'Ссылка на родительский узел';
 
-    insert into departments values(1, 'ЗАО ИнвестКорп', null);
-    insert into departments values(2, 'Бухгалтерия', 1);
-    insert into departments values(3, 'Отдел продаж', 1);
-    insert into departments values(4, 'IT-отдел', 1);
-    insert into departments values(5, 'Дирекция', 1);
-    insert into departments values(6, 'Бухгалтерия по участку 1', 2);
-    insert into departments values(7, 'Бухгалтерия по участку 2', 2);
-    insert into departments values(8, 'Отдел QA', 4);
-    insert into departments values(9, 'Отдел разработки', 4);
+insert into departments values(1, 'ЗАО ИнвестКорп', null);
+insert into departments values(2, 'Бухгалтерия', 1);
+insert into departments values(3, 'Отдел продаж', 1);
+insert into departments values(4, 'IT-отдел', 1);
+insert into departments values(5, 'Дирекция', 1);
+insert into departments values(6, 'Бухгалтерия по участку 1', 2);
+insert into departments values(7, 'Бухгалтерия по участку 2', 2);
+insert into departments values(8, 'Отдел QA', 4);
+insert into departments values(9, 'Отдел разработки', 4);
+```
 
 ## Connect by
 
 Oracle имеет свой собственный синтаксис для написания рекурсивных
 запросов. Сначала пример:
 
-    select d.*
-    from departments d
-    start with d.id = 1
-    connect by prior id = d.parent_id
+```sql
+select d.*
+from departments d
+start with d.id = 1
+connect by prior id = d.parent_id
+```
 
 ![](/img/6_recursive/simple_example.png)
 
@@ -76,10 +82,12 @@ Oracle имеет свой собственный синтаксис для на
 псевдостолбец возвращает 1 для корневых узлов в дереве, 2 для их
 дочерних узлов и т.д.
 
-    select dp.*, level
-    from departments dp
-    start with dp.parent_id is null
-    connect by prior id = dp.parent_id
+```sql
+select dp.*, level
+from departments dp
+start with dp.parent_id is null
+connect by prior id = dp.parent_id
+```
 
 ![](/img/6_recursive/level_example.png)
 
@@ -93,10 +101,12 @@ Oracle имеет свой собственный синтаксис для на
 Можно, например, используя `level`, вывести дерево в более красивом
 виде:
 
-    select lpad(dp.dept_name, length(dp.dept_name) + (level * 4) - 4, ' ') dept_name, level
-    from departments dp
-    start with dp.parent_id is null
-    connect by prior id = dp.parent_id
+```sql
+select lpad(dp.dept_name, length(dp.dept_name) + (level * 4) - 4, ' ') dept_name, level
+from departments dp
+start with dp.parent_id is null
+connect by prior id = dp.parent_id
+```
 
 ![](/img/6_recursive/level_pretty.png)
 
@@ -110,10 +120,12 @@ Oracle имеет свой собственный синтаксис для на
 Данный псевдостолбец вернет 1 в том случае, когда у узла в дереве больше
 нет потомков, и 0 в противном случае.
 
-    select dp.dept_name, CONNECT_BY_ISLEAF
-    from departments dp
-    start with dp.parent_id is null
-    connect by prior id = dp.parent_id
+```sql
+select dp.dept_name, CONNECT_BY_ISLEAF
+from departments dp
+start with dp.parent_id is null
+connect by prior id = dp.parent_id
+```
 
 ![](/img/6_recursive/connect_by_isleaf.png)
 
@@ -124,11 +136,13 @@ Oracle имеет свой собственный синтаксис для на
 
 Это можно увидеть на примере:
 
-    select dp.dept_name, level
-    from departments dp
-    start with dp.parent_id is null
-    connect by prior id = dp.parent_id
-    order by dp.dept_name asc
+```sql
+select dp.dept_name, level
+from departments dp
+start with dp.parent_id is null
+connect by prior id = dp.parent_id
+order by dp.dept_name asc
+```
 
 ![](/img/6_recursive/order_by_wrong.png)
 
@@ -150,10 +164,12 @@ Oracle имеет свой собственный синтаксис для на
 Предположим, что мы хотим получить структуру подразделений начиная с
 тех, чьи названия содержат в себе слово "отдел":
 
-    select *
-    from departments
-    start with upper(dept_name) like upper('%Отдел%')
-    connect by prior id = parent_id
+```sql
+select *
+from departments
+start with upper(dept_name) like upper('%Отдел%')
+connect by prior id = parent_id
+```
 
 ![](/img/6_recursive/wrong_tree_1.png)
 
@@ -163,10 +179,12 @@ Oracle имеет свой собственный синтаксис для на
 Теперь выполним тот же запрос, только добавим к списку колонок
 псевдостолбец `level`:
 
-    select id, dept_name, parent_id, level
-    from departments
-    start with upper(dept_name) like upper('%Отдел%')
-    connect by prior id = parent_id
+```sql
+select id, dept_name, parent_id, level
+from departments
+start with upper(dept_name) like upper('%Отдел%')
+connect by prior id = parent_id
+```
 
 ![](/img/6_recursive/wrong_tree_2.png)
 
