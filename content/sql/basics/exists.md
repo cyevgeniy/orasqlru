@@ -1,6 +1,6 @@
 ---
 Title: "Exists. Наличие строк в подзапросе"
-weight: 20
+weight: 14
 draft: false
 ---
 
