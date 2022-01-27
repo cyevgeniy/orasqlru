@@ -40,6 +40,8 @@ Orasql.ru
 <a href=#%d0%ba%d0%be%d0%bc%d0%bc%d0%b5%d0%bd%d1%82%d0%b0%d1%80%d0%b8%d0%b8 class=menu-link>Комментарии</a>
 </li><li class=menu-item>
 <a href=#%d1%80%d0%b0%d0%b7%d0%b4%d0%b5%d0%bb%d0%b5%d0%bd%d0%b8%d0%b5-%d0%ba%d0%be%d0%bc%d0%b0%d0%bd%d0%b4-sql class=menu-link>Разделение команд SQL</a>
+</li><li class=menu-item>
+<a href=#%d1%80%d0%b5%d0%b3%d0%b8%d1%81%d1%82%d1%80 class=menu-link>Регистр</a>
 </li></ul></nav>
 </div>
 <p>Код SQL, как и любой другой, можно сохранять в файлы. Расширение этих
@@ -91,6 +93,45 @@ insert into tst values(3);
 <p>Многие IDE позволяют выполнять только одну определенную команду из всех
 присутствующих в скрипте. В каждой это работает по-своему, но как
 правило это та команда, на которой сейчас стоит курсор.</p>
+<h2 id=регистр>Регистр</h2>
+<p>В Oracle ключевые слова(create, delete, select, join и т.д.)
+являются регистронезависимыми. С названиями таблиц и колонками дела обстоят иначе.
+По умолчанию, наименования таблиц и колонок регистронезависимы.
+Но если мы будем заключать их в кавычки, в них будет учитываться регистр.
+Сейчас мы не будем разбирать детали, приведём лишь пример двух абсолютно разных запросов:</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sql data-lang=sql><span style=color:#000;font-weight:700>select</span><span style=color:#bbb> </span><span style=color:#000;font-weight:700>*</span><span style=color:#bbb>
+</span><span style=color:#bbb></span><span style=color:#000;font-weight:700>from</span><span style=color:#bbb> </span><span style=color:#d14>&#34;Users&#34;</span>;<span style=color:#bbb>
+</span></code></pre></div><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sql data-lang=sql><span style=color:#000;font-weight:700>select</span><span style=color:#bbb> </span><span style=color:#000;font-weight:700>*</span><span style=color:#bbb>
+</span><span style=color:#bbb></span><span style=color:#000;font-weight:700>from</span><span style=color:#bbb> </span>users;<span style=color:#bbb>
+</span></code></pre></div><p>Каждый из этих запросов получает данные из абсолютно разных таблиц — <code>Users</code> и <code>users</code>(или <code>USERS</code>).
+Ещё один пример с использованием регистрозависимых колонок:</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sql data-lang=sql><span style=color:#000;font-weight:700>create</span><span style=color:#bbb> </span><span style=color:#000;font-weight:700>table</span><span style=color:#bbb> </span>orders(<span style=color:#bbb>
+</span><span style=color:#bbb>    </span>order_num<span style=color:#bbb> </span>varchar2(<span style=color:#099>20</span>),<span style=color:#bbb>
+</span><span style=color:#bbb>    </span><span style=color:#d14>&#34;Order_num&#34;</span><span style=color:#bbb> </span>varchar2(<span style=color:#099>20</span>)<span style=color:#bbb>
+</span><span style=color:#bbb></span>);<span style=color:#bbb>
+</span><span style=color:#bbb>
+</span><span style=color:#bbb></span><span style=color:#000;font-weight:700>insert</span><span style=color:#bbb> </span><span style=color:#000;font-weight:700>into</span><span style=color:#bbb> </span>orders(order_num,<span style=color:#bbb> </span><span style=color:#d14>&#34;Order_num&#34;</span>)<span style=color:#bbb>
+</span><span style=color:#bbb></span><span style=color:#000;font-weight:700>values</span>(<span style=color:#d14>&#39;123&#39;</span>,<span style=color:#bbb> </span><span style=color:#d14>&#39;456&#39;</span>);<span style=color:#bbb>
+</span></code></pre></div><p>Здесь мы создали таблицу с двумя разными колонками, одна из которых(&ldquo;Order_num&rdquo;) является
+регистрозависимой, после чего вставили в таблицу одну строку.
+Посмотрим на данные в таблице <code>orders</code>:</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sql data-lang=sql><span style=color:#000;font-weight:700>select</span><span style=color:#bbb> </span><span style=color:#000;font-weight:700>*</span><span style=color:#bbb>
+</span><span style=color:#bbb></span><span style=color:#000;font-weight:700>from</span><span style=color:#bbb> </span>orders;<span style=color:#bbb>
+</span></code></pre></div><table>
+<thead>
+<tr>
+<th>ORDER_NUM</th>
+<th>Order_num</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>123</td>
+<td>456</td>
+</tr>
+</tbody>
+</table>
+<p>В учебнике мы не будем использовать эту возможность, и все объекты у нас будут использовать регистронезависимыми.</p>
 <nav class="pagination mb-3">
 <ul class=pagination-list>
 <li class=pagination-item>
