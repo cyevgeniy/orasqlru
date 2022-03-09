@@ -31,6 +31,8 @@ toc: true
 с публичными и приватными модификаторами доступа в ООП языках(
 например, как `private` и `public` в Java).
 
+![](/img/plsql/package_structure.png)
+
 ## Создание пакета
 
 Общий синтаксис создания спецификации пакета выглядит
@@ -65,15 +67,15 @@ end pck_utils;
 Давайте создадим пакет и наполним его каким-нибудь функционалом:
 
 ```sql
-create or replace package body pck_date_utils as
+create or replace package pck_date_utils as
 
 -- Возвращает максимальную дату, 
 -- используемую в системе
-function maxdate() return date;
+function maxdate return date;
 
 -- Возвращает минимальную дату, 
 -- используемую в системе
-function mindate() return date;
+function mindate return date;
 
 -- Добавляет указанное количество недель к
 -- указанной дате. Для того, чтобы отнять
@@ -81,7 +83,7 @@ function mindate() return date;
 function add_weeks(
     pdate date,
     pweeks number
-);
+) return date;
 
 end pck_date_utils;
 ```
@@ -91,12 +93,12 @@ end pck_date_utils;
 ```sql
 create or replace package body pck_date_utils as
 
-function maxdate() return date is
+function maxdate return date is
 begin
     return to_date('4000.01.01', 'yyyy.mm.dd');
 end;
 
-function mindate() return date is
+function mindate return date is
 begin
     return to_date('1800.01.01', 'yyyy.mm.dd');
 end;
@@ -104,7 +106,8 @@ end;
 function add_weeks(
     pdate date,
     pweeks number
-) is
+) return date
+is
 begin
     return pdate + (7 * pweeks);
 end;
@@ -119,14 +122,19 @@ end pck_date_utils;
 
 ```sql
 begin
-    dbms_output.put_line(pck_date_utils.mindate);
-    dbms_output.put_line(pck_date_utils.maxdate);
-    dbms_output.put_line(pck_date_utils.add_weeks(sysdate, 3));
+    dbms_output.put_line(to_char(pck_date_utils.mindate, 'yyyy.mm.dd'));
+    dbms_output.put_line(to_char(pck_date_utils.maxdate, 'yyyy.mm.dd'));
+    dbms_output.put_line(to_char(pck_date_utils.add_weeks(sysdate, 3), 'yyyy.mm.dd'));
 end;
-
 ```
 
+Вывод:
 
+```
+1800.01.01
+4000.01.01
+2022.03.30
+```
 
 ## Удаление пакета
 
@@ -150,24 +158,23 @@ active constant number := 0;
 deleted constant number := 1;
 paused constant number := 2;
 
-cursor get_active_users(
-    pstart date,
-    pend date
-) is
-select u.*
-from users u
-where u.registered between pstart and pend
-and u.status = active;
-
 end pck_emp_gl;
 ```
 
 В данном пакете содержатся константы для
-описания статусов пользователей и курсор для
-получения активных пользователей, зарегистрировавшихся
-в указанный период времени (курсоры будут рассмотрены позже).
+описания статусов пользователей.
+Теперь мы можем обращаться к статусам, объявленным в пакете:
 
-Теперь мы можем обращаться к специ
+```
+begin
+    dbms_output.put_line(pck_emp_gl.active);
+    dbms_output.put_line(pck_emp_gl.paused);
+    dbms_output.put_line(pck_emp_gl.deleted);
+end;
+```
+
+Напомним, что констатны и переменные PL/SQL нельзя использовать в SQL запросах,
+но они могут быть использованы в другом PL/SQL коде.
 
 ## Сессии
 
@@ -249,3 +256,26 @@ end;
 Как видно, изменения переменной, произведённые в первой сессии,
 не повлияли на значение той же переменной пакета во второй сессии.
 
+## Порядок загрузки пакета в память
+
+Помимо создания экземпляра пакета в памяти при первоначальном
+обращении к нему, Oracle производит его инициализацию, состоящую
+из следующих шагов:
+
+- Присваивание первоначальных значений публичным константам
+- Присваивание первоначальных значений публичным переменным
+- Запуск блока инициализации
+
+## Init
+
+Блок инициализации находится в процедуре `init`. Это необязательная
+часть пакета.
+
+## Состояние пакета сбрасывается
+
+- При перекомпиляции пакета
+- Если хотя бы один из экземпляров пакетов был 
+
+## SERIALLY_REUSABLE
+
+todo: https://docs.oracle.com/cd/E11882_01/appdev.112/e25519/packages.htm#LNPLS99924
