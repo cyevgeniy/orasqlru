@@ -5,35 +5,20 @@
 <link rel=stylesheet href=/css/main.css>
 <script>var clicky_site_ids=clicky_site_ids||[];clicky_site_ids.push(101305633)</script>
 <script async src=//static.getclicky.com/js></script>
-<title>Учебник Oracle SQL, PL/SQL | Условные функции</title>
-</head>
-<body><div class="navbar bg-dark mb-10">
+<title>Учебник Oracle SQL, PL/SQL | Условные функции</title></head><body><div class="navbar bg-dark mb-10">
 <div class="navbar-container container edges centered">
 <div class=navbar-brand>
 <a href=/ class=brand>
 Orasql.ru
 </a>
-</div>
-<div class="navbar-nav ml-6">
+</div><div class="navbar-nav ml-6">
 <nav class="nav nav-light nav-semibold">
 <ul class=nav-list>
-<li class=nav-item><a href=/book/ class=nav-link>Книга</a></li>
-</ul>
-</nav>
-<nav class="nav nav-light nav-semibold">
+<li class=nav-item><a href=/book/ class=nav-link>Книга</a></li></ul></nav><nav class="nav nav-light nav-semibold">
 <ul class=nav-list>
-<li class=nav-item><a href=https://github.com/cyevgeniy/orasqlru class=nav-link>Github</a></li>
-</ul>
-</nav>
-</div>
-</div>
-</div>
-<div id=container class="container-medium edges centered">
+<li class=nav-item><a href=https://github.com/cyevgeniy/orasqlru class=nav-link>Github</a></li></ul></nav></div></div></div><div id=container class="container-medium edges centered">
 <div class="doc-head mb-4 container-10">
-<h5 class="heading-micro heading-muted">Стандарные функции</h5>
-<h1 class="heading-huge heading-heavy">Условные функции</h1>
-</div>
-<div class="doc-toc mt-6 mb-6">
+<h5 class="heading-micro heading-muted">Стандарные функции</h5><h1 class="heading-huge heading-heavy">Условные функции</h1></div><div class="doc-toc mt-6 mb-6">
 <nav class="menu menu-underline menu-medium menu-numbered">
 <ul class=menu-list>
 <li class=menu-item>
@@ -42,30 +27,20 @@ Orasql.ru
 <a href=#case class=menu-link>CASE</a>
 </li><li class=menu-item>
 <a href=#%d1%83%d1%81%d0%bb%d0%be%d0%b2%d0%bd%d1%8b%d0%b5-%d1%84%d1%83%d0%bd%d0%ba%d1%86%d0%b8%d0%b8-%d0%b2-where-%d1%87%d0%b0%d1%81%d1%82%d0%b8 class=menu-link>Условные функции в WHERE части</a>
-</li></ul></nav>
-</div>
-<p>Условные функции - это такие функции, которые могут возвращать разные
-результаты в зависимости от выполнения тех или иных условий.</p>
-<p>В качестве тестовых данным будем использовать таблицу из части про
-<a href=/sql/standfunc/nullfunctions/>функции для работы с NULL</a>.</p>
-<h2 id=decode>DECODE</h2>
-<p>Функция DECODE в общем случае имеет следующий вид:</p>
-<pre><code>DECODE(что сравниваем,
+</li></ul></nav></div><p>Условные функции - это такие функции, которые могут возвращать разные
+результаты в зависимости от выполнения тех или иных условий.</p><p>В качестве тестовых данным будем использовать таблицу из части про
+<a href=/sql/standfunc/nullfunctions/>функции для работы с NULL</a>.</p><h2 id=decode>DECODE</h2><p>Функция DECODE в общем случае имеет следующий вид:</p><pre><code>DECODE(что сравниваем,
        значение1, результат1,
        значение2, результат2,
        значение3, результат3,
        ....
        значениеN, результатN,
        значение по-умолчанию)               
-</code></pre>
-<p>Первым DECODE принимает параметр, значение которого будет сравниваться
+</code></pre><p>Первым DECODE принимает параметр, значение которого будет сравниваться
 по очереди со списком значений, и в случае, когда он совпадет с одним из
 перечисленных, будет возвращен соответствующий результат. Если
 совпадений не найдено, будет возвращено значение по-умолчанию. Если
-значение по-умолчанию не указано, будет возвращен <code>NULL</code>.</p>
-<p>Аргументы могут быть числового, строкового типа, или датой.</p>
-<p>DECODE может сравнивать NULL значения:</p>
-<pre><code>select login,
+значение по-умолчанию не указано, будет возвращен <code>NULL</code>.</p><p>Аргументы могут быть числового, строкового типа, или датой.</p><p>DECODE может сравнивать NULL значения:</p><pre><code>select login,
        status,
        decode(status, -- &lt;- Что сравниваем
               null, 'Статус не указан', -- &lt;- пара Значение-Результат
@@ -76,26 +51,20 @@ from profiles
 | johndoe | -                           | Статус не указан |
 | admin   | Я админ. Все вопросы ко мне | Статус указан    |
 | nelsol  | -                           | Статус не указан |
-</code></pre>
-<p>Перед сравнением Oracle автоматически приводит первый параметр и все
+</code></pre><p>Перед сравнением Oracle автоматически приводит первый параметр и все
 значения к типу первого значения в списке параметров. Результат функции
 автоматически приводится к типу первого результата в списке параметров.
 Если первый результат в списке - <code>NULL</code>, результат функции <code>DECODE</code>
-будет приведен к строковому типу <code>VARCHAR2</code>.</p>
-<p>Например, следующий запрос не выполнится из-за ошибки
-<code>ORA-01722: invalid number</code>:</p>
-<pre><code>select decode(login,
+будет приведен к строковому типу <code>VARCHAR2</code>.</p><p>Например, следующий запрос не выполнится из-за ошибки
+<code>ORA-01722: invalid number</code>:</p><pre><code>select decode(login,
               'admin', 10,
               'Администратор') has_status
 from profiles
-</code></pre>
-<p>Тип возвращаемого значения определяется первым результатом в списке
+</code></pre><p>Тип возвращаемого значения определяется первым результатом в списке
 параметров, в данном случае - числом &ldquo;10&rdquo;. Но значение по-умолчанию
 имеет строковый тип, что и приводит к ошибке. Чтобы ошибки не было,
 нужно либо значение по-умолчанию заменить на число, либо заменить число
-10 на любой строковый тип.</p>
-<p>Любой из следующих запросов отработает без ошибок:</p>
-<pre><code>select decode(login,
+10 на любой строковый тип.</p><p>Любой из следующих запросов отработает без ошибок:</p><pre><code>select decode(login,
               'admin', 'Администратор',
               'Не администратор') admin_login
 from profiles;
@@ -104,10 +73,8 @@ select decode(login,
               'admin', 10,
               20) admin_login_flag
 from profiles;
-</code></pre>
-<p>В качестве проверяемого значения не обязательно должна быть колонка
-таблицы. В следующем примере проверяем длину логина пользователя:</p>
-<pre><code>select login,
+</code></pre><p>В качестве проверяемого значения не обязательно должна быть колонка
+таблицы. В следующем примере проверяем длину логина пользователя:</p><pre><code>select login,
        length(login) login_length,
        decode(length(login),
               5, 'Пять',
@@ -119,10 +86,7 @@ from profiles
 | admin   |            5 | Пять               |
 | johndoe |            7 | Не пять и не шесть |
 | nelsol  |            6 | Шесть              |
-</code></pre>
-<p>Максимальное количество параметров в функции <code>DECODE</code> - 255.</p>
-<p>Предыдущий пример, только с использованием вложенного <code>DECODE</code>:</p>
-<pre><code>select login,
+</code></pre><p>Максимальное количество параметров в функции <code>DECODE</code> - 255.</p><p>Предыдущий пример, только с использованием вложенного <code>DECODE</code>:</p><pre><code>select login,
        length(login) login_length,
         decode(length(login),
               5, 'Пять',
@@ -130,14 +94,10 @@ from profiles
                      6, 'Шесть',
                      'Не пять и не шесть')) admin_login_length
 from profiles
-</code></pre>
-<p>Здесь в качестве значения по-умолчанию выступает еще один <code>DECODE</code>.</p>
-<p>На практике вложенных <code>decode</code> следует избегать, ровно как и <code>decode</code> с
-большим количеством параметров.</p>
-<p>Одна из распространенных ошибок - использовать <code>DECODE</code> для того, чтобы
+</code></pre><p>Здесь в качестве значения по-умолчанию выступает еще один <code>DECODE</code>.</p><p>На практике вложенных <code>decode</code> следует избегать, ровно как и <code>decode</code> с
+большим количеством параметров.</p><p>Одна из распространенных ошибок - использовать <code>DECODE</code> для того, чтобы
 преобразовать какие-либо флаги в их строковые эквиваленты (при их
-большом количестве):</p>
-<pre><code>select a.*,
+большом количестве):</p><pre><code>select a.*,
        decode(a.status,
               1, 'Закрыт',
               2, 'Отменен',
@@ -145,23 +105,16 @@ from profiles
               4, 'В обработке'
        ) status_name
 from some_table a
-</code></pre>
-<p>Для подобных ситуаций лучше создать отдельную таблицу с кодом статуса и
+</code></pre><p>Для подобных ситуаций лучше создать отдельную таблицу с кодом статуса и
 его строковым значением, и использовать
-<a href=/sql/basics/joins/>соединения</a>:</p>
-<pre><code>select a.*,
+<a href=/sql/basics/joins/>соединения</a>:</p><pre><code>select a.*,
        st.status_name
 from some_table a
 join statuses st on st.status_code = a.status
-</code></pre>
-<h2 id=case>CASE</h2>
-<p>Выражение <code>CASE</code> во многом похоже на <code>DECODE</code>, но обладает большими
+</code></pre><h2 id=case>CASE</h2><p>Выражение <code>CASE</code> во многом похоже на <code>DECODE</code>, но обладает большими
 возможностями. Данное выражение позволяет реализовать полноценную
-условную логику в SQL запросе.</p>
-<p><code>CASE</code> может использоваться в двух вариантах - простом(англ. simple case
-expression) и поисковом(англ. searched case expression).</p>
-<p>Простой <code>CASE</code> по принципу работы идентичен <code>DECODE</code>:</p>
-<pre><code>select login,
+условную логику в SQL запросе.</p><p><code>CASE</code> может использоваться в двух вариантах - простом(англ. simple case
+expression) и поисковом(англ. searched case expression).</p><p>Простой <code>CASE</code> по принципу работы идентичен <code>DECODE</code>:</p><pre><code>select login,
        case login -- &lt;- что сравниваем
            when 'admin' then 'Администратор' -- Результат 1
            when 'johndoe' then 'Джон До' -- Результат 2
@@ -173,20 +126,16 @@ from profiles
 | admin   | Администратор       |
 | johndoe | Джон До             |
 | nelsol  | Другой пользователь |
-</code></pre>
-<p><code>user_flag</code> здесь - псевдоним для столбца. Само выражение начинается с
-ключевого слова <code>case</code> и заканчивается ключевым словом <code>end</code>.</p>
-<p>Как и в <code>DECODE</code>, для проверяемого значения начинают производиться
+</code></pre><p><code>user_flag</code> здесь - псевдоним для столбца. Само выражение начинается с
+ключевого слова <code>case</code> и заканчивается ключевым словом <code>end</code>.</p><p>Как и в <code>DECODE</code>, для проверяемого значения начинают производиться
 сравнения со значениями в блоках <code>WHEN</code>. При первом же совпадении
 функция завершает работу и возвращает соответствующий результат
 (указанный после <code>then</code>). В случае, если ни одного совпадения не было
 найдено, возвращается значение, указанное в блоке <code>ELSE</code>. Если значение
-по-умолчанию не указано, будет возвращен <code>NULL</code>.</p>
-<p>Searched case expression, в отличие от simple case expression, является
+по-умолчанию не указано, будет возвращен <code>NULL</code>.</p><p>Searched case expression, в отличие от simple case expression, является
 куда более мощным инструментом. В отличие от последнего, в searched case
 expression в блоках when указываются условия, а не просто значения для
-сравнения:</p>
-<pre><code>select login,
+сравнения:</p><pre><code>select login,
        case
            when login = 'admin' then 'Администратор'
            else 'Не администратор'
@@ -210,13 +159,9 @@ from profiles
 | admin   | Пять               |
 | johndoe | Больше пяти        |
 | nelsol  | Больше пяти        |
-</code></pre>
-<p>В общем и целом, лучше использовать <code>DECODE</code> для небольших, простых
-сравнений, и <code>CASE</code> для более сложных, т.к. он лучше читается.</p>
-<h2 id=условные-функции-в-where-части>Условные функции в WHERE части</h2>
-<p>Условные функции спокойно могут использоваться в WHERE-части запроса,
-как и другие функции:</p>
-<pre><code>-- Выведет профили пользователей, которые
+</code></pre><p>В общем и целом, лучше использовать <code>DECODE</code> для небольших, простых
+сравнений, и <code>CASE</code> для более сложных, т.к. он лучше читается.</p><h2 id=условные-функции-в-where-части>Условные функции в WHERE части</h2><p>Условные функции спокойно могут использоваться в WHERE-части запроса,
+как и другие функции:</p><pre><code>-- Выведет профили пользователей, которые
 -- не являются администраторами
 select *
 from profiles
@@ -228,21 +173,17 @@ where case
 | LOGIN   | LAST_UPDATED | STATUS |
 | johndoe | 01-JAN-09    | -      |
 | nelsol  | -            | -      |
-</code></pre>
-<p>В примере выше выражение case вернет 0 в тех случаях, когда логин
+</code></pre><p>В примере выше выражение case вернет 0 в тех случаях, когда логин
 пользователя не будет логином администратора. Сразу после окончания
 выражения мы сравниваем его с нулем, тем самым получая только
 не-администраторов. Подобные способы, конечно, лучше не использовать, а
 вместо них прибегать к классическому варианту написания запроса, который
-будет более понятным:</p>
-<pre><code>select *
+будет более понятным:</p><pre><code>select *
 from profiles
 where login &lt;&gt; 'admin'
-</code></pre>
-<p>При группировке условные функции, как и все другие, должны быть
+</code></pre><p>При группировке условные функции, как и все другие, должны быть
 полностью продублированы в <code>GROUP BY</code>, использовать псевдоним колонки не
-получится:</p>
-<pre><code>-- Этот запрос не сработает
+получится:</p><pre><code>-- Этот запрос не сработает
 select case
            when length(login) &gt; 5 then '&gt; 5'
            when length(login) &lt; 5 then '&lt; 5'
@@ -269,14 +210,11 @@ group by case
 | LOGIN_LENGTH | CNT |
 | = 5          |   1 |
 | &gt; 5          |   2 |
-</code></pre>
-<p>Запрос выше выведет статистику о количестве логинов пользователей с
+</code></pre><p>Запрос выше выведет статистику о количестве логинов пользователей с
 определенной длиной - меньше пяти символов, больше пяти символов, или с
-длиной логина ровно в пять символов.</p>
-<p>Последний запрос можно переписать с использованием
+длиной логина ровно в пять символов.</p><p>Последний запрос можно переписать с использованием
 <a href=/sql/basics/subqueries/>подзапроса</a>, чтобы не дублировать <code>CASE</code> в
-<code>GROUP BY</code>:</p>
-<pre><code>select login_length,
+<code>GROUP BY</code>:</p><pre><code>select login_length,
        count(*)
 from (
     select case
@@ -290,32 +228,15 @@ from (
     from profiles
 )
 group by login_length
-</code></pre>
-<nav class="pagination mb-3">
+</code></pre><nav class="pagination mb-3">
 <ul class=pagination-list>
 <li class=pagination-item>
 <a href=http://orasql.ru/sql/standfunc/nullfunctions/ class="pagination-link pagination-prev"> &lt; Функции для работы с NULL </a>
-</li>
-<li class="pagination-item ml-auto">
+</li><li class="pagination-item ml-auto">
 <a href=http://orasql.ru/sql/standfunc/bit/ class="pagination-link pagination-next"> Битовые операции > </a>
-</li>
-</ul>
-</nav>
-</div>
-<footer class="footer b-dark-low b-top">
+</li></ul></nav></div><footer class="footer b-dark-low b-top">
 <div class="footer-container container centered edges">
 <div class="footer-body mt-10">
 <nav class="nav nav-muted nav-menu-sm"><ul class=nav-list>
-<li class=nav-item><a href=/ class=nav-link>Orasql.ru</a></li>
-<li class=nav-item><a href=/ class=nav-link>Учебник</a></li>
-<li class=nav-item><p class="text-medium text-moderated">Email: orasqlru@gmail.com</p></li>
-</ul>
-</nav>
-</div>
-<div class="footer-copy mt-6 pt-6 b-dark-7 b-top">
-<p class="text-medium text-moderated">© Orasql.ru <br> 2019-2021</p>
-</div>
-</div>
-</footer>
-</body>
-</html>
+<li class=nav-item><a href=/ class=nav-link>Orasql.ru</a></li><li class=nav-item><a href=/ class=nav-link>Учебник</a></li><li class=nav-item><p class="text-medium text-moderated">Email: orasqlru@gmail.com</p></li></ul></nav></div><div class="footer-copy mt-6 pt-6 b-dark-7 b-top">
+<p class="text-medium text-moderated">© Orasql.ru <br> 2019-2021</p></div></div></footer></body></html>

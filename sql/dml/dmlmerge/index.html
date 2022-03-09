@@ -5,50 +5,29 @@
 <link rel=stylesheet href=/css/main.css>
 <script>var clicky_site_ids=clicky_site_ids||[];clicky_site_ids.push(101305633)</script>
 <script async src=//static.getclicky.com/js></script>
-<title>Учебник Oracle SQL, PL/SQL | Слияние данных. MERGE</title>
-</head>
-<body><div class="navbar bg-dark mb-10">
+<title>Учебник Oracle SQL, PL/SQL | Слияние данных. MERGE</title></head><body><div class="navbar bg-dark mb-10">
 <div class="navbar-container container edges centered">
 <div class=navbar-brand>
 <a href=/ class=brand>
 Orasql.ru
 </a>
-</div>
-<div class="navbar-nav ml-6">
+</div><div class="navbar-nav ml-6">
 <nav class="nav nav-light nav-semibold">
 <ul class=nav-list>
-<li class=nav-item><a href=/book/ class=nav-link>Книга</a></li>
-</ul>
-</nav>
-<nav class="nav nav-light nav-semibold">
+<li class=nav-item><a href=/book/ class=nav-link>Книга</a></li></ul></nav><nav class="nav nav-light nav-semibold">
 <ul class=nav-list>
-<li class=nav-item><a href=https://github.com/cyevgeniy/orasqlru class=nav-link>Github</a></li>
-</ul>
-</nav>
-</div>
-</div>
-</div>
-<div id=container class="container-medium edges centered">
+<li class=nav-item><a href=https://github.com/cyevgeniy/orasqlru class=nav-link>Github</a></li></ul></nav></div></div></div><div id=container class="container-medium edges centered">
 <div class="doc-head mb-4 container-10">
-<h5 class="heading-micro heading-muted">DML. Изменение данных и структуры БД</h5>
-<h1 class="heading-huge heading-heavy">Слияние данных. MERGE</h1>
-</div>
-<div class="doc-toc mt-6 mb-6">
+<h5 class="heading-micro heading-muted">DML. Изменение данных и структуры БД</h5><h1 class="heading-huge heading-heavy">Слияние данных. MERGE</h1></div><div class="doc-toc mt-6 mb-6">
 <nav class="menu menu-underline menu-medium menu-numbered">
 <ul class=menu-list>
 <li class=menu-item>
 <a href=#%d0%bf%d0%be%d0%b4%d0%b3%d0%be%d1%82%d0%be%d0%b2%d0%ba%d0%b0-%d0%b4%d0%b0%d0%bd%d0%bd%d1%8b%d1%85 class=menu-link>Подготовка данных</a>
 </li><li class=menu-item>
 <a href=#%d0%b8%d1%81%d0%bf%d0%be%d0%bb%d1%8c%d0%b7%d0%be%d0%b2%d0%b0%d0%bd%d0%b8%d0%b5-merge class=menu-link>Использование MERGE</a>
-</li></ul></nav>
-</div>
-<p>Команда <code>MERGE</code> позволяет выбрать строки из одного источника и
-использовать их для обновления, вставки или удаления строк в таблице.</p>
-<p>Вся прелесть данной команды в том, что в некоторых она позволяет сделать
-все эти операции в одном выражении SQL.</p>
-<h2 id=подготовка-данных>Подготовка данных</h2>
-<p>Будем использовать следующие таблицы:</p>
-<pre><code>create table employees(
+</li></ul></nav></div><p>Команда <code>MERGE</code> позволяет выбрать строки из одного источника и
+использовать их для обновления, вставки или удаления строк в таблице.</p><p>Вся прелесть данной команды в том, что в некоторых она позволяет сделать
+все эти операции в одном выражении SQL.</p><h2 id=подготовка-данных>Подготовка данных</h2><p>Будем использовать следующие таблицы:</p><pre><code>create table employees(
     id number not null,
     emp_name varchar2(200 char) not null,
     department varchar2(100 char) not null,
@@ -86,23 +65,14 @@ values(3, '101', to_date('2020.01.01', 'yyyy.mm.dd'));
 insert into ted_speakers
 values(5, '201b', to_date('2020.01.01', 'yyyy.mm.dd'));
 )
-</code></pre>
-<p>Эти таблицы - списки сотрудников компании и список сотрудников,
-выступающих на конференции TED.</p>
-<h2 id=использование-merge>Использование MERGE</h2>
-<p>Задача: Как стало известно, все сотрудники из небольшого подразделения
-IT будут выступать на конференции, только в аудитории &ldquo;809&rdquo;.</p>
-<p>В таблицу <code>ted_speakers</code> уже указаны некоторые сотрудники безопасности,
+</code></pre><p>Эти таблицы - списки сотрудников компании и список сотрудников,
+выступающих на конференции TED.</p><h2 id=использование-merge>Использование MERGE</h2><p>Задача: Как стало известно, все сотрудники из небольшого подразделения
+IT будут выступать на конференции, только в аудитории &ldquo;809&rdquo;.</p><p>В таблицу <code>ted_speakers</code> уже указаны некоторые сотрудники безопасности,
 только у них указаны другие. То есть, чтобы решить задачу, нам нужно
-сделать несколько действий:</p>
-<ol>
+сделать несколько действий:</p><ol>
 <li>1. Обновить номера аудиторий у уже существующих записей в таблице
-<code>ted_speakers</code></li>
-<li>2. Добавить туда недостающих сотрудников из отдела IT</li>
-</ol>
-<p>Данную задачу можно очень просто решить, используя 2 уже известных
-оператора <code>INSERT</code> и <code>UPDATE</code>:</p>
-<pre><code>-- Сначала обновим аудиторию у тех сотрудников, которые уже записаны
+<code>ted_speakers</code></li><li>2. Добавить туда недостающих сотрудников из отдела IT</li></ol><p>Данную задачу можно очень просто решить, используя 2 уже известных
+оператора <code>INSERT</code> и <code>UPDATE</code>:</p><pre><code>-- Сначала обновим аудиторию у тех сотрудников, которые уже записаны
 -- в список выступающих, и которые работают в отделе безопасности
 update ted_speakers ts
 set ts.room = '809'
@@ -127,9 +97,7 @@ where department = 'IT'
 and id not in (
      select emp_id
      from ted_speakers);
-</code></pre>
-<p>А вот как эту же задачу можно решить с помощью оператора <code>MERGE</code>:</p>
-<pre><code>merge into ted_speakers ts -- (1)
+</code></pre><p>А вот как эту же задачу можно решить с помощью оператора <code>MERGE</code>:</p><pre><code>merge into ted_speakers ts -- (1)
 using (
     select id
     from employees
@@ -140,43 +108,27 @@ when matched then -- (4) Если есть такой сотрудник
 when not matched then -- (5) Если нет такого сотрудника
     insert (emp_id, room, conf_date)
       values(eit.id, '809', to_date('2020.04.03', 'yyyy.mm.dd')) -- добавляем его
-</code></pre>
-<p>Смотрим на результат:</p>
-<pre><code>select ts.emp_id, ts.room, emp.emp_name, emp.department
+</code></pre><p>Смотрим на результат:</p><pre><code>select ts.emp_id, ts.room, emp.emp_name, emp.department
 from ted_speakers ts
 join employees emp on emp.id = ts.emp_id
-</code></pre>
-<p><img src=/img/12_dml/merge_1.png alt></p>
-<p>Все сотрудники из IT отдела были добавлены, у всех аудитория равна 809.</p>
-<p>Давайте подробнее разберем, как этот запрос работает.</p>
-<p>Для начала, в строке &ldquo;(1)&rdquo; мы указываем, в какую таблицу мы будем
+</code></pre><p><img src=/img/12_dml/merge_1.png alt></p><p>Все сотрудники из IT отдела были добавлены, у всех аудитория равна 809.</p><p>Давайте подробнее разберем, как этот запрос работает.</p><p>Для начала, в строке &ldquo;(1)&rdquo; мы указываем, в какую таблицу мы будем
 производить слияние(кстати, слово &ldquo;merge&rdquo; с английского так и
-переводится).</p>
-<p>После этого, мы пишем обычный запрос, который будет являться источником
+переводится).</p><p>После этого, мы пишем обычный запрос, который будет являться источником
 данных для наших действий и указываем его в <code>USING</code>. Этому подзапросу
 нужно дать псевдоним, чтобы можно было в дальнейшем обращаться к данным,
-которые он возвращает(строка &ldquo;(2)"). В нашем случае источником данных
+которые он возвращает(строка &ldquo;(2)&rdquo;). В нашем случае источником данных
 является запрос, который получает список всех сотрудников из
-подразделения IT.</p>
-<p>После определения источника данных мы указываем условие, по которому
-таблица слияния будет соединяться с источником данных( строка &ldquo;(3)"). Мы
-соединяемся по id сотрудника.</p>
-<p>Далее мы указываем, что будем делать, если в исходной таблице есть
+подразделения IT.</p><p>После определения источника данных мы указываем условие, по которому
+таблица слияния будет соединяться с источником данных( строка &ldquo;(3)&rdquo;). Мы
+соединяемся по id сотрудника.</p><p>Далее мы указываем, что будем делать, если в исходной таблице есть
 строки, для которых условие &ldquo;(3)&rdquo; выполняется, и что делать, если это
 условие не выполняется. Это происходит в частях запроса &ldquo;(4)&rdquo; и &ldquo;(5)&rdquo;
-соответственно.</p>
-<p>Теперь мы вместо двух разных команд SQL использовали всего одну. Также,
-мы сократили количество обращений к БД с двух до одного.</p>
-<h3 id=использование-delete-в-merge>Использование DELETE в MERGE</h3>
-<p>Кроме операций вставки и обновления в <code>MERGE</code> можно использовать и
-операцию удаления. Но есть одна особенность:</p>
-<p>Операция DELETE в MERGE будет производиться только для тех строк,
-которые были обновлены командой <code>UPDATE</code></p>
-<p>Решим следующую задачу: удалить из списка выступающих всех сотрудников
+соответственно.</p><p>Теперь мы вместо двух разных команд SQL использовали всего одну. Также,
+мы сократили количество обращений к БД с двух до одного.</p><h3 id=использование-delete-в-merge>Использование DELETE в MERGE</h3><p>Кроме операций вставки и обновления в <code>MERGE</code> можно использовать и
+операцию удаления. Но есть одна особенность:</p><p>Операция DELETE в MERGE будет производиться только для тех строк,
+которые были обновлены командой <code>UPDATE</code></p><p>Решим следующую задачу: удалить из списка выступающих всех сотрудников
 IT подразделения, кроме сотрудника с id = 5; для этого сотрудника нужно
-сдвинуть дату выступления на 1 месяц вперед.</p>
-<p>Напишем следующий запрос:</p>
-<pre><code>merge into ted_speakers ts
+сдвинуть дату выступления на 1 месяц вперед.</p><p>Напишем следующий запрос:</p><pre><code>merge into ted_speakers ts
 using (
     select id
     from employees
@@ -193,21 +145,15 @@ when matched then
 select ts.emp_id, ts.conf_date, emp.emp_name, emp.department
 from ted_speakers ts
 join employees emp on emp.id = ts.emp_id
-</code></pre>
-<p><img src=/img/12_dml/merge_delete_err.png alt></p>
-<p>Как видно, мы дата выступления для сотрудника с <code>id = 5</code> была изменена,
-но остальные сотрудники из it подразделения остались в таблице.</p>
-<p>Это произошло потому, что в команде <code>UPDATE</code> мы написали условие
+</code></pre><p><img src=/img/12_dml/merge_delete_err.png alt></p><p>Как видно, мы дата выступления для сотрудника с <code>id = 5</code> была изменена,
+но остальные сотрудники из it подразделения остались в таблице.</p><p>Это произошло потому, что в команде <code>UPDATE</code> мы написали условие
 <code>where ts.emp_id = 5</code>. Это значит, что команда <code>delete</code> будет
 выполняться только для одной этой строки. А так как в условии удаления
 мы написали условие <code>where ts.emp_id &lt;> 5</code>, то она ничего не удалит.
-Следующий код поможет понять, почему:</p>
-<pre><code>delete from ted_speakers
+Следующий код поможет понять, почему:</p><pre><code>delete from ted_speakers
 where emp_id = 5 and emp_id &lt;&gt; 5 -- это условие всегда ложно!
-</code></pre>
-<p>Зная, что <code>delete</code> выполняется только для обновленных строк, перепишем
-запрос:</p>
-<pre><code>merge into ted_speakers ts
+</code></pre><p>Зная, что <code>delete</code> выполняется только для обновленных строк, перепишем
+запрос:</p><pre><code>merge into ted_speakers ts
 using (
     select id
     from employees
@@ -217,44 +163,24 @@ when matched then
     update set ts.conf_date = add_months(ts.conf_date, 1)
     delete
     where ts.emp_id &lt;&gt; 5
-</code></pre>
-<p><img src=/img/12_dml/merge_delete_noerr.png alt></p>
-<p>Здесь дата 1 марта для сотрудника с id = 5 была получена в результате
+</code></pre><p><img src=/img/12_dml/merge_delete_noerr.png alt></p><p>Здесь дата 1 марта для сотрудника с id = 5 была получена в результате
 последовательного выполнения запросов из учебника. В случае, если бы мы
 сразу запустили данный запрос, дата была бы на 1 месяц больше, чем было
-изначально - 1 февраля 2020 года.</p>
-<p>Теперь все работает, как нам нужно. Все потому, что в update мы не
+изначально - 1 февраля 2020 года.</p><p>Теперь все работает, как нам нужно. Все потому, что в update мы не
 прописывали никаких условий, т.е он обновил месяц выступления для
 каждого сотрудника IT подразделения, выступающего на конференции. Далее,
 команда <code>DELETE</code> была запущена для каждой строки с выступающими из IT
 отдела. Вот уже в ней мы добавили условие <code>where ts.emp_id &lt;> 5</code>. То
 есть она удалила всех сотрудников IT отдела за исключением сотрудника с
-ID = 5.</p>
-<nav class="pagination mb-3">
+ID = 5.</p><nav class="pagination mb-3">
 <ul class=pagination-list>
 <li class=pagination-item>
 <a href=http://orasql.ru/sql/dml/dmldelete/ class="pagination-link pagination-prev"> &lt; Удаление данных. DELETE </a>
-</li>
-<li class="pagination-item ml-auto">
+</li><li class="pagination-item ml-auto">
 <a href=http://orasql.ru/sql/dml/dmlaltertable/ class="pagination-link pagination-next"> Изменение структуры таблицы. ALTER TABLE > </a>
-</li>
-</ul>
-</nav>
-</div>
-<footer class="footer b-dark-low b-top">
+</li></ul></nav></div><footer class="footer b-dark-low b-top">
 <div class="footer-container container centered edges">
 <div class="footer-body mt-10">
 <nav class="nav nav-muted nav-menu-sm"><ul class=nav-list>
-<li class=nav-item><a href=/ class=nav-link>Orasql.ru</a></li>
-<li class=nav-item><a href=/ class=nav-link>Учебник</a></li>
-<li class=nav-item><p class="text-medium text-moderated">Email: orasqlru@gmail.com</p></li>
-</ul>
-</nav>
-</div>
-<div class="footer-copy mt-6 pt-6 b-dark-7 b-top">
-<p class="text-medium text-moderated">© Orasql.ru <br> 2019-2021</p>
-</div>
-</div>
-</footer>
-</body>
-</html>
+<li class=nav-item><a href=/ class=nav-link>Orasql.ru</a></li><li class=nav-item><a href=/ class=nav-link>Учебник</a></li><li class=nav-item><p class="text-medium text-moderated">Email: orasqlru@gmail.com</p></li></ul></nav></div><div class="footer-copy mt-6 pt-6 b-dark-7 b-top">
+<p class="text-medium text-moderated">© Orasql.ru <br> 2019-2021</p></div></div></footer></body></html>

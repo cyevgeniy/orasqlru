@@ -5,93 +5,49 @@
 <link rel=stylesheet href=/css/main.css>
 <script>var clicky_site_ids=clicky_site_ids||[];clicky_site_ids.push(101305633)</script>
 <script async src=//static.getclicky.com/js></script>
-<title>Учебник Oracle SQL, PL/SQL | Вхождение в диапазон. BETWEEN. NOT BETWEEN</title>
-</head>
-<body><div class="navbar bg-dark mb-10">
+<title>Учебник Oracle SQL, PL/SQL | Вхождение в диапазон. BETWEEN. NOT BETWEEN</title></head><body><div class="navbar bg-dark mb-10">
 <div class="navbar-container container edges centered">
 <div class=navbar-brand>
 <a href=/ class=brand>
 Orasql.ru
 </a>
-</div>
-<div class="navbar-nav ml-6">
+</div><div class="navbar-nav ml-6">
 <nav class="nav nav-light nav-semibold">
 <ul class=nav-list>
-<li class=nav-item><a href=/book/ class=nav-link>Книга</a></li>
-</ul>
-</nav>
-<nav class="nav nav-light nav-semibold">
+<li class=nav-item><a href=/book/ class=nav-link>Книга</a></li></ul></nav><nav class="nav nav-light nav-semibold">
 <ul class=nav-list>
-<li class=nav-item><a href=https://github.com/cyevgeniy/orasqlru class=nav-link>Github</a></li>
-</ul>
-</nav>
-</div>
-</div>
-</div>
-<div id=container class="container-medium edges centered">
+<li class=nav-item><a href=https://github.com/cyevgeniy/orasqlru class=nav-link>Github</a></li></ul></nav></div></div></div><div id=container class="container-medium edges centered">
 <div class="doc-head mb-4 container-10">
-<h5 class="heading-micro heading-muted">Основы</h5>
-<h1 class="heading-huge heading-heavy">Вхождение в диапазон. BETWEEN. NOT BETWEEN</h1>
-</div>
-<p><code>BETWEEN</code> используется для того, чтобы проверить значение на вхождение в
+<h5 class="heading-micro heading-muted">Основы</h5><h1 class="heading-huge heading-heavy">Вхождение в диапазон. BETWEEN. NOT BETWEEN</h1></div><p><code>BETWEEN</code> используется для того, чтобы проверить значение на вхождение в
 диапазон. Проверять вхождение в диапазон значений можно строки, числа и
-даты.</p>
-<p>Пример №1: Получить список блюд, рейтинг которых колеблется от 270 до
-320 включительно:</p>
-<pre><code>select d.*
+даты.</p><p>Пример №1: Получить список блюд, рейтинг которых колеблется от 270 до
+320 включительно:</p><pre><code>select d.*
 from dishes d
 where rating between 270 and 320
-</code></pre>
-<p><img src=/img/3_select/rating_between_270_320.png alt></p>
-<p>Следует помнить, что граничные значения диапазона всегда включаются при
-проверке, т.е. этот запрос идентичен следующему:</p>
-<pre><code>select d.*
+</code></pre><p><img src=/img/3_select/rating_between_270_320.png alt></p><p>Следует помнить, что граничные значения диапазона всегда включаются при
+проверке, т.е. этот запрос идентичен следующему:</p><pre><code>select d.*
 from dishes d
 where d.rating ≥ 270
 and d.rating ≤ 320
-</code></pre>
-<p>Пример №2: Получить список блюд, рейтинг которых колеблется от 270 до
-320, и стоимость которых от 1 до 6:</p>
-<pre><code>select d.*
+</code></pre><p>Пример №2: Получить список блюд, рейтинг которых колеблется от 270 до
+320, и стоимость которых от 1 до 6:</p><pre><code>select d.*
 from dishes d
 where d.rating between 270 and 320
 and d.price between 1 and 6
-</code></pre>
-<p><img src=/img/3_select/rating_btw_270_320_price_btw_1_6.png alt></p>
-<p>Пример №3: Получить список блюд с рейтингом, значения которого не входят
-в диапазон чисел от 270 до 320:</p>
-<pre><code>select d.*
+</code></pre><p><img src=/img/3_select/rating_btw_270_320_price_btw_1_6.png alt></p><p>Пример №3: Получить список блюд с рейтингом, значения которого не входят
+в диапазон чисел от 270 до 320:</p><pre><code>select d.*
 from dishes d
 where d.rating not between 270 and 320
-</code></pre>
-<p><img src=/img/3_select/rating_not_btw_270_320.png alt></p>
-<p>Здесь для того, чтобы исключить значения из диапазона, перед `between`
-было добавлено ключевое слово <code>NOT</code>.</p>
-<nav class="pagination mb-3">
+</code></pre><p><img src=/img/3_select/rating_not_btw_270_320.png alt></p><p>Здесь для того, чтобы исключить значения из диапазона, перед `between`
+было добавлено ключевое слово <code>NOT</code>.</p><nav class="pagination mb-3">
 <ul class=pagination-list>
 <li class=pagination-item>
 <a href=http://orasql.ru/sql/basics/innotin/ class="pagination-link pagination-prev"> &lt; IN, NOT IN </a>
-</li>
-<li class="pagination-item ml-auto">
+</li><li class="pagination-item ml-auto">
 <a href=http://orasql.ru/sql/basics/joins/ class="pagination-link pagination-next"> Соединения таблиц > </a>
-</li>
-</ul>
-</nav>
-</div>
-<footer class="footer b-dark-low b-top">
+</li></ul></nav></div><footer class="footer b-dark-low b-top">
 <div class="footer-container container centered edges">
 <div class="footer-body mt-10">
 <nav class="nav nav-muted nav-menu-sm"><ul class=nav-list>
-<li class=nav-item><a href=/ class=nav-link>Orasql.ru</a></li>
-<li class=nav-item><a href=/ class=nav-link>Учебник</a></li>
-<li class=nav-item><p class="text-medium text-moderated">Email: orasqlru@gmail.com</p></li>
-</ul>
-</nav>
-</div>
-<div class="footer-copy mt-6 pt-6 b-dark-7 b-top">
-<p class="text-medium text-moderated">© Orasql.ru <br> 2019-2021</p>
-</div>
-</div>
-</footer>
-</body>
-</html>
+<li class=nav-item><a href=/ class=nav-link>Orasql.ru</a></li><li class=nav-item><a href=/ class=nav-link>Учебник</a></li><li class=nav-item><p class="text-medium text-moderated">Email: orasqlru@gmail.com</p></li></ul></nav></div><div class="footer-copy mt-6 pt-6 b-dark-7 b-top">
+<p class="text-medium text-moderated">© Orasql.ru <br> 2019-2021</p></div></div></footer></body></html>

@@ -5,36 +5,20 @@
 <link rel=stylesheet href=/css/main.css>
 <script>var clicky_site_ids=clicky_site_ids||[];clicky_site_ids.push(101305633)</script>
 <script async src=//static.getclicky.com/js></script>
-<title>Учебник Oracle SQL, PL/SQL | Пример SELECT запроса</title>
-</head>
-<body><div class="navbar bg-dark mb-10">
+<title>Учебник Oracle SQL, PL/SQL | Пример SELECT запроса</title></head><body><div class="navbar bg-dark mb-10">
 <div class="navbar-container container edges centered">
 <div class=navbar-brand>
 <a href=/ class=brand>
 Orasql.ru
 </a>
-</div>
-<div class="navbar-nav ml-6">
+</div><div class="navbar-nav ml-6">
 <nav class="nav nav-light nav-semibold">
 <ul class=nav-list>
-<li class=nav-item><a href=/book/ class=nav-link>Книга</a></li>
-</ul>
-</nav>
-<nav class="nav nav-light nav-semibold">
+<li class=nav-item><a href=/book/ class=nav-link>Книга</a></li></ul></nav><nav class="nav nav-light nav-semibold">
 <ul class=nav-list>
-<li class=nav-item><a href=https://github.com/cyevgeniy/orasqlru class=nav-link>Github</a></li>
-</ul>
-</nav>
-</div>
-</div>
-</div>
-<div id=container class="container-medium edges centered">
+<li class=nav-item><a href=https://github.com/cyevgeniy/orasqlru class=nav-link>Github</a></li></ul></nav></div></div></div><div id=container class="container-medium edges centered">
 <div class="doc-head mb-4 container-10">
-<h5 class="heading-micro heading-muted">Основы</h5>
-<h1 class="heading-huge heading-heavy">Пример SELECT запроса</h1>
-</div>
-<p>Рассмотрим простой SQL запрос:</p>
-<pre><code>-- данные, которые мы извлекаем
+<h5 class="heading-micro heading-muted">Основы</h5><h1 class="heading-huge heading-heavy">Пример SELECT запроса</h1></div><p>Рассмотрим простой SQL запрос:</p><pre><code>-- данные, которые мы извлекаем
 select emp.name,
        emp.last_name,
        emp.age,
@@ -43,47 +27,21 @@ from employees emp
 join departments dept on dept.id = emp.department_id -- соединение
 where (emp.id = 10 and emp.age &gt; 25) -- условие выборки
 order by name desc -- сортировка
-</code></pre>
-<p>Конечно, запрос может выглядеть и по-другому, но в целом данный пример
-раскрывает большую часть из структуры SELECT запроса.</p>
-<h2 id=порядок-выполнения>Порядок выполнения</h2>
-<p>Очень важно понимать, в каком порядке выполняется запрос.</p>
-<ol>
-<li>Сначала происходит соединение таблиц, если таковое имеется</li>
-<li>Затем выборка фильтруется условием <code>where</code></li>
-<li>После этого набор данных извлекается из БД. Все функции, которые
+</code></pre><p>Конечно, запрос может выглядеть и по-другому, но в целом данный пример
+раскрывает большую часть из структуры SELECT запроса.</p><h2 id=порядок-выполнения>Порядок выполнения</h2><p>Очень важно понимать, в каком порядке выполняется запрос.</p><ol>
+<li>Сначала происходит соединение таблиц, если таковое имеется</li><li>Затем выборка фильтруется условием <code>where</code></li><li>После этого набор данных извлекается из БД. Все функции, которые
 указаны в части SELECT, выполняются для каждой строки из набора
-данных</li>
-<li>И только затем этот набор данных сортируется в указанном порядке</li>
-</ol>
-<p>Сейчас это может показаться не столь важным, но знания о порядке
+данных</li><li>И только затем этот набор данных сортируется в указанном порядке</li></ol><p>Сейчас это может показаться не столь важным, но знания о порядке
 выполнения запроса пригодятся, когда мы будем рассматривать запросы с
-использованием псевдостолбца <code>ROWNUM</code>.</p>
-<nav class="pagination mb-3">
+использованием псевдостолбца <code>ROWNUM</code>.</p><nav class="pagination mb-3">
 <ul class=pagination-list>
 <li class=pagination-item>
 <a href=http://orasql.ru/sql/basics/maintypes/ class="pagination-link pagination-prev"> &lt; Основные типы данных </a>
-</li>
-<li class="pagination-item ml-auto">
+</li><li class="pagination-item ml-auto">
 <a href=http://orasql.ru/sql/basics/scripts/ class="pagination-link pagination-next"> Написание SQL- кода > </a>
-</li>
-</ul>
-</nav>
-</div>
-<footer class="footer b-dark-low b-top">
+</li></ul></nav></div><footer class="footer b-dark-low b-top">
 <div class="footer-container container centered edges">
 <div class="footer-body mt-10">
 <nav class="nav nav-muted nav-menu-sm"><ul class=nav-list>
-<li class=nav-item><a href=/ class=nav-link>Orasql.ru</a></li>
-<li class=nav-item><a href=/ class=nav-link>Учебник</a></li>
-<li class=nav-item><p class="text-medium text-moderated">Email: orasqlru@gmail.com</p></li>
-</ul>
-</nav>
-</div>
-<div class="footer-copy mt-6 pt-6 b-dark-7 b-top">
-<p class="text-medium text-moderated">© Orasql.ru <br> 2019-2021</p>
-</div>
-</div>
-</footer>
-</body>
-</html>
+<li class=nav-item><a href=/ class=nav-link>Orasql.ru</a></li><li class=nav-item><a href=/ class=nav-link>Учебник</a></li><li class=nav-item><p class="text-medium text-moderated">Email: orasqlru@gmail.com</p></li></ul></nav></div><div class="footer-copy mt-6 pt-6 b-dark-7 b-top">
+<p class="text-medium text-moderated">© Orasql.ru <br> 2019-2021</p></div></div></footer></body></html>

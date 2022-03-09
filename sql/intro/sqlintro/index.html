@@ -5,97 +5,51 @@
 <link rel=stylesheet href=/css/main.css>
 <script>var clicky_site_ids=clicky_site_ids||[];clicky_site_ids.push(101305633)</script>
 <script async src=//static.getclicky.com/js></script>
-<title>Учебник Oracle SQL, PL/SQL | Введение в SQL</title>
-</head>
-<body><div class="navbar bg-dark mb-10">
+<title>Учебник Oracle SQL, PL/SQL | Введение в SQL</title></head><body><div class="navbar bg-dark mb-10">
 <div class="navbar-container container edges centered">
 <div class=navbar-brand>
 <a href=/ class=brand>
 Orasql.ru
 </a>
-</div>
-<div class="navbar-nav ml-6">
+</div><div class="navbar-nav ml-6">
 <nav class="nav nav-light nav-semibold">
 <ul class=nav-list>
-<li class=nav-item><a href=/book/ class=nav-link>Книга</a></li>
-</ul>
-</nav>
-<nav class="nav nav-light nav-semibold">
+<li class=nav-item><a href=/book/ class=nav-link>Книга</a></li></ul></nav><nav class="nav nav-light nav-semibold">
 <ul class=nav-list>
-<li class=nav-item><a href=https://github.com/cyevgeniy/orasqlru class=nav-link>Github</a></li>
-</ul>
-</nav>
-</div>
-</div>
-</div>
-<div id=container class="container-medium edges centered">
+<li class=nav-item><a href=https://github.com/cyevgeniy/orasqlru class=nav-link>Github</a></li></ul></nav></div></div></div><div id=container class="container-medium edges centered">
 <div class="doc-head mb-4 container-10">
-<h5 class="heading-micro heading-muted">Введение</h5>
-<h1 class="heading-huge heading-heavy">Введение в SQL</h1>
-</div>
-<p><a href=https://ru.wikipedia.org/wiki/SQL>SQL</a>, или Structure Query Language
+<h5 class="heading-micro heading-muted">Введение</h5><h1 class="heading-huge heading-heavy">Введение в SQL</h1></div><p><a href=https://ru.wikipedia.org/wiki/SQL>SQL</a>, или Structure Query Language
 (Структурированный язык запросов) является основным инструментом для
-взаимодействия с реляционными базами данных.</p>
-<p>С помощью sql можно:</p>
-<ul>
-<li>Получать данные из базы данных</li>
-<li>Сохранять данные в базу данных</li>
-<li>Производить манипуляции с объектами базы данных</li>
-</ul>
-<h2 id=диалекты-sql>Диалекты SQL</h2>
-<p>Реляционных систем управления базой данных(СУБД) существует достаточно
+взаимодействия с реляционными базами данных.</p><p>С помощью sql можно:</p><ul>
+<li>Получать данные из базы данных</li><li>Сохранять данные в базу данных</li><li>Производить манипуляции с объектами базы данных</li></ul><h2 id=диалекты-sql>Диалекты SQL</h2><p>Реляционных систем управления базой данных(СУБД) существует достаточно
 много. И как правило, в каждой СУБД есть свои отличительные особенности
 в SQL, которые заключаются в наличии или отсутствии в нем определенных
 функций, различиях синтаксиса самого SQL, а также по функциональным
-возможностям этого языка.</p>
-<p>В данном учебнике мы будем рассматривать <a href=https://ru.wikipedia.org/wiki/Oracle_Database>СУБД
-Oracle</a>.</p>
-<h2 id=особенности-sql>Особенности SQL</h2>
-<p>Пара слов о том, что необычного в SQL.</p>
-<p>В отличие многих других языков программирования, например таких как
+возможностям этого языка.</p><p>В данном учебнике мы будем рассматривать <a href=https://ru.wikipedia.org/wiki/Oracle_Database>СУБД
+Oracle</a>.</p><h2 id=особенности-sql>Особенности SQL</h2><p>Пара слов о том, что необычного в SQL.</p><p>В отличие многих других языков программирования, например таких как
 Java, Pascal или JavaScript, программирование на которых заключается в
 том, чтобы описать, *как* нужно что-то сделать, в SQL описывается,
 *что* нужно сделать(т.е. какой результат мы хотим получить). SQL -
 ближайший к данным язык программирования. Он больше всего приближен к
 &ldquo;чистым&rdquo; данным системы. Под &ldquo;чистыми&rdquo; данными подразумевается то, что
-ниже тех абстракций, с которыми работает sql, уже не будет.</p>
-<h2 id=зачем-изучать-sql>Зачем изучать SQL</h2>
-<p>Как уже говорилось, sql является основным средством общения с
-реляционными базами данных.</p>
-<p>Когда какая-либо программа хочет получить, сохранить, или изменить
+ниже тех абстракций, с которыми работает sql, уже не будет.</p><h2 id=зачем-изучать-sql>Зачем изучать SQL</h2><p>Как уже говорилось, sql является основным средством общения с
+реляционными базами данных.</p><p>Когда какая-либо программа хочет получить, сохранить, или изменить
 данные в БД, то она это делает посредством SQL. Какой-нибудь список
 классов, с которыми работает объектно-ориентированный язык, должен
 получить данные, которые будут храниться в этих классах. Это все
-делается с помощью SQL.</p>
-<p>Даже если в программе нигде явно не пишутся SQL-запросы, а используется
+делается с помощью SQL.</p><p>Даже если в программе нигде явно не пишутся SQL-запросы, а используется
 с виду обычный программный код(например на языке Java), то это вовсе не
 значит, что в данном случае общение с БД происходит каким-то другим
 способом. Cкорее всего, в программе используется специальная библиотека,
 которая превратит код на языке Java в соответствующий код на языке SQL и
 отправит его на выполнение БД. Подобных библиотек существует великое
-множество почти для всех популярных языков программирования.</p>
-<nav class="pagination mb-3">
+множество почти для всех популярных языков программирования.</p><nav class="pagination mb-3">
 <ul class=pagination-list>
 <li class="pagination-item ml-auto">
 <a href=http://orasql.ru/sql/intro/ddldml/ class="pagination-link pagination-next"> DML, DDL > </a>
-</li>
-</ul>
-</nav>
-</div>
-<footer class="footer b-dark-low b-top">
+</li></ul></nav></div><footer class="footer b-dark-low b-top">
 <div class="footer-container container centered edges">
 <div class="footer-body mt-10">
 <nav class="nav nav-muted nav-menu-sm"><ul class=nav-list>
-<li class=nav-item><a href=/ class=nav-link>Orasql.ru</a></li>
-<li class=nav-item><a href=/ class=nav-link>Учебник</a></li>
-<li class=nav-item><p class="text-medium text-moderated">Email: orasqlru@gmail.com</p></li>
-</ul>
-</nav>
-</div>
-<div class="footer-copy mt-6 pt-6 b-dark-7 b-top">
-<p class="text-medium text-moderated">© Orasql.ru <br> 2019-2021</p>
-</div>
-</div>
-</footer>
-</body>
-</html>
+<li class=nav-item><a href=/ class=nav-link>Orasql.ru</a></li><li class=nav-item><a href=/ class=nav-link>Учебник</a></li><li class=nav-item><p class="text-medium text-moderated">Email: orasqlru@gmail.com</p></li></ul></nav></div><div class="footer-copy mt-6 pt-6 b-dark-7 b-top">
+<p class="text-medium text-moderated">© Orasql.ru <br> 2019-2021</p></div></div></footer></body></html>

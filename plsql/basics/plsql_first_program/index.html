@@ -5,38 +5,22 @@
 <link rel=stylesheet href=/css/main.css>
 <script>var clicky_site_ids=clicky_site_ids||[];clicky_site_ids.push(101305633)</script>
 <script async src=//static.getclicky.com/js></script>
-<title>Учебник Oracle SQL, PL/SQL | Первая программа на PL/SQL</title>
-</head>
-<body><div class="navbar bg-dark mb-10">
+<title>Учебник Oracle SQL, PL/SQL | Первая программа на PL/SQL</title></head><body><div class="navbar bg-dark mb-10">
 <div class="navbar-container container edges centered">
 <div class=navbar-brand>
 <a href=/ class=brand>
 Orasql.ru
 </a>
-</div>
-<div class="navbar-nav ml-6">
+</div><div class="navbar-nav ml-6">
 <nav class="nav nav-light nav-semibold">
 <ul class=nav-list>
-<li class=nav-item><a href=/book/ class=nav-link>Книга</a></li>
-</ul>
-</nav>
-<nav class="nav nav-light nav-semibold">
+<li class=nav-item><a href=/book/ class=nav-link>Книга</a></li></ul></nav><nav class="nav nav-light nav-semibold">
 <ul class=nav-list>
-<li class=nav-item><a href=https://github.com/cyevgeniy/orasqlru class=nav-link>Github</a></li>
-</ul>
-</nav>
-</div>
-</div>
-</div>
-<div id=container class="container-medium edges centered">
+<li class=nav-item><a href=https://github.com/cyevgeniy/orasqlru class=nav-link>Github</a></li></ul></nav></div></div></div><div id=container class="container-medium edges centered">
 <div class="doc-head mb-4 container-10">
-<h5 class="heading-micro heading-muted">Основы PL/SQL</h5>
-<h1 class="heading-huge heading-heavy">Первая программа на PL/SQL</h1>
-</div>
-<p>Итак, напишем нашу первую программу на PL/SQL. Но перед этим создадим
+<h5 class="heading-micro heading-muted">Основы PL/SQL</h5><h1 class="heading-huge heading-heavy">Первая программа на PL/SQL</h1></div><p>Итак, напишем нашу первую программу на PL/SQL. Но перед этим создадим
 простую таблицу <code>users</code>, в которой будем хранить список пользователей
-некой системы:</p>
-<pre><code>create table users(
+некой системы:</p><pre><code>create table users(
     id number primary key,
     login varchar2(60) not null,
     sign_date date default sysdate not null,
@@ -51,29 +35,22 @@ values(2, 'UserB', to_date('15.07.2017', 'dd.mm.yyyy'), 1);
 
 insert into users
 values(3, 'UserC', to_date('02.10.2015', 'dd.mm.yyyy'), 1);
-</code></pre>
-<p>Теперь приведем текст программы:</p>
-<pre><code>begin
+</code></pre><p>Теперь приведем текст программы:</p><pre><code>begin
     update users
     set is_active = 0
     where sign_date &lt; to_date('01.01.2016', 'dd.mm.yyyy'); 
 end;
 /
-</code></pre>
-<p>Данный код делает неактивными всех пользователей, которые были
-зарегистрированы ранее, чем первое января 2016 года.</p>
-<p>Программа очень простая, но зато она наглядно демонстрирует важнейшую
+</code></pre><p>Данный код делает неактивными всех пользователей, которые были
+зарегистрированы ранее, чем первое января 2016 года.</p><p>Программа очень простая, но зато она наглядно демонстрирует важнейшую
 особенность PL/SQL - <strong>тесную интеграцию с SQL</strong>. Любой SQL запрос может
 быть вызван из PL/SQL, и это абсллютно нормально и естественно. На самом
 деле, большую часть кода PL/SQL, как правило, составляют именно
-SQL-запросы.</p>
-<p>Здесь важно понимать, почему это PL/SQL программа, а не простой
+SQL-запросы.</p><p>Здесь важно понимать, почему это PL/SQL программа, а не простой
 SQL-запрос. Причиной является тот факт, что запрос заключен в
-<a href=/plsql/basics/plsql_anonymous_blocks/>анонимный блок</a>.</p>
-<p>Внутри блока может находиться сколько угодно запросов. Например,
+<a href=/plsql/basics/plsql_anonymous_blocks/>анонимный блок</a>.</p><p>Внутри блока может находиться сколько угодно запросов. Например,
 следующая программа делает неактивными пользователей,
-зарегистрировавшихся раньше 2016 года, и добавляет нового пользователя:</p>
-<pre><code>begin
+зарегистрировавшихся раньше 2016 года, и добавляет нового пользователя:</p><pre><code>begin
     update users
     set is_active = 0
     where sign_date &lt; to_date('01.01.2016', 'dd.mm.yyyy');
@@ -82,32 +59,15 @@ SQL-запрос. Причиной является тот факт, что за
     values(4, 'UserD', SYSDATE);
 end;
 /
-</code></pre>
-<nav class="pagination mb-3">
+</code></pre><nav class="pagination mb-3">
 <ul class=pagination-list>
 <li class=pagination-item>
 <a href=http://orasql.ru/plsql/basics/plsql_blocks/ class="pagination-link pagination-prev"> &lt; Вложенные и именованные блоки </a>
-</li>
-<li class="pagination-item ml-auto">
+</li><li class="pagination-item ml-auto">
 <a href=http://orasql.ru/plsql/basics/plsql_dbms_put_line/ class="pagination-link pagination-next"> DBMS_OUTPUT.PUT_LINE. Вывод на экран > </a>
-</li>
-</ul>
-</nav>
-</div>
-<footer class="footer b-dark-low b-top">
+</li></ul></nav></div><footer class="footer b-dark-low b-top">
 <div class="footer-container container centered edges">
 <div class="footer-body mt-10">
 <nav class="nav nav-muted nav-menu-sm"><ul class=nav-list>
-<li class=nav-item><a href=/ class=nav-link>Orasql.ru</a></li>
-<li class=nav-item><a href=/ class=nav-link>Учебник</a></li>
-<li class=nav-item><p class="text-medium text-moderated">Email: orasqlru@gmail.com</p></li>
-</ul>
-</nav>
-</div>
-<div class="footer-copy mt-6 pt-6 b-dark-7 b-top">
-<p class="text-medium text-moderated">© Orasql.ru <br> 2019-2021</p>
-</div>
-</div>
-</footer>
-</body>
-</html>
+<li class=nav-item><a href=/ class=nav-link>Orasql.ru</a></li><li class=nav-item><a href=/ class=nav-link>Учебник</a></li><li class=nav-item><p class="text-medium text-moderated">Email: orasqlru@gmail.com</p></li></ul></nav></div><div class="footer-copy mt-6 pt-6 b-dark-7 b-top">
+<p class="text-medium text-moderated">© Orasql.ru <br> 2019-2021</p></div></div></footer></body></html>

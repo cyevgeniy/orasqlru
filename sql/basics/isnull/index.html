@@ -5,101 +5,50 @@
 <link rel=stylesheet href=/css/main.css>
 <script>var clicky_site_ids=clicky_site_ids||[];clicky_site_ids.push(101305633)</script>
 <script async src=//static.getclicky.com/js></script>
-<title>Учебник Oracle SQL, PL/SQL | Проверка значения на NULL</title>
-</head>
-<body><div class="navbar bg-dark mb-10">
+<title>Учебник Oracle SQL, PL/SQL | Проверка значения на NULL</title></head><body><div class="navbar bg-dark mb-10">
 <div class="navbar-container container edges centered">
 <div class=navbar-brand>
 <a href=/ class=brand>
 Orasql.ru
 </a>
-</div>
-<div class="navbar-nav ml-6">
+</div><div class="navbar-nav ml-6">
 <nav class="nav nav-light nav-semibold">
 <ul class=nav-list>
-<li class=nav-item><a href=/book/ class=nav-link>Книга</a></li>
-</ul>
-</nav>
-<nav class="nav nav-light nav-semibold">
+<li class=nav-item><a href=/book/ class=nav-link>Книга</a></li></ul></nav><nav class="nav nav-light nav-semibold">
 <ul class=nav-list>
-<li class=nav-item><a href=https://github.com/cyevgeniy/orasqlru class=nav-link>Github</a></li>
-</ul>
-</nav>
-</div>
-</div>
-</div>
-<div id=container class="container-medium edges centered">
+<li class=nav-item><a href=https://github.com/cyevgeniy/orasqlru class=nav-link>Github</a></li></ul></nav></div></div></div><div id=container class="container-medium edges centered">
 <div class="doc-head mb-4 container-10">
-<h5 class="heading-micro heading-muted">Основы</h5>
-<h1 class="heading-huge heading-heavy">Проверка значения на NULL</h1>
-</div>
-<p>Если обратить внимание на результаты запросов, выше, то можно заметить,
+<h5 class="heading-micro heading-muted">Основы</h5><h1 class="heading-huge heading-heavy">Проверка значения на NULL</h1></div><p>Если обратить внимание на результаты запросов, выше, то можно заметить,
 что строка, содержащая <code>NULL</code> в колонке <code>rating</code> не была возвращена ни
-одним из них.</p>
-<p>Как уже говорилось ранее, <code>NULL</code> - это отсутствие значения.
+одним из них.</p><p>Как уже говорилось ранее, <code>NULL</code> - это отсутствие значения.
 Соответственно, он и не может быть больше, меньше, либо даже равняться
-какому-либо значению, даже себе.</p>
-<p>Например, следующий запрос не вернет ни одной строки, хотя мы вроде как
-и указываем в запросе необходимый критерий - равенство <code>NULL</code>:</p>
-<pre><code>select d.*
+какому-либо значению, даже себе.</p><p>Например, следующий запрос не вернет ни одной строки, хотя мы вроде как
+и указываем в запросе необходимый критерий - равенство <code>NULL</code>:</p><pre><code>select d.*
 from dishes d
 where d.rating = NULL
-</code></pre>
-<p><img src=/img/3_select/no_data_found.png alt></p>
-<p>Теперь попробуем получить все блюда, у которых рейтинг указан, т.е. те
-строки из таблицы, где значение rating не равно <code>NULL</code>:</p>
-<pre><code>select d.*
+</code></pre><p><img src=/img/3_select/no_data_found.png alt></p><p>Теперь попробуем получить все блюда, у которых рейтинг указан, т.е. те
+строки из таблицы, где значение rating не равно <code>NULL</code>:</p><pre><code>select d.*
 from dishes d
 where d.rating &lt;&gt; NULL
-</code></pre>
-<p>Получим аналогичный результат - ни одной строки не будет получено:</p>
-<p><img src=/img/3_select/no_data_found.png alt></p>
-<p>Встает вопрос - как определить, что колонка содержит NULL?</p>
-<p>Для этого используются операторы <code>IS NULL</code> и <code>IS NOT NULL</code>. <code>IS NULL</code>
+</code></pre><p>Получим аналогичный результат - ни одной строки не будет получено:</p><p><img src=/img/3_select/no_data_found.png alt></p><p>Встает вопрос - как определить, что колонка содержит NULL?</p><p>Для этого используются операторы <code>IS NULL</code> и <code>IS NOT NULL</code>. <code>IS NULL</code>
 проверяет, является ли значение равным NULL, в то время как
-<code>IS NOT NULL</code> проверяет, является ли значение любым, но не NULL.</p>
-<p>Работу данных операторов лучше рассмотреть на примерах.</p>
-<p>Получим блюда, которые еще не получили никакой оценки, т.е. те блюда,
-которые в колонке <code>rating</code> содержат NULL:</p>
-<pre><code>select d.*
+<code>IS NOT NULL</code> проверяет, является ли значение любым, но не NULL.</p><p>Работу данных операторов лучше рассмотреть на примерах.</p><p>Получим блюда, которые еще не получили никакой оценки, т.е. те блюда,
+которые в колонке <code>rating</code> содержат NULL:</p><pre><code>select d.*
 from dishes d
 where d.rating IS NULL
-</code></pre>
-<p><img src=/img/3_select/rating_is_null.png alt></p>
-<p>А теперь получим все блюда, которые уже получили оценку:</p>
-<pre><code>select d.*
+</code></pre><p><img src=/img/3_select/rating_is_null.png alt></p><p>А теперь получим все блюда, которые уже получили оценку:</p><pre><code>select d.*
 from dishes d
 where d.rating IS NOT NULL
-</code></pre>
-<p>Как видно, <code>IS NOT NULL</code> возвращает все строки, кроме тех, которые
-содержат <code>NULL</code>:</p>
-<p><img src=/img/3_select/rating_is_not_null.png alt></p>
-<p>В Oracle пустая строка эквивалентна <code>NULL</code>.</p>
-<nav class="pagination mb-3">
+</code></pre><p>Как видно, <code>IS NOT NULL</code> возвращает все строки, кроме тех, которые
+содержат <code>NULL</code>:</p><p><img src=/img/3_select/rating_is_not_null.png alt></p><p>В Oracle пустая строка эквивалентна <code>NULL</code>.</p><nav class="pagination mb-3">
 <ul class=pagination-list>
 <li class=pagination-item>
 <a href=http://orasql.ru/sql/basics/andor/ class="pagination-link pagination-prev"> &lt; Проверка нескольких условий. AND, OR </a>
-</li>
-<li class="pagination-item ml-auto">
+</li><li class="pagination-item ml-auto">
 <a href=http://orasql.ru/sql/basics/innotin/ class="pagination-link pagination-next"> IN, NOT IN > </a>
-</li>
-</ul>
-</nav>
-</div>
-<footer class="footer b-dark-low b-top">
+</li></ul></nav></div><footer class="footer b-dark-low b-top">
 <div class="footer-container container centered edges">
 <div class="footer-body mt-10">
 <nav class="nav nav-muted nav-menu-sm"><ul class=nav-list>
-<li class=nav-item><a href=/ class=nav-link>Orasql.ru</a></li>
-<li class=nav-item><a href=/ class=nav-link>Учебник</a></li>
-<li class=nav-item><p class="text-medium text-moderated">Email: orasqlru@gmail.com</p></li>
-</ul>
-</nav>
-</div>
-<div class="footer-copy mt-6 pt-6 b-dark-7 b-top">
-<p class="text-medium text-moderated">© Orasql.ru <br> 2019-2021</p>
-</div>
-</div>
-</footer>
-</body>
-</html>
+<li class=nav-item><a href=/ class=nav-link>Orasql.ru</a></li><li class=nav-item><a href=/ class=nav-link>Учебник</a></li><li class=nav-item><p class="text-medium text-moderated">Email: orasqlru@gmail.com</p></li></ul></nav></div><div class="footer-copy mt-6 pt-6 b-dark-7 b-top">
+<p class="text-medium text-moderated">© Orasql.ru <br> 2019-2021</p></div></div></footer></body></html>

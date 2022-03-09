@@ -5,174 +5,99 @@
 <link rel=stylesheet href=/css/main.css>
 <script>var clicky_site_ids=clicky_site_ids||[];clicky_site_ids.push(101305633)</script>
 <script async src=//static.getclicky.com/js></script>
-<title>Учебник Oracle SQL, PL/SQL | IN, NOT IN</title>
-</head>
-<body><div class="navbar bg-dark mb-10">
+<title>Учебник Oracle SQL, PL/SQL | IN, NOT IN</title></head><body><div class="navbar bg-dark mb-10">
 <div class="navbar-container container edges centered">
 <div class=navbar-brand>
 <a href=/ class=brand>
 Orasql.ru
 </a>
-</div>
-<div class="navbar-nav ml-6">
+</div><div class="navbar-nav ml-6">
 <nav class="nav nav-light nav-semibold">
 <ul class=nav-list>
-<li class=nav-item><a href=/book/ class=nav-link>Книга</a></li>
-</ul>
-</nav>
-<nav class="nav nav-light nav-semibold">
+<li class=nav-item><a href=/book/ class=nav-link>Книга</a></li></ul></nav><nav class="nav nav-light nav-semibold">
 <ul class=nav-list>
-<li class=nav-item><a href=https://github.com/cyevgeniy/orasqlru class=nav-link>Github</a></li>
-</ul>
-</nav>
-</div>
-</div>
-</div>
-<div id=container class="container-medium edges centered">
+<li class=nav-item><a href=https://github.com/cyevgeniy/orasqlru class=nav-link>Github</a></li></ul></nav></div></div></div><div id=container class="container-medium edges centered">
 <div class="doc-head mb-4 container-10">
-<h5 class="heading-micro heading-muted">Основы</h5>
-<h1 class="heading-huge heading-heavy">IN, NOT IN</h1>
-</div>
-<div class="doc-toc mt-6 mb-6">
+<h5 class="heading-micro heading-muted">Основы</h5><h1 class="heading-huge heading-heavy">IN, NOT IN</h1></div><div class="doc-toc mt-6 mb-6">
 <nav class="menu menu-underline menu-medium menu-numbered">
 <ul class=menu-list>
 <li class=menu-item>
 <a href=#%d0%b2%d1%85%d0%be%d0%b6%d0%b4%d0%b5%d0%bd%d0%b8%d0%b5-%d0%b2-%d0%bd%d0%b0%d0%b1%d0%be%d1%80-%d0%b4%d0%b0%d0%bd%d0%bd%d1%8b%d1%85-in class=menu-link>Вхождение в набор данных. IN</a>
 </li><li class=menu-item>
 <a href=#%d0%be%d1%82%d1%81%d1%83%d1%82%d1%81%d1%82%d0%b2%d0%b8%d0%b5-%d0%b2-%d0%bd%d0%b0%d0%b1%d0%be%d1%80%d0%b5-%d0%b4%d0%b0%d0%bd%d0%bd%d1%8b%d1%85-not-in class=menu-link>Отсутствие в наборе данных. NOT IN</a>
-</li></ul></nav>
-</div>
-<h2 id=вхождение-в-набор-данных-in>Вхождение в набор данных. IN</h2>
-<p>Условие <code>IN</code> позволяет ответить на следующий вопрос: &ldquo;Входит ( IN ) ли
-значение в заданный набор данных?&rdquo;.</p>
-<p>Следующий пример вернет все блюда, рейтинг которых равен 320 либо 270:</p>
-<pre><code>select d.*
+</li></ul></nav></div><h2 id=вхождение-в-набор-данных-in>Вхождение в набор данных. IN</h2><p>Условие <code>IN</code> позволяет ответить на следующий вопрос: &ldquo;Входит ( IN ) ли
+значение в заданный набор данных?&rdquo;.</p><p>Следующий пример вернет все блюда, рейтинг которых равен 320 либо 270:</p><pre><code>select d.*
 from dishes d
 where d.rating IN (320, 270)
-</code></pre>
-<p><img src=/img/3_select/rating_in_320_270.png alt></p>
-<p>Использовать можно любые типы, не только числа:</p>
-<pre><code>select d.*
+</code></pre><p><img src=/img/3_select/rating_in_320_270.png alt></p><p>Использовать можно любые типы, не только числа:</p><pre><code>select d.*
 from dishes d
 where d.name IN 
     ('Макароны с сыром', 'Овощной салат', 'Борщ')
-</code></pre>
-<p><img src=/img/3_select/dishes_name_in.png alt></p>
-<p>Следует помнить, что при сравнении строк учитывается регистр, т.е.
-cледующий запрос:</p>
-<pre><code>select d.*
+</code></pre><p><img src=/img/3_select/dishes_name_in.png alt></p><p>Следует помнить, что при сравнении строк учитывается регистр, т.е.
+cледующий запрос:</p><pre><code>select d.*
 from dishes d
 where d.name IN
     ('Макароны с сыром', 'ОВОЩНОЙ салат', 'БОРЩ')
-</code></pre>
-<p>Не вернет строки с овощным салатом и борщом:</p>
-<p><img src=/img/3_select/name_in_casesensitive.png alt></p>
-<p>Можно попробовать поправить ситуацию и воспользоваться уже знакомой
+</code></pre><p>Не вернет строки с овощным салатом и борщом:</p><p><img src=/img/3_select/name_in_casesensitive.png alt></p><p>Можно попробовать поправить ситуацию и воспользоваться уже знакомой
 функцией <code>UPPER</code>. Напомним, что эта функция приводит строку к верхнему
-регистру:</p>
-<pre><code>select d.*
+регистру:</p><pre><code>select d.*
 from dishes d
 where UPPER(d.name) IN
     ('Макароны с сыром', 'ОВОЩНОЙ салат', 'БОРЩ')
-</code></pre>
-<p><img src=/img/3_select/name_in_upper_borsch.png alt></p>
-<p>Итак, следующим запросом мы фактически сказали БД: &ldquo;Покажи нам все
+</code></pre><p><img src=/img/3_select/name_in_upper_borsch.png alt></p><p>Итак, следующим запросом мы фактически сказали БД: &ldquo;Покажи нам все
 строки из таблицы dishes, в которых наименование, написанное большими
 буквами, будет равно либо &ldquo;Макароны с сыром&rdquo;, либо &ldquo;ОВОЩНОЙ салат&rdquo;, либо
-&ldquo;БОРЩ&rdquo;.</p>
-<p>Почему в выборку не попали макароны с сыром и овощной салат? Ответ прост</p>
-<ul>
+&ldquo;БОРЩ&rdquo;.</p><p>Почему в выборку не попали макароны с сыром и овощной салат? Ответ прост</p><ul>
 <li>строка &ldquo;МАКАРОНЫ С СЫРОМ&rdquo; не идентична строке &ldquo;Макароны с сыром&rdquo;, как
-и строка &ldquo;ОВОЩНОЙ САЛАТ&rdquo; не идентична строке &ldquo;ОВОЩНОЙ салат&rdquo;.</li>
-</ul>
-<p>Как же можно получить все три интересующих нас блюда, не переживая за
+и строка &ldquo;ОВОЩНОЙ САЛАТ&rdquo; не идентична строке &ldquo;ОВОЩНОЙ салат&rdquo;.</li></ul><p>Как же можно получить все три интересующих нас блюда, не переживая за
 то, что регистры строк(а здесь достаточно несовпадения и хотя бы в одном
 символе) в таблице <code>dishes</code> не совпадут с регистрами строк, которые мы
-перечисляем в выражении <code>IN</code>?</p>
-<p>Ответ прост - привести к верхнему/нижнему регистру как строки в таблице,
-так и строки в выражении <code>IN</code>.</p>
-<p>Следующий запрос выдаст список всех интересующих нас блюд:</p>
-<pre><code>select d.*
+перечисляем в выражении <code>IN</code>?</p><p>Ответ прост - привести к верхнему/нижнему регистру как строки в таблице,
+так и строки в выражении <code>IN</code>.</p><p>Следующий запрос выдаст список всех интересующих нас блюд:</p><pre><code>select d.*
 from dishes d
 where UPPER(d.name) IN (
     upper('Макароны с сыром'),
     upper('ОВОЩНОЙ салат'),
     upper('БОРЩ')
 )
-</code></pre>
-<p><img src=/img/3_select/dishes_name_in.png alt></p>
-<h2 id=отсутствие-в-наборе-данных-not-in>Отсутствие в наборе данных. NOT IN</h2>
-<p>Условие <code>NOT IN</code> выполняет функцию, противоположную выражению <code>IN</code>:
-убедиться, что значение не входит в указанный набор данных.</p>
-<p>Например, нам требуется получить список блюд, за исключением чая с
-молоком и овощного салата:</p>
-<pre><code>select *
+</code></pre><p><img src=/img/3_select/dishes_name_in.png alt></p><h2 id=отсутствие-в-наборе-данных-not-in>Отсутствие в наборе данных. NOT IN</h2><p>Условие <code>NOT IN</code> выполняет функцию, противоположную выражению <code>IN</code>:
+убедиться, что значение не входит в указанный набор данных.</p><p>Например, нам требуется получить список блюд, за исключением чая с
+молоком и овощного салата:</p><pre><code>select *
 from dishes
 where name not in ('Овощной салат', 'Чай с молоком')
-</code></pre>
-<p>Получим следующий результат:</p>
-<p><img src=/img/3_select/not_in_tea_s.png alt></p>
-<p>Для понимания того, как работает конструкция NOT IN, лучше рассматривать
-приведенный пример как следующий, эквивалентный запрос:</p>
-<pre><code>select *
+</code></pre><p>Получим следующий результат:</p><p><img src=/img/3_select/not_in_tea_s.png alt></p><p>Для понимания того, как работает конструкция NOT IN, лучше рассматривать
+приведенный пример как следующий, эквивалентный запрос:</p><pre><code>select *
 from dishes
 where name &lt;&gt; 'Овощной салат'
 and name &lt;&gt; 'Чай с молоком'
-</code></pre>
-<p>При использовании <code>NOT IN</code>, проверяемое значение будет поочередно
+</code></pre><p>При использовании <code>NOT IN</code>, проверяемое значение будет поочередно
 сравнено с каждым из значений, перечисленных в скобках после <code>NOT IN</code>, и
 если хотя бы одно сравнение не будет истинным, то все условие будет
-считаться ложным.</p>
-<p>Если в списке значений <code>NOT IN</code> будет присутствовать хотя бы одно
+считаться ложным.</p><p>Если в списке значений <code>NOT IN</code> будет присутствовать хотя бы одно
 <code>NULL</code>-значение, то условие будет ложным для всех обрабатываемых строк,
-даже тех, где проверяемое значение является <code>NULL</code>.</p>
-<p>Для большего понимания рассмотрим это на примере.</p>
-<p>Предположим, мы хотим получить список блюд, рейтинг которых не 320 и не
-NULL. Для этого мы написали следующий запрос:</p>
-<pre><code>select *
+даже тех, где проверяемое значение является <code>NULL</code>.</p><p>Для большего понимания рассмотрим это на примере.</p><p>Предположим, мы хотим получить список блюд, рейтинг которых не 320 и не
+NULL. Для этого мы написали следующий запрос:</p><pre><code>select *
 from dishes
 where rating not in (320, null)
-</code></pre>
-<p><img src=/img/3_select/no_data_found.png alt></p>
-<p>Результат получился немного не таким, как хотелось бы. Для того, чтобы
+</code></pre><p><img src=/img/3_select/no_data_found.png alt></p><p>Результат получился немного не таким, как хотелось бы. Для того, чтобы
 понять, почему не было получено никаких данных, следует понимать, как
-рассматривается данный запрос:</p>
-<pre><code>select *
+рассматривается данный запрос:</p><pre><code>select *
 from dishes
 where rating &lt;&gt; 320
 and rating &lt;&gt; null
-</code></pre>
-<p>Теперь все должно быть более понятным. Причина кроется в выражении
+</code></pre><p>Теперь все должно быть более понятным. Причина кроется в выражении
 <code>rating &lt;> null</code>. Как уже было рассмотрено, сравнение с <code>NULL</code> всегда
 дает ложный результат, а так как используется логическое И(and), то и
-результат всего выражения WHERE будет ложным.</p>
-<p>Поэтому, используя <code>NOT IN</code>, всегда следует убедиться в отсутствии
-null-значений.</p>
-<nav class="pagination mb-3">
+результат всего выражения WHERE будет ложным.</p><p>Поэтому, используя <code>NOT IN</code>, всегда следует убедиться в отсутствии
+null-значений.</p><nav class="pagination mb-3">
 <ul class=pagination-list>
 <li class=pagination-item>
 <a href=http://orasql.ru/sql/basics/isnull/ class="pagination-link pagination-prev"> &lt; Проверка значения на NULL </a>
-</li>
-<li class="pagination-item ml-auto">
+</li><li class="pagination-item ml-auto">
 <a href=http://orasql.ru/sql/basics/between/ class="pagination-link pagination-next"> Вхождение в диапазон. BETWEEN. NOT BETWEEN > </a>
-</li>
-</ul>
-</nav>
-</div>
-<footer class="footer b-dark-low b-top">
+</li></ul></nav></div><footer class="footer b-dark-low b-top">
 <div class="footer-container container centered edges">
 <div class="footer-body mt-10">
 <nav class="nav nav-muted nav-menu-sm"><ul class=nav-list>
-<li class=nav-item><a href=/ class=nav-link>Orasql.ru</a></li>
-<li class=nav-item><a href=/ class=nav-link>Учебник</a></li>
-<li class=nav-item><p class="text-medium text-moderated">Email: orasqlru@gmail.com</p></li>
-</ul>
-</nav>
-</div>
-<div class="footer-copy mt-6 pt-6 b-dark-7 b-top">
-<p class="text-medium text-moderated">© Orasql.ru <br> 2019-2021</p>
-</div>
-</div>
-</footer>
-</body>
-</html>
+<li class=nav-item><a href=/ class=nav-link>Orasql.ru</a></li><li class=nav-item><a href=/ class=nav-link>Учебник</a></li><li class=nav-item><p class="text-medium text-moderated">Email: orasqlru@gmail.com</p></li></ul></nav></div><div class="footer-copy mt-6 pt-6 b-dark-7 b-top">
+<p class="text-medium text-moderated">© Orasql.ru <br> 2019-2021</p></div></div></footer></body></html>

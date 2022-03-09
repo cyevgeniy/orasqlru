@@ -5,35 +5,20 @@
 <link rel=stylesheet href=/css/main.css>
 <script>var clicky_site_ids=clicky_site_ids||[];clicky_site_ids.push(101305633)</script>
 <script async src=//static.getclicky.com/js></script>
-<title>Учебник Oracle SQL, PL/SQL | Таблицы</title>
-</head>
-<body><div class="navbar bg-dark mb-10">
+<title>Учебник Oracle SQL, PL/SQL | Таблицы</title></head><body><div class="navbar bg-dark mb-10">
 <div class="navbar-container container edges centered">
 <div class=navbar-brand>
 <a href=/ class=brand>
 Orasql.ru
 </a>
-</div>
-<div class="navbar-nav ml-6">
+</div><div class="navbar-nav ml-6">
 <nav class="nav nav-light nav-semibold">
 <ul class=nav-list>
-<li class=nav-item><a href=/book/ class=nav-link>Книга</a></li>
-</ul>
-</nav>
-<nav class="nav nav-light nav-semibold">
+<li class=nav-item><a href=/book/ class=nav-link>Книга</a></li></ul></nav><nav class="nav nav-light nav-semibold">
 <ul class=nav-list>
-<li class=nav-item><a href=https://github.com/cyevgeniy/orasqlru class=nav-link>Github</a></li>
-</ul>
-</nav>
-</div>
-</div>
-</div>
-<div id=container class="container-medium edges centered">
+<li class=nav-item><a href=https://github.com/cyevgeniy/orasqlru class=nav-link>Github</a></li></ul></nav></div></div></div><div id=container class="container-medium edges centered">
 <div class="doc-head mb-4 container-10">
-<h5 class="heading-micro heading-muted">Основы</h5>
-<h1 class="heading-huge heading-heavy">Таблицы</h1>
-</div>
-<div class="doc-toc mt-6 mb-6">
+<h5 class="heading-micro heading-muted">Основы</h5><h1 class="heading-huge heading-heavy">Таблицы</h1></div><div class="doc-toc mt-6 mb-6">
 <nav class="menu menu-underline menu-medium menu-numbered">
 <ul class=menu-list>
 <li class=menu-item>
@@ -44,146 +29,90 @@ Orasql.ru
 <a href=#%d0%bf%d0%be%d0%bd%d1%8f%d1%82%d0%b8%d0%b5-null-not-null-%d0%ba%d0%be%d0%bb%d0%be%d0%bd%d0%ba%d0%b8 class=menu-link>Понятие NULL. Not-null колонки</a>
 </li><li class=menu-item>
 <a href=#%d0%ba%d0%be%d0%bc%d0%bc%d0%b5%d0%bd%d1%82%d0%b0%d1%80%d0%b8%d0%b8-%d0%ba-%d1%82%d0%b0%d0%b1%d0%bb%d0%b8%d1%86%d0%b5-%d0%ba%d0%be%d0%bb%d0%be%d0%bd%d0%ba%d0%b0%d0%bc class=menu-link>Комментарии к таблице, колонкам</a>
-</li></ul></nav>
-</div>
-<p>Данные в реляционных базах данных хранятся в таблицах. Таблицы - это
-ключевой объект, с которыми придется работать в SQL.</p>
-<p>Таблицы в БД совсем не отличаются от тех таблиц, с которыми все уже
-знакомы со школы - они состоят из колонок и строк.</p>
-<p>Каждая колонка в таблице имеет своё имя и свой тип, т.е. тип данных,
+</li></ul></nav></div><p>Данные в реляционных базах данных хранятся в таблицах. Таблицы - это
+ключевой объект, с которыми придется работать в SQL.</p><p>Таблицы в БД совсем не отличаются от тех таблиц, с которыми все уже
+знакомы со школы - они состоят из колонок и строк.</p><p>Каждая колонка в таблице имеет своё имя и свой тип, т.е. тип данных,
 которые будут в ней содержаться. Помимо типа данных для колонки можно
 указать максимальный размер данных, которые могут содержаться в этой
-таблице.</p>
-<p>Например, мы можем указать, что для колонки возраст тип данных - это
+таблице.</p><p>Например, мы можем указать, что для колонки возраст тип данных - это
 целое число, и это число должно состоять максимум из 3-х цифр. Т.о.
 максимальное число, которое может содержаться в этой колонке = 999. А с
 помощью дополнительных конструкций можно задать и правила проверки
 корректности для значения в колонке,- например, мы можем указать, что
-для колонки возраст в таблице минимальное значение = 18.</p>
-<h2 id=создание-таблицы>Создание таблицы</h2>
-<pre><code>create table hello(
+для колонки возраст в таблице минимальное значение = 18.</p><h2 id=создание-таблицы>Создание таблицы</h2><pre><code>create table hello(
     text_to_hello varchar2(100)
-</code></pre>
-<p>После выполнения данной sql-команды в базе данных будет создана таблица
+</code></pre><p>После выполнения данной sql-команды в базе данных будет создана таблица
 под названием <code>hello</code>. Эта таблица будет содержать всего одну колонку
 под названием <code>text_to_hello</code>. В этой колонке мы можем хранить только
 строковые значения(т.е. любой текст, который можно ввести с клавиатуры)
-длинной до 100 байт.</p>
-<p>Обратите внимание на размер допустимого текста в колонке
+длинной до 100 байт.</p><p>Обратите внимание на размер допустимого текста в колонке
 <code>text_to_hello</code>. 100 байт - это не одно и то же, что и 100 символов! Для
 того, чтобы сказать базе данных Oracle, что длина строки может быть 100
-символов, нужно было определить столбец следующим образом:</p>
-<pre><code>text_to_hello varchar2(100 char)
-</code></pre>
-<h3 id=создание-таблицы-с-несколькими-полями>Создание таблицы с несколькими полями</h3>
-<p>В таблице может много столбцов. Например, можно создать таблицу с тремя,
+символов, нужно было определить столбец следующим образом:</p><pre><code>text_to_hello varchar2(100 char)
+</code></pre><h3 id=создание-таблицы-с-несколькими-полями>Создание таблицы с несколькими полями</h3><p>В таблице может много столбцов. Например, можно создать таблицу с тремя,
 пятью или даже 100 колонками. В версиях oracle с 8i по 11g максимальное
-количество колонок в одной таблице достигает 1000.</p>
-<p>Для того, чтобы создать таблицу с несколькими колонками, нужно
-перечислить все колонки через запятую.</p>
-<p>Например, создадим таблицу <code>cars</code>, в которой будем хранить марку
-автомобиля и страну-производитель:</p>
-<pre><code>create table cars(
+количество колонок в одной таблице достигает 1000.</p><p>Для того, чтобы создать таблицу с несколькими колонками, нужно
+перечислить все колонки через запятую.</p><p>Например, создадим таблицу <code>cars</code>, в которой будем хранить марку
+автомобиля и страну-производитель:</p><pre><code>create table cars(
     model varchar2(50 char),
     country varchar2(70 char)
-</code></pre>
-<p>Эта таблица может содержать, например, такие данные:</p>
-<pre><code>|model |country
+</code></pre><p>Эта таблица может содержать, например, такие данные:</p><pre><code>|model |country
 |toyota|japan
 |ВАЗ   |Россия
 |Tesla |
 |      |
-</code></pre>
-<p>Следует обратить внимание на последние 2 строки в таблице <code>cars</code> - они
+</code></pre><p>Следует обратить внимание на последние 2 строки в таблице <code>cars</code> - они
 не полные. Первая из них содержит данные только в колонке <code>model</code>,
 вторая - не содержит данных ни в одной из колонок. Эта таблица может
 даже состоять из миллиона строк, подобных последней - и каждая строка не
-будет содержать в себе абсолютно никаких данных.</p>
-<h2 id=значения-по-умолчанию>Значения по умолчанию</h2>
-<p>При создании таблицы можно указать, какое значение будет принимать
-колонка по умолчанию:</p>
-<pre><code>create table cars(
+будет содержать в себе абсолютно никаких данных.</p><h2 id=значения-по-умолчанию>Значения по умолчанию</h2><p>При создании таблицы можно указать, какое значение будет принимать
+колонка по умолчанию:</p><pre><code>create table cars(
     model varchar2(50 char),
     country varchar2(50 char),
     wheel_count number(2) default 4
 )
-</code></pre>
-<p>В этом примере создается таблица cars, в которой помимо модели и
+</code></pre><p>В этом примере создается таблица cars, в которой помимо модели и
 страны-производителя хранится еще и количество колес, которое имеет
 автомобиль. И поле <code>wheel_count</code> по-умолчанию будет принимать значение,
-равное 4.</p>
-<p>Что значит по-умолчанию? Это значит, что если при вставке данных в эту
+равное 4.</p><p>Что значит по-умолчанию? Это значит, что если при вставке данных в эту
 таблицу не указать значение для колонки <code>wheel_count</code>, то оно будет
-равно числу 4.</p>
-<h2 id=понятие-null-not-null-колонки>Понятие NULL. Not-null колонки</h2>
-<p>Ячейки в таблицах могут быть пустыми, т.е. не содержать значения. Для
+равно числу 4.</p><h2 id=понятие-null-not-null-колонки>Понятие NULL. Not-null колонки</h2><p>Ячейки в таблицах могут быть пустыми, т.е. не содержать значения. Для
 обозначения отсутствия значения в ячейке используется ключевое слово
-<code>NULL</code>. Null могут содержать ячейки с любым типом данных.</p>
-<p>Рассмотрим таблицу cars из предыдущего примера. В каждой из трех ее
+<code>NULL</code>. Null могут содержать ячейки с любым типом данных.</p><p>Рассмотрим таблицу cars из предыдущего примера. В каждой из трех ее
 колонок может храниться Null(даже в колонке <code>wheel_count</code>, если указать
-значение Null явно при вставке).</p>
-<p>Но представляют ли информационную ценность строки в таблице, где
+значение Null явно при вставке).</p><p>Но представляют ли информационную ценность строки в таблице, где
 абсолютно нет значений? Конечно нет. Если рассматривать таблицу <code>cars</code>
 как источник информации об автомобилях, то нам хотелось бы получать хоть
-какую-то полезную информацию. Наиболее важной здесь будет колонка model</p>
-<ul>
+какую-то полезную информацию. Наиболее важной здесь будет колонка model</p><ul>
 <li>без нее информация о стране-производителе и количестве колес будет
-бесполезной.</li>
-</ul>
-<p>Для того, чтобы запретить Null-значения в колонке при создании таблицы,
-к описанию колонки добавляется <code>not null</code>:</p>
-<pre><code>create table cars(
+бесполезной.</li></ul><p>Для того, чтобы запретить Null-значения в колонке при создании таблицы,
+к описанию колонки добавляется <code>not null</code>:</p><pre><code>create table cars(
     model varchar2(50 char) not null,
     country varchar2(50 char),
     wheel_count number(2) default 4
 )
-</code></pre>
-<p>Теперь БД <strong>гарантирует</strong>, что колонка <code>model</code> не будет пустой, по
-крайней мере до тех пор, пока флаг <code>not null</code> включен для этой колонки.</p>
-<p>Также можно указать, что колонка <code>wheel_count</code> тоже не должна содержать
-<code>Null</code>:</p>
-<pre><code>create table cars(
+</code></pre><p>Теперь БД <strong>гарантирует</strong>, что колонка <code>model</code> не будет пустой, по
+крайней мере до тех пор, пока флаг <code>not null</code> включен для этой колонки.</p><p>Также можно указать, что колонка <code>wheel_count</code> тоже не должна содержать
+<code>Null</code>:</p><pre><code>create table cars(
     model varchar2(50 char) not null,
     country varchar2(50 char),
     wheel_count number(2) default 4 not null
 );
-</code></pre>
-<h2 id=комментарии-к-таблице-колонкам>Комментарии к таблице, колонкам</h2>
-<p>Для создаваемых таблиц и их колонок можно указывать комментарии. Это
-значитально облегчит понимание того, для чего и как они используются.</p>
-<p>Например, укажем комментарии для таблицы <code>cars</code> и ее колонок:</p>
-<pre><code>comment on table cars is 'Список автомобилей';
+</code></pre><h2 id=комментарии-к-таблице-колонкам>Комментарии к таблице, колонкам</h2><p>Для создаваемых таблиц и их колонок можно указывать комментарии. Это
+значитально облегчит понимание того, для чего и как они используются.</p><p>Например, укажем комментарии для таблицы <code>cars</code> и ее колонок:</p><pre><code>comment on table cars is 'Список автомобилей';
 
 comment on column cars.model is 'Модель авто, согласно тех. паспорту';
 comment on column cars.country is 'Страна-производитель';
 comment on column cars.wheel_count is 'Количество колес';
-</code></pre>
-<p>Для того, чтобы удалить комментарий, нужно просто задать в качестве его
-значения пустую строку:</p>
-<pre><code>comment on table cars is '';
-</code></pre>
-<nav class="pagination mb-3">
+</code></pre><p>Для того, чтобы удалить комментарий, нужно просто задать в качестве его
+значения пустую строку:</p><pre><code>comment on table cars is '';
+</code></pre><nav class="pagination mb-3">
 <ul class=pagination-list>
 <li class="pagination-item ml-auto">
 <a href=http://orasql.ru/sql/basics/maintypes/ class="pagination-link pagination-next"> Основные типы данных > </a>
-</li>
-</ul>
-</nav>
-</div>
-<footer class="footer b-dark-low b-top">
+</li></ul></nav></div><footer class="footer b-dark-low b-top">
 <div class="footer-container container centered edges">
 <div class="footer-body mt-10">
 <nav class="nav nav-muted nav-menu-sm"><ul class=nav-list>
-<li class=nav-item><a href=/ class=nav-link>Orasql.ru</a></li>
-<li class=nav-item><a href=/ class=nav-link>Учебник</a></li>
-<li class=nav-item><p class="text-medium text-moderated">Email: orasqlru@gmail.com</p></li>
-</ul>
-</nav>
-</div>
-<div class="footer-copy mt-6 pt-6 b-dark-7 b-top">
-<p class="text-medium text-moderated">© Orasql.ru <br> 2019-2021</p>
-</div>
-</div>
-</footer>
-</body>
-</html>
+<li class=nav-item><a href=/ class=nav-link>Orasql.ru</a></li><li class=nav-item><a href=/ class=nav-link>Учебник</a></li><li class=nav-item><p class="text-medium text-moderated">Email: orasqlru@gmail.com</p></li></ul></nav></div><div class="footer-copy mt-6 pt-6 b-dark-7 b-top">
+<p class="text-medium text-moderated">© Orasql.ru <br> 2019-2021</p></div></div></footer></body></html>

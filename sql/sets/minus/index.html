@@ -5,36 +5,20 @@
 <link rel=stylesheet href=/css/main.css>
 <script>var clicky_site_ids=clicky_site_ids||[];clicky_site_ids.push(101305633)</script>
 <script async src=//static.getclicky.com/js></script>
-<title>Учебник Oracle SQL, PL/SQL | Разница запросов. MINUS</title>
-</head>
-<body><div class="navbar bg-dark mb-10">
+<title>Учебник Oracle SQL, PL/SQL | Разница запросов. MINUS</title></head><body><div class="navbar bg-dark mb-10">
 <div class="navbar-container container edges centered">
 <div class=navbar-brand>
 <a href=/ class=brand>
 Orasql.ru
 </a>
-</div>
-<div class="navbar-nav ml-6">
+</div><div class="navbar-nav ml-6">
 <nav class="nav nav-light nav-semibold">
 <ul class=nav-list>
-<li class=nav-item><a href=/book/ class=nav-link>Книга</a></li>
-</ul>
-</nav>
-<nav class="nav nav-light nav-semibold">
+<li class=nav-item><a href=/book/ class=nav-link>Книга</a></li></ul></nav><nav class="nav nav-light nav-semibold">
 <ul class=nav-list>
-<li class=nav-item><a href=https://github.com/cyevgeniy/orasqlru class=nav-link>Github</a></li>
-</ul>
-</nav>
-</div>
-</div>
-</div>
-<div id=container class="container-medium edges centered">
+<li class=nav-item><a href=https://github.com/cyevgeniy/orasqlru class=nav-link>Github</a></li></ul></nav></div></div></div><div id=container class="container-medium edges centered">
 <div class="doc-head mb-4 container-10">
-<h5 class="heading-micro heading-muted">Работа с множествами</h5>
-<h1 class="heading-huge heading-heavy">Разница запросов. MINUS</h1>
-</div>
-<p>Подготовим тестовые данные:</p>
-<pre><code>create table cars(
+<h5 class="heading-micro heading-muted">Работа с множествами</h5><h1 class="heading-huge heading-heavy">Разница запросов. MINUS</h1></div><p>Подготовим тестовые данные:</p><pre><code>create table cars(
     car_id number not null,
     car_model varchar2(100) not null,
     release_year number
@@ -71,44 +55,29 @@ values('Volkswagen passat', 1998);
 
 insert into car_offers
 values('Volkswagen passat', 2003);
-</code></pre>
-<p>Посмотрим на данные в таблицах:</p>
-<p>Таблица <code>cars</code></p>
-<p><img src=/img/7_unions/minus_cars.png alt></p>
-<p>Таблица <code>car_offers</code></p>
-<p><img src=/img/7_unions/minus_car_offers.png alt></p>
-<p>Получим список предлагаемых нам моделей автомобилей, которых нет среди
+</code></pre><p>Посмотрим на данные в таблицах:</p><p>Таблица <code>cars</code></p><p><img src=/img/7_unions/minus_cars.png alt></p><p>Таблица <code>car_offers</code></p><p><img src=/img/7_unions/minus_car_offers.png alt></p><p>Получим список предлагаемых нам моделей автомобилей, которых нет среди
 нашего автопарка. Для этого будем использовать оператор <code>MINUS</code>, который
 возвращает уникальные строки из первого запроса, которых нет во втором
-запросе:</p>
-<pre><code>select car_model
+запросе:</p><pre><code>select car_model
 from car_offers
 
 MINUS
 
 select car_model
 from cars
-</code></pre>
-<p><img src=/img/7_unions/minus_car_model_result.png alt></p>
-<p>Если искать только отсутствующие у нас марки авто, то найдется лишь одна
-модель, которой нет у нас - &ldquo;Tesla&rdquo;.</p>
-<p>Теперь получим предложения автомобилей, у которых либо год, либо модель
-не совпадают с теми авто, что есть у нас:</p>
-<pre><code>select car_model, release_year
+</code></pre><p><img src=/img/7_unions/minus_car_model_result.png alt></p><p>Если искать только отсутствующие у нас марки авто, то найдется лишь одна
+модель, которой нет у нас - &ldquo;Tesla&rdquo;.</p><p>Теперь получим предложения автомобилей, у которых либо год, либо модель
+не совпадают с теми авто, что есть у нас:</p><pre><code>select car_model, release_year
 from car_offers
 
 MINUS
 
 select car_model, release_year
 from cars
-</code></pre>
-<p><img src=/img/7_unions/minus_car_model_year_result.png alt></p>
-<p>Типы данных в колонках и их количество в каждом из запросов должны
-совпадать.</p>
-<p>Если мы в первом запросе поменяем местами колонки, то запрос не
+</code></pre><p><img src=/img/7_unions/minus_car_model_year_result.png alt></p><p>Типы данных в колонках и их количество в каждом из запросов должны
+совпадать.</p><p>Если мы в первом запросе поменяем местами колонки, то запрос не
 выполнится и мы получим ошибку
-<code>ORA-01790: expression must have same datatype as corresponding expression</code>:</p>
-<pre><code>-- Ошибка, типы данных возвращаемых колонок  в 
+<code>ORA-01790: expression must have same datatype as corresponding expression</code>:</p><pre><code>-- Ошибка, типы данных возвращаемых колонок  в 
 -- обоих запросах должны совпадать
 select release_year, car_model
 from car_offers
@@ -117,11 +86,9 @@ MINUS
 
 select car_model, release_year
 from cars
-</code></pre>
-<p>Если запросы возвращают неодинаковое количество колонок, при выполнении
+</code></pre><p>Если запросы возвращают неодинаковое количество колонок, при выполнении
 запроса получим ошибку
-<code>ORA-01789: query block has incorrect number of result columns</code>:</p>
-<pre><code>-- Ошибка, запросы должны возвращать
+<code>ORA-01789: query block has incorrect number of result columns</code>:</p><pre><code>-- Ошибка, запросы должны возвращать
 -- одинаковое количество колонок
 select release_year
 from car_offers
@@ -130,57 +97,31 @@ MINUS
 
 select car_model, release_year
 from cars
-</code></pre>
-<p>MINUS возвращает уникальные строки, которые отсутствуют во втором
-запросе.</p>
-<p>Разберем это на примере. Для начала удалим из таблицы <code>car_offers</code>
-модели Volkswagen passat:</p>
-<pre><code>delete
+</code></pre><p>MINUS возвращает уникальные строки, которые отсутствуют во втором
+запросе.</p><p>Разберем это на примере. Для начала удалим из таблицы <code>car_offers</code>
+модели Volkswagen passat:</p><pre><code>delete
 from car_offers
 where car_model = 'Volkswagen passat'
-</code></pre>
-<p>Теперь данные в таблице <code>car_offers</code> выглядят вот так:</p>
-<p><img src=/img/7_unions/minus_car_offers_without_passat.png alt></p>
-<p>Теперь получим список моделей авто, которые есть у нас, но отсутствуют в
-списке предложений:</p>
-<pre><code>select car_model, release_year
+</code></pre><p>Теперь данные в таблице <code>car_offers</code> выглядят вот так:</p><p><img src=/img/7_unions/minus_car_offers_without_passat.png alt></p><p>Теперь получим список моделей авто, которые есть у нас, но отсутствуют в
+списке предложений:</p><pre><code>select car_model, release_year
 from cars
 
 MINUS
 
 select car_model, release_year
 from car_offers
-</code></pre>
-<p><img src=/img/7_unions/minus_unique_passat.png alt></p>
-<p>В результате мы видим всего одну строку с моделью Volkswagen passat 1998
+</code></pre><p><img src=/img/7_unions/minus_unique_passat.png alt></p><p>В результате мы видим всего одну строку с моделью Volkswagen passat 1998
 года, несмотря на то, что в таблице <code>cars</code> таких записей две. Как было
 сказано, это произошло потому, что оператор <code>MINUS</code> удаляет дубликаты и
-возвращает только уникальные строки.</p>
-<nav class="pagination mb-3">
+возвращает только уникальные строки.</p><nav class="pagination mb-3">
 <ul class=pagination-list>
 <li class=pagination-item>
 <a href=http://orasql.ru/sql/sets/unions/ class="pagination-link pagination-prev"> &lt; Объединение. UNION </a>
-</li>
-<li class="pagination-item ml-auto">
+</li><li class="pagination-item ml-auto">
 <a href=http://orasql.ru/sql/sets/intersect/ class="pagination-link pagination-next"> Пересечение запросов > </a>
-</li>
-</ul>
-</nav>
-</div>
-<footer class="footer b-dark-low b-top">
+</li></ul></nav></div><footer class="footer b-dark-low b-top">
 <div class="footer-container container centered edges">
 <div class="footer-body mt-10">
 <nav class="nav nav-muted nav-menu-sm"><ul class=nav-list>
-<li class=nav-item><a href=/ class=nav-link>Orasql.ru</a></li>
-<li class=nav-item><a href=/ class=nav-link>Учебник</a></li>
-<li class=nav-item><p class="text-medium text-moderated">Email: orasqlru@gmail.com</p></li>
-</ul>
-</nav>
-</div>
-<div class="footer-copy mt-6 pt-6 b-dark-7 b-top">
-<p class="text-medium text-moderated">© Orasql.ru <br> 2019-2021</p>
-</div>
-</div>
-</footer>
-</body>
-</html>
+<li class=nav-item><a href=/ class=nav-link>Orasql.ru</a></li><li class=nav-item><a href=/ class=nav-link>Учебник</a></li><li class=nav-item><p class="text-medium text-moderated">Email: orasqlru@gmail.com</p></li></ul></nav></div><div class="footer-copy mt-6 pt-6 b-dark-7 b-top">
+<p class="text-medium text-moderated">© Orasql.ru <br> 2019-2021</p></div></div></footer></body></html>

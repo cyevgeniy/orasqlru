@@ -5,68 +5,44 @@
 <link rel=stylesheet href=/css/main.css>
 <script>var clicky_site_ids=clicky_site_ids||[];clicky_site_ids.push(101305633)</script>
 <script async src=//static.getclicky.com/js></script>
-<title>Учебник Oracle SQL, PL/SQL | Уникальные ключи</title>
-</head>
-<body><div class="navbar bg-dark mb-10">
+<title>Учебник Oracle SQL, PL/SQL | Уникальные ключи</title></head><body><div class="navbar bg-dark mb-10">
 <div class="navbar-container container edges centered">
 <div class=navbar-brand>
 <a href=/ class=brand>
 Orasql.ru
 </a>
-</div>
-<div class="navbar-nav ml-6">
+</div><div class="navbar-nav ml-6">
 <nav class="nav nav-light nav-semibold">
 <ul class=nav-list>
-<li class=nav-item><a href=/book/ class=nav-link>Книга</a></li>
-</ul>
-</nav>
-<nav class="nav nav-light nav-semibold">
+<li class=nav-item><a href=/book/ class=nav-link>Книга</a></li></ul></nav><nav class="nav nav-light nav-semibold">
 <ul class=nav-list>
-<li class=nav-item><a href=https://github.com/cyevgeniy/orasqlru class=nav-link>Github</a></li>
-</ul>
-</nav>
-</div>
-</div>
-</div>
-<div id=container class="container-medium edges centered">
+<li class=nav-item><a href=https://github.com/cyevgeniy/orasqlru class=nav-link>Github</a></li></ul></nav></div></div></div><div id=container class="container-medium edges centered">
 <div class="doc-head mb-4 container-10">
-<h5 class="heading-micro heading-muted">Объекты БД</h5>
-<h1 class="heading-huge heading-heavy">Уникальные ключи</h1>
-</div>
-<div class="doc-toc mt-6 mb-6">
+<h5 class="heading-micro heading-muted">Объекты БД</h5><h1 class="heading-huge heading-heavy">Уникальные ключи</h1></div><div class="doc-toc mt-6 mb-6">
 <nav class="menu menu-underline menu-medium menu-numbered">
 <ul class=menu-list>
 <li class=menu-item>
 <a href=#%d1%81%d0%be%d0%b7%d0%b4%d0%b0%d0%bd%d0%b8%d0%b5-%d1%83%d0%bd%d0%b8%d0%ba%d0%b0%d0%bb%d1%8c%d0%bd%d1%8b%d1%85-%d0%ba%d0%bb%d1%8e%d1%87%d0%b5%d0%b9 class=menu-link>Создание уникальных ключей</a>
 </li><li class=menu-item>
 <a href=#%d1%81%d0%be%d1%81%d1%82%d0%b0%d0%b2%d0%bd%d1%8b%d0%b5-%d1%83%d0%bd%d0%b8%d0%ba%d0%b0%d0%bb%d1%8c%d0%bd%d1%8b%d0%b5-%d0%ba%d0%bb%d1%8e%d1%87%d0%b8 class=menu-link>Составные уникальные ключи</a>
-</li></ul></nav>
-</div>
-<p>Возьмем нашу таблицу с сотрудниками и добавим туда колонку с номером
+</li></ul></nav></div><p>Возьмем нашу таблицу с сотрудниками и добавим туда колонку с номером
 паспорта сотрудника. Может ли у двух разных людей быть одинаковый номер
 паспорта? Однозначно нет. Если в наших данных возникнет такая ситуация,
 когда у нескольких сотрудников по ошибке указали один и тот же номер
 паспорта, это может обернуться серьезными ошибками - клиентская
 программа выдаст по поиску несколько записей вместо одной, либо вообще
 выдаст ошибку и закроется. Или в бухгалтерии переведут деньги не тому
-сотруднику, или наоборот, всем.</p>
-<p>В любом случае, подобной ситуации нужно избежать. Это помогут сделать
-уникальные ключи.</p>
-<p>На колонки с уникальными ключами, как и на колонки с первичными ключами,
-можно ссылаться из других таблиц по внешним ключам.</p>
-<p>В отличие от первичных, в одной таблице может быть несколько уникальных
-ключей.</p>
-<h2 id=создание-уникальных-ключей>Создание уникальных ключей</h2>
-<pre><code>create table employees(
+сотруднику, или наоборот, всем.</p><p>В любом случае, подобной ситуации нужно избежать. Это помогут сделать
+уникальные ключи.</p><p>На колонки с уникальными ключами, как и на колонки с первичными ключами,
+можно ссылаться из других таблиц по внешним ключам.</p><p>В отличие от первичных, в одной таблице может быть несколько уникальных
+ключей.</p><h2 id=создание-уникальных-ключей>Создание уникальных ключей</h2><pre><code>create table employees(
     id number primary key,
     emp_name varchar2(200 char) not null,
     pas_no varchar2(30),
     constraint employees_pas_no_uk unique(pas_no)
 )
-</code></pre>
-<p>Теперь попробуем добавить нескольких сотрудников с одинаковыми номерами
-паспортов:</p>
-<pre><code>-- Эта строка добавляется в таблицу без проблем
+</code></pre><p>Теперь попробуем добавить нескольких сотрудников с одинаковыми номерами
+паспортов:</p><pre><code>-- Эта строка добавляется в таблицу без проблем
 insert into employees(id, emp_name, pas_no)
 values (1, 'Евгений Петров', '01012020pb8007');
 
@@ -74,15 +50,11 @@ values (1, 'Евгений Петров', '01012020pb8007');
 -- в таблице будет нарушен
 insert into employees(id, emp_name, pas_no)
 values (2, 'Алексей Иванов', '01012020pb8007');
-</code></pre>
-<p>Уникальные ключи на строковых данных чувствительны к регистру.</p>
-<pre><code>-- Эта строка добавляется без проблем
+</code></pre><p>Уникальные ключи на строковых данных чувствительны к регистру.</p><pre><code>-- Эта строка добавляется без проблем
 insert into employees(id, emp_name, pas_no)
 values (2, 'Алексей Иванов', '01012020PB8007');
-</code></pre>
-<p>Пробелы вначале и конце строк также учитываются, поэтому следующие
-данные также успешно добавятся в таблицу:</p>
-<pre><code>insert into employees(id, emp_name, pas_no)
+</code></pre><p>Пробелы вначале и конце строк также учитываются, поэтому следующие
+данные также успешно добавятся в таблицу:</p><pre><code>insert into employees(id, emp_name, pas_no)
 values (3, 'Петр Иванов', '   01012020PB8007');
 
 insert into employees(id, emp_name, pas_no)
@@ -90,54 +62,40 @@ values (4, 'Иван Петров', '01012020PB8007  ');
 
 insert into employees(id, emp_name, pas_no)
 values (5, 'Светлана Сидорова', '  01012020PB8007  ');
-</code></pre>
-<p>Наличие подобных данных в таблице также ошибка - как ни крути, номер
+</code></pre><p>Наличие подобных данных в таблице также ошибка - как ни крути, номер
 паспорта у всех этих сотрудников все равно совпадает. Поэтому в подобных
 случаях, когда регистр строк и наличие пробелов в начале или конце
 строки не должны учитываться, строки хранят в верхнем или нижнем
-регистре, а пробелы обрезают перед вставкой.</p>
-<p>Т.е. вставка данных в таблицу выглядит подобным образом:</p>
-<pre><code>-- Сначала удаляем пробелы(TRIM), потом приводим к верхнему
+регистре, а пробелы обрезают перед вставкой.</p><p>Т.е. вставка данных в таблицу выглядит подобным образом:</p><pre><code>-- Сначала удаляем пробелы(TRIM), потом приводим к верхнему
 -- регистру(UPPER)
 insert into employees(id, emp_name, pas_no)
 values (6, 'Светлана Сидорова', UPPER(TRIM('  01012020PB8007  ')));
-</code></pre>
-<p>Значения в колонке с уникальным ключом могут содержать <code>NULL</code>, причем
-строк с пустыми значениями может сколько угодно.</p>
-<p>Следующий запрос выполнится без ошибок, и добавит 2 сотрудника с пустыми
-номерами паспортов:</p>
-<pre><code>insert into employees(id, emp_name, pas_no)
+</code></pre><p>Значения в колонке с уникальным ключом могут содержать <code>NULL</code>, причем
+строк с пустыми значениями может сколько угодно.</p><p>Следующий запрос выполнится без ошибок, и добавит 2 сотрудника с пустыми
+номерами паспортов:</p><pre><code>insert into employees(id, emp_name, pas_no)
 values (7, 'Иван Иванов', NULL);
 
 insert into employees(id, emp_name, pas_no)
 values (8, 'Петр Петров', NULL);
-</code></pre>
-<p>Следует отметить, что это сработает только в том случае, если
+</code></pre><p>Следует отметить, что это сработает только в том случае, если
 <code>NULL</code>-значения разрешены в колонке, как в нашем случае. Если бы колонка
 была <code>NOT NULL</code>, то в таком случае, конечно, пустые значения туда не
-положишь.</p>
-<h2 id=составные-уникальные-ключи>Составные уникальные ключи</h2>
-<p>Создадим таблицу месячных бонусов сотрудников с использованием
-уникального ключа, а не первичного:</p>
-<pre><code>create table bonuses(
+положишь.</p><h2 id=составные-уникальные-ключи>Составные уникальные ключи</h2><p>Создадим таблицу месячных бонусов сотрудников с использованием
+уникального ключа, а не первичного:</p><pre><code>create table bonuses(
     emp_id number,
     mnth date,
     bonus number,
     constraint bonuses_uk unique(emp_id, mnth)
 );
-</code></pre>
-<p>Также, как и с первичным, вставить 2 строки с одинаковыми значениями не
-получится:</p>
-<pre><code>insert into bonuses(emp_id, mnth, bonus)
+</code></pre><p>Также, как и с первичным, вставить 2 строки с одинаковыми значениями не
+получится:</p><pre><code>insert into bonuses(emp_id, mnth, bonus)
 values(1, to_date('2020.01.01', 'yyyy.mm.dd'), 100);
 
 -- Будет нарушена уникальность ключа bonuses_uk
 insert into bonuses(emp_id, mnth, bonus)
 values(1, to_date('2020.01.01', 'yyyy.mm.dd'), 200);
-</code></pre>
-<p>Но т.к. в уникальном ключе разрешены <code>NULL</code>-значения (и они разрешены в
-нашей таблице), следующие строки добавятся без проблем:</p>
-<pre><code>insert into bonuses(emp_id, mnth, bonus)
+</code></pre><p>Но т.к. в уникальном ключе разрешены <code>NULL</code>-значения (и они разрешены в
+нашей таблице), следующие строки добавятся без проблем:</p><pre><code>insert into bonuses(emp_id, mnth, bonus)
 values(2, to_date('2020.01.01', 'yyyy.mm.dd'), 200);
 
 insert into bonuses(emp_id, mnth, bonus)
@@ -145,11 +103,9 @@ values(null, null, 200);
 
 insert into bonuses(emp_id, mnth, bonus)
 values(null, to_date('2020.01.01', 'yyyy.mm.dd'), 200);
-</code></pre>
-<p>Более того, в случае, когда все колонки уникального ключа пусты,
+</code></pre><p>Более того, в случае, когда все колонки уникального ключа пусты,
 добавлять строк можно сколько угодно(при условии, что не будет нарушена
-целостность других существующих в таблице ключей):</p>
-<pre><code>insert into bonuses(emp_id, mnth, bonus)
+целостность других существующих в таблице ключей):</p><pre><code>insert into bonuses(emp_id, mnth, bonus)
 values(null, null, 200);
 
 insert into bonuses(emp_id, mnth, bonus)
@@ -157,32 +113,15 @@ values(null, null, 200);
 
 insert into bonuses(emp_id, mnth, bonus)
 values(null, null, 200);
-</code></pre>
-<nav class="pagination mb-3">
+</code></pre><nav class="pagination mb-3">
 <ul class=pagination-list>
 <li class=pagination-item>
 <a href=http://orasql.ru/sql/dbobjects/foreignkeys/ class="pagination-link pagination-prev"> &lt; Внешние ключи </a>
-</li>
-<li class="pagination-item ml-auto">
+</li><li class="pagination-item ml-auto">
 <a href=http://orasql.ru/sql/dbobjects/views/ class="pagination-link pagination-next"> Представления > </a>
-</li>
-</ul>
-</nav>
-</div>
-<footer class="footer b-dark-low b-top">
+</li></ul></nav></div><footer class="footer b-dark-low b-top">
 <div class="footer-container container centered edges">
 <div class="footer-body mt-10">
 <nav class="nav nav-muted nav-menu-sm"><ul class=nav-list>
-<li class=nav-item><a href=/ class=nav-link>Orasql.ru</a></li>
-<li class=nav-item><a href=/ class=nav-link>Учебник</a></li>
-<li class=nav-item><p class="text-medium text-moderated">Email: orasqlru@gmail.com</p></li>
-</ul>
-</nav>
-</div>
-<div class="footer-copy mt-6 pt-6 b-dark-7 b-top">
-<p class="text-medium text-moderated">© Orasql.ru <br> 2019-2021</p>
-</div>
-</div>
-</footer>
-</body>
-</html>
+<li class=nav-item><a href=/ class=nav-link>Orasql.ru</a></li><li class=nav-item><a href=/ class=nav-link>Учебник</a></li><li class=nav-item><p class="text-medium text-moderated">Email: orasqlru@gmail.com</p></li></ul></nav></div><div class="footer-copy mt-6 pt-6 b-dark-7 b-top">
+<p class="text-medium text-moderated">© Orasql.ru <br> 2019-2021</p></div></div></footer></body></html>

@@ -5,35 +5,20 @@
 <link rel=stylesheet href=/css/main.css>
 <script>var clicky_site_ids=clicky_site_ids||[];clicky_site_ids.push(101305633)</script>
 <script async src=//static.getclicky.com/js></script>
-<title>Учебник Oracle SQL, PL/SQL | Подзапросы в Oracle</title>
-</head>
-<body><div class="navbar bg-dark mb-10">
+<title>Учебник Oracle SQL, PL/SQL | Подзапросы в Oracle</title></head><body><div class="navbar bg-dark mb-10">
 <div class="navbar-container container edges centered">
 <div class=navbar-brand>
 <a href=/ class=brand>
 Orasql.ru
 </a>
-</div>
-<div class="navbar-nav ml-6">
+</div><div class="navbar-nav ml-6">
 <nav class="nav nav-light nav-semibold">
 <ul class=nav-list>
-<li class=nav-item><a href=/book/ class=nav-link>Книга</a></li>
-</ul>
-</nav>
-<nav class="nav nav-light nav-semibold">
+<li class=nav-item><a href=/book/ class=nav-link>Книга</a></li></ul></nav><nav class="nav nav-light nav-semibold">
 <ul class=nav-list>
-<li class=nav-item><a href=https://github.com/cyevgeniy/orasqlru class=nav-link>Github</a></li>
-</ul>
-</nav>
-</div>
-</div>
-</div>
-<div id=container class="container-medium edges centered">
+<li class=nav-item><a href=https://github.com/cyevgeniy/orasqlru class=nav-link>Github</a></li></ul></nav></div></div></div><div id=container class="container-medium edges centered">
 <div class="doc-head mb-4 container-10">
-<h5 class="heading-micro heading-muted">Основы</h5>
-<h1 class="heading-huge heading-heavy">Подзапросы в Oracle</h1>
-</div>
-<div class="doc-toc mt-6 mb-6">
+<h5 class="heading-micro heading-muted">Основы</h5><h1 class="heading-huge heading-heavy">Подзапросы в Oracle</h1></div><div class="doc-toc mt-6 mb-6">
 <nav class="menu menu-underline menu-medium menu-numbered">
 <ul class=menu-list>
 <li class=menu-item>
@@ -48,15 +33,10 @@ Orasql.ru
 <a href=#%d0%ba%d0%be%d1%80%d1%80%d0%b5%d0%bb%d0%b8%d1%80%d0%be%d0%b2%d0%b0%d0%bd%d0%bd%d1%8b%d0%b5-%d0%bf%d0%be%d0%b4%d0%b7%d0%b0%d0%bf%d1%80%d0%be%d1%81%d1%8b class=menu-link>Коррелированные подзапросы</a>
 </li><li class=menu-item>
 <a href=#%d0%bf%d0%be%d0%b4%d0%b7%d0%b0%d0%bf%d1%80%d0%be%d1%81%d1%8b-%d0%b2-in-not-in class=menu-link>Подзапросы в IN, NOT IN</a>
-</li></ul></nav>
-</div>
-<p>Подзапросы представляют собой обычные SQL-запросы, которые являются
-частью другого SQL-запроса.</p>
-<p>Подзапросы - важная часть в изучении SQL. Некоторые данные просто не
+</li></ul></nav></div><p>Подзапросы представляют собой обычные SQL-запросы, которые являются
+частью другого SQL-запроса.</p><p>Подзапросы - важная часть в изучении SQL. Некоторые данные просто не
 могут быть получены, если их не использовать. Далее будут рассмотрены
-примеры использования подзапросов в Oracle.</p>
-<h2 id=подготовка-тестовых-данных>Подготовка тестовых данных</h2>
-<pre><code>create table books(
+примеры использования подзапросов в Oracle.</p><h2 id=подготовка-тестовых-данных>Подготовка тестовых данных</h2><pre><code>create table books(
     book_id number primary key,
     book_name varchar2(200) not null,
     author varchar2(50 char) not null,
@@ -100,35 +80,24 @@ values(2, 1, to_date('12.05.2005', 'dd.mm.yyyy'));
 
 insert into book_orders
 values(3, 2, to_date('05.11.2005', 'dd.mm.yyyy'));
-</code></pre>
-<h2 id=подзапросы-в-where--части-запроса>Подзапросы в where- части запроса</h2>
-<p>Получим информацию о продажах книги &ldquo;Властелин колец&rdquo;:</p>
-<pre><code>select bo.*
+</code></pre><h2 id=подзапросы-в-where--части-запроса>Подзапросы в where- части запроса</h2><p>Получим информацию о продажах книги &ldquo;Властелин колец&rdquo;:</p><pre><code>select bo.*
 from book_orders bo
 where bo.book_id = (
     select book_id
     from books
     where book_name = 'Властелин колец'
 );
-</code></pre>
-<p><img src=/img/8_subqueries/wherepart_1.png alt></p>
-<p>Здесь использовался подзапрос, чтобы определить id книги с названием
-&ldquo;Властелин колец&rdquo;.</p>
-<p>Если выполнить подзапрос отдельно:</p>
-<pre><code>select book_id
+</code></pre><p><img src=/img/8_subqueries/wherepart_1.png alt></p><p>Здесь использовался подзапрос, чтобы определить id книги с названием
+&ldquo;Властелин колец&rdquo;.</p><p>Если выполнить подзапрос отдельно:</p><pre><code>select book_id
 from books
 where book_name = 'Властелин колец'
-</code></pre>
-<p>То мы получим одну строку, которая будет содержать значение <code>book_id</code>,
-равое 1. Поэтому самый первый запрос эквивалентен следующему:</p>
-<pre><code>select bo.*
+</code></pre><p>То мы получим одну строку, которая будет содержать значение <code>book_id</code>,
+равое 1. Поэтому самый первый запрос эквивалентен следующему:</p><pre><code>select bo.*
 from book_orders bo
 where bo.book_id = 1
-</code></pre>
-<p>Следует обратить внимание на то, что в данном случае подзапрос должен
+</code></pre><p>Следует обратить внимание на то, что в данном случае подзапрос должен
 возвращать только одну строку, состоящую из одной колонки. Следующие
-запросы работать не будут:</p>
-<pre><code>select bo.*
+запросы работать не будут:</p><pre><code>select bo.*
 from book_orders bo
 where bo.book_id = (
     select book_id,
@@ -136,122 +105,82 @@ where bo.book_id = (
         from books
         where book_name = 'Властелин колец'
 )
-</code></pre>
-<p>Данный запрос выдаст ошибку <code>ORA-00913: too many values</code>, т.к. подзапрос
-возвращает одну строку с двумя колонками.</p>
-<pre><code>select bo.*
+</code></pre><p>Данный запрос выдаст ошибку <code>ORA-00913: too many values</code>, т.к. подзапрос
+возвращает одну строку с двумя колонками.</p><pre><code>select bo.*
 from book_orders bo
 where bo.book_id = (select book_id from books)
-</code></pre>
-<p>А здесь будет ошибка
+</code></pre><p>А здесь будет ошибка
 <code>ORA-01427: single-row subquery returns more than one row</code>, что
 переводится как &ldquo;однострочный подзапрос возвращает более одной строки&rdquo;.
 Из-за этого результат выполнения данного подзапроса нельзя подставить в
 условие сравнения, т.к. сравнение должно работать с одиночными
-значениями.</p>
-<h2 id=подзапросы-в-select-части>Подзапросы в select-части</h2>
-<p>Подзапросы, которые возвращают одиночные значения, можно использовать
+значениями.</p><h2 id=подзапросы-в-select-части>Подзапросы в select-части</h2><p>Подзапросы, которые возвращают одиночные значения, можно использовать
 прямо в части <code>SELECT</code> в качестве колонок. Результат выполнения
-подзапроса будет добавляться к каждой строке, как обычная колонка:</p>
-<pre><code>select b.*,
+подзапроса будет добавляться к каждой строке, как обычная колонка:</p><pre><code>select b.*,
        (select count(*) from book_orders) ord_cnt
 from books b
-</code></pre>
-<p><img src=/img/8_subqueries/selectpart_1.png alt></p>
-<p>Здесь мы добавили колонку <code>ord_cnt</code>, которая содержит количество всех
-имеющихся заказов по всем книгам.</p>
-<p>Здесь также нельзя, чтобы запрос возвращал несколько колонок или
+</code></pre><p><img src=/img/8_subqueries/selectpart_1.png alt></p><p>Здесь мы добавили колонку <code>ord_cnt</code>, которая содержит количество всех
+имеющихся заказов по всем книгам.</p><p>Здесь также нельзя, чтобы запрос возвращал несколько колонок или
 несколько строк. Зато запрос может ничего не возвращать, тогда значение
-в колонке будет <code>NULL</code>:</p>
-<pre><code>select b.*,
+в колонке будет <code>NULL</code>:</p><pre><code>select b.*,
        (select book_id from book_orders where 2 &gt; 10) book_id_subq
 from books b
-</code></pre>
-<p><img src=/img/8_subqueries/selectpart_2.png alt></p>
-<p>Т.к. утверждение <code>2 > 10</code> ложно, подзапрос не вернет ни одной записи,
-поэтому значение в соответствующей колонке будет <code>NULL</code>.</p>
-<h2 id=подзапросы-во-from-части>Подзапросы во FROM части</h2>
-<p>Подзапросы можно использовать во FROM части запроса, и обращаться к
+</code></pre><p><img src=/img/8_subqueries/selectpart_2.png alt></p><p>Т.к. утверждение <code>2 > 10</code> ложно, подзапрос не вернет ни одной записи,
+поэтому значение в соответствующей колонке будет <code>NULL</code>.</p><h2 id=подзапросы-во-from-части>Подзапросы во FROM части</h2><p>Подзапросы можно использовать во FROM части запроса, и обращаться к
 данным, которые они возвращают, как с полноценной таблицей(в пределах
 запроса; каким-либо образом удалить или изменить данные в подрапросе не
-получится).</p>
-<pre><code>select b_orders.*
+получится).</p><pre><code>select b_orders.*
 from (
 select b.book_id, b.book_name, bo.quantity, bo.order_date
 from books b
 join book_orders bo on bo.book_id = b.book_id) b_orders
 where b_orders.quantity &gt; 1
-</code></pre>
-<p><img src=/img/8_subqueries/frompart_1.png alt></p>
-<p>Здесь мы написали отдельный запрос, дали ему псевдоним <code>b_orders</code>,
+</code></pre><p><img src=/img/8_subqueries/frompart_1.png alt></p><p>Здесь мы написали отдельный запрос, дали ему псевдоним <code>b_orders</code>,
 поместили его во <code>FROM</code> часть, как будто это обычная таблица, и дальше
-работаем с псевдонимом данного подзапроса.</p>
-<p>В подзапросе использовались <a href=/sql/basics/joins/ title=соединения>соединения</a>.</p>
-<p>Сам подзапрос можно выполнить отдельно:</p>
-<pre><code>select b.book_id, b.book_name, bo.quantity, bo.order_date
+работаем с псевдонимом данного подзапроса.</p><p>В подзапросе использовались <a href=/sql/basics/joins/ title=соединения>соединения</a>.</p><p>Сам подзапрос можно выполнить отдельно:</p><pre><code>select b.book_id, b.book_name, bo.quantity, bo.order_date
 from books b
 join book_orders bo on bo.book_id = b.book_id
-</code></pre>
-<p><img src=/img/8_subqueries/frompart_2.png alt></p>
-<p>Как можно заметить, там есть строки, в которых количество(столбец
-<code>quantity</code>) равен 1.</p>
-<p>Но в первом примере этих строк нет, т.к. мы прописали условие
-<code>where b_orders.quantity > 1</code>.</p>
-<p>Подзапросов во <code>FROM</code> части может быть несколько, т.е. мы можем
+</code></pre><p><img src=/img/8_subqueries/frompart_2.png alt></p><p>Как можно заметить, там есть строки, в которых количество(столбец
+<code>quantity</code>) равен 1.</p><p>Но в первом примере этих строк нет, т.к. мы прописали условие
+<code>where b_orders.quantity > 1</code>.</p><p>Подзапросов во <code>FROM</code> части может быть несколько, т.е. мы можем
 соединять их, как обычные таблицы(опять, про соединения таблиц можно
-почитать <a href=/sql/basics/joins/>вот здесь</a>.</p>
-<p>В отличие от подзапросов, которые используются в select-части, данные
+почитать <a href=/sql/basics/joins/>вот здесь</a>.</p><p>В отличие от подзапросов, которые используются в select-части, данные
 подзапросы могут возвращать более одной строки (более того, как правило,
-они и возвращают много строк, иначе зачем их использовать?).</p>
-<h2 id=коррелированные-подзапросы>Коррелированные подзапросы</h2>
-<p>Коррелированный подзапрос - это такой подзапрос, который использует для
-своей работы данные из внешнего по отношению к нему запроса. Например:</p>
-<pre><code>select b.*,
+они и возвращают много строк, иначе зачем их использовать?).</p><h2 id=коррелированные-подзапросы>Коррелированные подзапросы</h2><p>Коррелированный подзапрос - это такой подзапрос, который использует для
+своей работы данные из внешнего по отношению к нему запроса. Например:</p><pre><code>select b.*,
        (select count(*)
         from book_orders
         where book_id = b.book_id) ord_cnt
 from books b
-</code></pre>
-<p><img src=/img/8_subqueries/correlated_select.png alt></p>
-<p>Здесь подзапрос подсчитывает количество дней, в которые производились
+</code></pre><p><img src=/img/8_subqueries/correlated_select.png alt></p><p>Здесь подзапрос подсчитывает количество дней, в которые производились
 продажи определенной книги. Т.е. подзапрос считает количество строк в
 таблице <code>book_orders</code> по значению колонки <code>book_id</code>, которую он берет из
 внешнего запроса. В условии прописывается <code>where book_id = b.book_id</code>,
 что означает: &ldquo;Возьми для каждой строки из основного запроса значение
 колонки book_id, и посчитай количество строк в таблице book_orders с
-таким же book_id.&rdquo;</p>
-<h2 id=подзапросы-в-in-not-in>Подзапросы в IN, NOT IN</h2>
-<p>Ранее уже рассматривались примеры и особенности использования <code>IN</code> и
+таким же book_id.&rdquo;</p><h2 id=подзапросы-в-in-not-in>Подзапросы в IN, NOT IN</h2><p>Ранее уже рассматривались примеры и особенности использования <code>IN</code> и
 <code>NOT IN</code> в SQL. В качестве перечисляемых значений в этих операторах были
 значения, которые прописывал сам программист. На практике чаще всего в
 качестве источника для значений в этих операторах используются
-подзапросы:</p>
-<pre><code>select b.*
+подзапросы:</p><pre><code>select b.*
 from books b
 where b.book_id in (
     select book_id
     from book_orders bo
     where bo.quantity &lt; 2)
-</code></pre>
-<p><img src=/img/8_subqueries/inpart_1.png alt></p>
-<p>Данный запрос выводит список книг, у которых были продажи менее, чем по
-2 штуки в день.</p>
-<p>Cписок книг для оператора <code>IN</code> формируется в результате выполнения
-подзапроса, а не ручного кодирования значений программистом.</p>
-<p>Подзапросы в <code>IN</code> и <code>NOT IN</code> должны возвращать строки с одной колонкой.
+</code></pre><p><img src=/img/8_subqueries/inpart_1.png alt></p><p>Данный запрос выводит список книг, у которых были продажи менее, чем по
+2 штуки в день.</p><p>Cписок книг для оператора <code>IN</code> формируется в результате выполнения
+подзапроса, а не ручного кодирования значений программистом.</p><p>Подзапросы в <code>IN</code> и <code>NOT IN</code> должны возвращать строки с одной колонкой.
 Следующий запрос выдаст ошибку <code>ORA-00913: too many values</code>, т.к.
-подзапрос получает список строк с двумя колонками:</p>
-<pre><code>select b.*
+подзапрос получает список строк с двумя колонками:</p><pre><code>select b.*
 from books b
 where b.book_id in (
     select book_id, quantity
     from book_orders bo
     where bo.quantity &lt; 2)
-</code></pre>
-<p>При этом не следует забывать об особенности использования <code>NOT IN</code>: Если
+</code></pre><p>При этом не следует забывать об особенности использования <code>NOT IN</code>: Если
 в списке значений для проверки есть хотя бы одно <code>NULL</code>-значение, то
-результат выражения будет ложным, и запрос не вернет никаких данных:</p>
-<pre><code>select b.*
+результат выражения будет ложным, и запрос не вернет никаких данных:</p><pre><code>select b.*
 from books b
 where b.book_id  not in (
     select book_id
@@ -262,37 +191,18 @@ where b.book_id  not in (
 
     select null
     from dual)
-</code></pre>
-<p><img src=/img/3_select/no_data_found.png alt></p>
-<p>Здесь при помощи <a href=/sql/sets/unions/>объединения</a>
+</code></pre><p><img src=/img/3_select/no_data_found.png alt></p><p>Здесь при помощи <a href=/sql/sets/unions/>объединения</a>
 запросов в выборку
 подзапроса была добавлена строка с одним <code>NULL</code>-значением, и как
-следствие, запрос не вернул никаких данных.</p>
-<nav class="pagination mb-3">
+следствие, запрос не вернул никаких данных.</p><nav class="pagination mb-3">
 <ul class=pagination-list>
 <li class=pagination-item>
 <a href=http://orasql.ru/sql/basics/recursive/ class="pagination-link pagination-prev"> &lt; Древовидные структуры данных. Рекурсивные запросы </a>
-</li>
-<li class="pagination-item ml-auto">
+</li><li class="pagination-item ml-auto">
 <a href=http://orasql.ru/sql/basics/exists/ class="pagination-link pagination-next"> Exists. Наличие строк в подзапросе > </a>
-</li>
-</ul>
-</nav>
-</div>
-<footer class="footer b-dark-low b-top">
+</li></ul></nav></div><footer class="footer b-dark-low b-top">
 <div class="footer-container container centered edges">
 <div class="footer-body mt-10">
 <nav class="nav nav-muted nav-menu-sm"><ul class=nav-list>
-<li class=nav-item><a href=/ class=nav-link>Orasql.ru</a></li>
-<li class=nav-item><a href=/ class=nav-link>Учебник</a></li>
-<li class=nav-item><p class="text-medium text-moderated">Email: orasqlru@gmail.com</p></li>
-</ul>
-</nav>
-</div>
-<div class="footer-copy mt-6 pt-6 b-dark-7 b-top">
-<p class="text-medium text-moderated">© Orasql.ru <br> 2019-2021</p>
-</div>
-</div>
-</footer>
-</body>
-</html>
+<li class=nav-item><a href=/ class=nav-link>Orasql.ru</a></li><li class=nav-item><a href=/ class=nav-link>Учебник</a></li><li class=nav-item><p class="text-medium text-moderated">Email: orasqlru@gmail.com</p></li></ul></nav></div><div class="footer-copy mt-6 pt-6 b-dark-7 b-top">
+<p class="text-medium text-moderated">© Orasql.ru <br> 2019-2021</p></div></div></footer></body></html>
