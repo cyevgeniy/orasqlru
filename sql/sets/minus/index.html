@@ -1,24 +1,4 @@
-<!doctype html><html><head>
-<meta charset=utf-8>
-<meta name=viewport content="width=device-width,initial-scale=1">
-<link rel=stylesheet href=/css/superkube.min.css>
-<link rel=stylesheet href=/css/main.css>
-<script>var clicky_site_ids=clicky_site_ids||[];clicky_site_ids.push(101305633)</script>
-<script async src=//static.getclicky.com/js></script>
-<title>Учебник Oracle SQL, PL/SQL | Разница запросов. MINUS</title></head><body><div class="navbar bg-dark mb-10">
-<div class="navbar-container container edges centered">
-<div class=navbar-brand>
-<a href=/ class=brand>
-Orasql.ru
-</a>
-</div><div class="navbar-nav ml-6">
-<nav class="nav nav-light nav-semibold">
-<ul class=nav-list>
-<li class=nav-item><a href=/book/ class=nav-link>Книга</a></li></ul></nav><nav class="nav nav-light nav-semibold">
-<ul class=nav-list>
-<li class=nav-item><a href=https://github.com/cyevgeniy/orasqlru class=nav-link>Github</a></li></ul></nav></div></div></div><div id=container class="container-medium edges centered">
-<div class="doc-head mb-4 container-10">
-<h5 class="heading-micro heading-muted">Работа с множествами</h5><h1 class="heading-huge heading-heavy">Разница запросов. MINUS</h1></div><p>Подготовим тестовые данные:</p><pre><code>create table cars(
+<!doctype html><html><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><link rel=stylesheet href=/css/superkube.min.css><link rel=stylesheet href=/css/main.css><script>var clicky_site_ids=clicky_site_ids||[];clicky_site_ids.push(101305633)</script><script async src=//static.getclicky.com/js></script><title>Учебник Oracle SQL, PL/SQL | Разница запросов. MINUS</title></head><body><div class="navbar bg-dark mb-10"><div class="navbar-container container edges centered"><div class=navbar-brand><a href=/ class=brand>Orasql.ru</a></div><div class="navbar-nav ml-6"><nav class="nav nav-light nav-semibold"><ul class=nav-list><li class=nav-item><a href=/book/ class=nav-link>Книга</a></li></ul></nav><nav class="nav nav-light nav-semibold"><ul class=nav-list><li class=nav-item><a href=https://github.com/cyevgeniy/orasqlru class=nav-link>Github</a></li></ul></nav></div></div></div><div id=container class="container-medium edges centered"><div class="doc-head mb-4 container-10"><h5 class="heading-micro heading-muted">Работа с множествами</h5><h1 class="heading-huge heading-heavy">Разница запросов. MINUS</h1></div><p>Подготовим тестовые данные:</p><pre><code>create table cars(
     car_id number not null,
     car_model varchar2(100) not null,
     release_year number
@@ -113,15 +93,4 @@ from car_offers
 </code></pre><p><img src=/img/7_unions/minus_unique_passat.png alt></p><p>В результате мы видим всего одну строку с моделью Volkswagen passat 1998
 года, несмотря на то, что в таблице <code>cars</code> таких записей две. Как было
 сказано, это произошло потому, что оператор <code>MINUS</code> удаляет дубликаты и
-возвращает только уникальные строки.</p><nav class="pagination mb-3">
-<ul class=pagination-list>
-<li class=pagination-item>
-<a href=http://orasql.ru/sql/sets/unions/ class="pagination-link pagination-prev"> &lt; Объединение. UNION </a>
-</li><li class="pagination-item ml-auto">
-<a href=http://orasql.ru/sql/sets/intersect/ class="pagination-link pagination-next"> Пересечение запросов > </a>
-</li></ul></nav></div><footer class="footer b-dark-low b-top">
-<div class="footer-container container centered edges">
-<div class="footer-body mt-10">
-<nav class="nav nav-muted nav-menu-sm"><ul class=nav-list>
-<li class=nav-item><a href=/ class=nav-link>Orasql.ru</a></li><li class=nav-item><a href=/ class=nav-link>Учебник</a></li><li class=nav-item><p class="text-medium text-moderated">Email: orasqlru@gmail.com</p></li></ul></nav></div><div class="footer-copy mt-6 pt-6 b-dark-7 b-top">
-<p class="text-medium text-moderated">© Orasql.ru <br> 2019-2021</p></div></div></footer></body></html>
+возвращает только уникальные строки.</p><nav class="pagination mb-3"><ul class=pagination-list><li class=pagination-item><a href=http://orasql.ru/sql/sets/unions/ class="pagination-link pagination-prev">&lt; Объединение. UNION</a></li><li class="pagination-item ml-auto"><a href=http://orasql.ru/sql/sets/intersect/ class="pagination-link pagination-next">Пересечение запросов ></a></li></ul></nav></div><footer class="footer b-dark-low b-top"><div class="footer-container container centered edges"><div class="footer-body mt-10"><nav class="nav nav-muted nav-menu-sm"><ul class=nav-list><li class=nav-item><a href=/ class=nav-link>Orasql.ru</a></li><li class=nav-item><a href=/ class=nav-link>Учебник</a></li><li class=nav-item><p class="text-medium text-moderated">Email: orasqlru@gmail.com</p></li></ul></nav></div><div class="footer-copy mt-6 pt-6 b-dark-7 b-top"><p class="text-medium text-moderated">© Orasql.ru<br>2019-2021</p></div></div></footer></body></html>

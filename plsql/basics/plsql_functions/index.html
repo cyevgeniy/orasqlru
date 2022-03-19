@@ -1,39 +1,4 @@
-<!doctype html><html><head>
-<meta charset=utf-8>
-<meta name=viewport content="width=device-width,initial-scale=1">
-<link rel=stylesheet href=/css/superkube.min.css>
-<link rel=stylesheet href=/css/main.css>
-<script>var clicky_site_ids=clicky_site_ids||[];clicky_site_ids.push(101305633)</script>
-<script async src=//static.getclicky.com/js></script>
-<title>Учебник Oracle SQL, PL/SQL | Функции в PL/SQL</title></head><body><div class="navbar bg-dark mb-10">
-<div class="navbar-container container edges centered">
-<div class=navbar-brand>
-<a href=/ class=brand>
-Orasql.ru
-</a>
-</div><div class="navbar-nav ml-6">
-<nav class="nav nav-light nav-semibold">
-<ul class=nav-list>
-<li class=nav-item><a href=/book/ class=nav-link>Книга</a></li></ul></nav><nav class="nav nav-light nav-semibold">
-<ul class=nav-list>
-<li class=nav-item><a href=https://github.com/cyevgeniy/orasqlru class=nav-link>Github</a></li></ul></nav></div></div></div><div id=container class="container-medium edges centered">
-<div class="doc-head mb-4 container-10">
-<h5 class="heading-micro heading-muted">Основы PL/SQL</h5><h1 class="heading-huge heading-heavy">Функции в PL/SQL</h1></div><div class="doc-toc mt-6 mb-6">
-<nav class="menu menu-underline menu-medium menu-numbered">
-<ul class=menu-list>
-<li class=menu-item>
-<a href=#%d0%ba%d0%b0%d0%ba%d1%83%d1%8e-%d0%bf%d1%80%d0%be%d0%b1%d0%bb%d0%b5%d0%bc%d1%83-%d0%bf%d0%be%d0%bc%d0%be%d0%b3%d0%b0%d1%8e%d1%82-%d1%80%d0%b5%d1%88%d0%b8%d1%82%d1%8c-%d1%84%d1%83%d0%bd%d0%ba%d1%86%d0%b8%d0%b8 class=menu-link>Какую проблему помогают решить функции</a>
-</li><li class=menu-item>
-<a href=#%d0%bf%d1%80%d0%b8%d0%bc%d0%b5%d1%80-%d1%81%d0%be%d0%b7%d0%b4%d0%b0%d0%bd%d0%b8%d1%8f-%d0%bf%d1%80%d0%be%d1%81%d1%82%d0%be%d0%b9-%d1%84%d1%83%d0%bd%d0%ba%d1%86%d0%b8%d0%b8 class=menu-link>Пример создания простой функции</a>
-</li><li class=menu-item>
-<a href=#%d1%84%d1%83%d0%bd%d0%ba%d1%86%d0%b8%d0%b8-%d1%81-%d0%be%d1%88%d0%b8%d0%b1%d0%ba%d0%b0%d0%bc%d0%b8-%d0%b2%d1%81%d0%b5-%d1%80%d0%b0%d0%b2%d0%bd%d0%be-%d1%81%d0%be%d0%b7%d0%b4%d0%b0%d1%8e%d1%82%d1%81%d1%8f class=menu-link>Функции с ошибками все равно создаются</a>
-</li><li class=menu-item>
-<a href=#%d1%83%d0%b4%d0%b0%d0%bb%d0%b5%d0%bd%d0%b8%d0%b5-%d1%84%d1%83%d0%bd%d0%ba%d1%86%d0%b8%d0%b8 class=menu-link>Удаление функции</a>
-</li><li class=menu-item>
-<a href=#%d0%bb%d0%be%d0%ba%d0%b0%d0%bb%d1%8c%d0%bd%d1%8b%d0%b5-%d0%bf%d0%b5%d1%80%d0%b5%d0%bc%d0%b5%d0%bd%d0%bd%d1%8b%d0%b5 class=menu-link>Локальные переменные</a>
-</li><li class=menu-item>
-<a href=#%d0%b8%d1%81%d0%bf%d0%be%d0%bb%d1%8c%d0%b7%d0%be%d0%b2%d0%b0%d0%bd%d0%b8%d0%b5-%d1%84%d1%83%d0%bd%d0%ba%d1%86%d0%b8%d0%b9-%d0%b2-sql-%d0%b7%d0%b0%d0%bf%d1%80%d0%be%d1%81%d0%b0%d1%85 class=menu-link>Использование функций в SQL запросах</a>
-</li></ul></nav></div><h2 id=какую-проблему-помогают-решить-функции>Какую проблему помогают решить функции</h2><p>Общее описание функций уже было дано в предыдущей части, добавим лишь
+<!doctype html><html><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><link rel=stylesheet href=/css/superkube.min.css><link rel=stylesheet href=/css/main.css><script>var clicky_site_ids=clicky_site_ids||[];clicky_site_ids.push(101305633)</script><script async src=//static.getclicky.com/js></script><title>Учебник Oracle SQL, PL/SQL | Функции в PL/SQL</title></head><body><div class="navbar bg-dark mb-10"><div class="navbar-container container edges centered"><div class=navbar-brand><a href=/ class=brand>Orasql.ru</a></div><div class="navbar-nav ml-6"><nav class="nav nav-light nav-semibold"><ul class=nav-list><li class=nav-item><a href=/book/ class=nav-link>Книга</a></li></ul></nav><nav class="nav nav-light nav-semibold"><ul class=nav-list><li class=nav-item><a href=https://github.com/cyevgeniy/orasqlru class=nav-link>Github</a></li></ul></nav></div></div></div><div id=container class="container-medium edges centered"><div class="doc-head mb-4 container-10"><h5 class="heading-micro heading-muted">Основы PL/SQL</h5><h1 class="heading-huge heading-heavy">Функции в PL/SQL</h1></div><div class="doc-toc mt-6 mb-6"><nav class="menu menu-underline menu-medium menu-numbered"><ul class=menu-list><li class=menu-item><a href=#%d0%ba%d0%b0%d0%ba%d1%83%d1%8e-%d0%bf%d1%80%d0%be%d0%b1%d0%bb%d0%b5%d0%bc%d1%83-%d0%bf%d0%be%d0%bc%d0%be%d0%b3%d0%b0%d1%8e%d1%82-%d1%80%d0%b5%d1%88%d0%b8%d1%82%d1%8c-%d1%84%d1%83%d0%bd%d0%ba%d1%86%d0%b8%d0%b8 class=menu-link>Какую проблему помогают решить функции</a></li><li class=menu-item><a href=#%d0%bf%d1%80%d0%b8%d0%bc%d0%b5%d1%80-%d1%81%d0%be%d0%b7%d0%b4%d0%b0%d0%bd%d0%b8%d1%8f-%d0%bf%d1%80%d0%be%d1%81%d1%82%d0%be%d0%b9-%d1%84%d1%83%d0%bd%d0%ba%d1%86%d0%b8%d0%b8 class=menu-link>Пример создания простой функции</a></li><li class=menu-item><a href=#%d1%84%d1%83%d0%bd%d0%ba%d1%86%d0%b8%d0%b8-%d1%81-%d0%be%d1%88%d0%b8%d0%b1%d0%ba%d0%b0%d0%bc%d0%b8-%d0%b2%d1%81%d0%b5-%d1%80%d0%b0%d0%b2%d0%bd%d0%be-%d1%81%d0%be%d0%b7%d0%b4%d0%b0%d1%8e%d1%82%d1%81%d1%8f class=menu-link>Функции с ошибками все равно создаются</a></li><li class=menu-item><a href=#%d1%83%d0%b4%d0%b0%d0%bb%d0%b5%d0%bd%d0%b8%d0%b5-%d1%84%d1%83%d0%bd%d0%ba%d1%86%d0%b8%d0%b8 class=menu-link>Удаление функции</a></li><li class=menu-item><a href=#%d0%bb%d0%be%d0%ba%d0%b0%d0%bb%d1%8c%d0%bd%d1%8b%d0%b5-%d0%bf%d0%b5%d1%80%d0%b5%d0%bc%d0%b5%d0%bd%d0%bd%d1%8b%d0%b5 class=menu-link>Локальные переменные</a></li><li class=menu-item><a href=#%d0%b8%d1%81%d0%bf%d0%be%d0%bb%d1%8c%d0%b7%d0%be%d0%b2%d0%b0%d0%bd%d0%b8%d0%b5-%d1%84%d1%83%d0%bd%d0%ba%d1%86%d0%b8%d0%b9-%d0%b2-sql-%d0%b7%d0%b0%d0%bf%d1%80%d0%be%d1%81%d0%b0%d1%85 class=menu-link>Использование функций в SQL запросах</a></li></ul></nav></div><h2 id=какую-проблему-помогают-решить-функции>Какую проблему помогают решить функции</h2><p>Общее описание функций уже было дано в предыдущей части, добавим лишь
 то, что функции - это один из способов сделать наш код более простым,
 понятным, компактным, а также избежать повторного написания однотипного
 кода.</p><h2 id=пример-создания-простой-функции>Пример создания простой функции</h2><p>Предположим, что мы работаем над системой, в которой часто приходится
@@ -122,8 +87,7 @@ begin
     return 1;
 end;
 /
-</code></pre><p>Основные элементы которые нужно указать при создани функции это:</p><ul>
-<li>Имя функции</li><li>Параметры(могут отсутствовать)</li><li>Тип возвращаемого значения</li><li>Тело функции</li><li>Команда Return</li></ul><p><img src=/img/plsql/function_structure.png alt></p><p>Вообще, существует большое количество дополнительных синтаксических
+</code></pre><p>Основные элементы которые нужно указать при создани функции это:</p><ul><li>Имя функции</li><li>Параметры(могут отсутствовать)</li><li>Тип возвращаемого значения</li><li>Тело функции</li><li>Команда Return</li></ul><p><img src=/img/plsql/function_structure.png alt></p><p>Вообще, существует большое количество дополнительных синтаксических
 конструкций при создании функций, как например указание того, что
 функция является табличной или детерминированной, но на данном этапе мы
 не будем их рассматривать, так как они используются лишь в специфичных
@@ -192,8 +156,7 @@ end;
 использовать конструкцию <code>create or replace</code>.</p><h2 id=удаление-функции>Удаление функции</h2><p>Чтобы удалить функцию из схемы, используется команда <code>drop function</code>:</p><pre><code>drop function invalidFunc;
 </code></pre><h2 id=локальные-переменные>Локальные переменные</h2><p>Не всегда функции бывают такими простыми, что их логика помещается в
 одну команду <code>return</code>.</p><p>Для реализации более сложной бизнес-логики или для улучшения
-&ldquo;читаемости&rdquo; кода лучше можно использовать локальные переменные фукнции</p><ul>
-<li>переменные, которые доступны для использования только внутри функции и
+&ldquo;читаемости&rdquo; кода лучше можно использовать локальные переменные фукнции</p><ul><li>переменные, которые доступны для использования только внутри функции и
 нигде больше. Они объявляются между ключевым словом <code>IS</code> и <code>BEGIN</code>.</li></ul><p>Попробуем переписать нашу функцию <code>getDiscount</code> с использованием
 локальных переменных:</p><pre><code>create or replace function getDiscount(
     pprice number
@@ -230,15 +193,4 @@ from products
 Клавиатура  | 55   | 5.5
 Планшет     | 800  | 80
 =========================
-</code></pre><nav class="pagination mb-3">
-<ul class=pagination-list>
-<li class=pagination-item>
-<a href=http://orasql.ru/plsql/basics/plsql_schema/ class="pagination-link pagination-prev"> &lt; Схема БД. Её объекты </a>
-</li><li class="pagination-item ml-auto">
-<a href=http://orasql.ru/plsql/basics/plsql_procedures/ class="pagination-link pagination-next"> Процедуры в PL/SQL > </a>
-</li></ul></nav></div><footer class="footer b-dark-low b-top">
-<div class="footer-container container centered edges">
-<div class="footer-body mt-10">
-<nav class="nav nav-muted nav-menu-sm"><ul class=nav-list>
-<li class=nav-item><a href=/ class=nav-link>Orasql.ru</a></li><li class=nav-item><a href=/ class=nav-link>Учебник</a></li><li class=nav-item><p class="text-medium text-moderated">Email: orasqlru@gmail.com</p></li></ul></nav></div><div class="footer-copy mt-6 pt-6 b-dark-7 b-top">
-<p class="text-medium text-moderated">© Orasql.ru <br> 2019-2021</p></div></div></footer></body></html>
+</code></pre><nav class="pagination mb-3"><ul class=pagination-list><li class=pagination-item><a href=http://orasql.ru/plsql/basics/plsql_schema/ class="pagination-link pagination-prev">&lt; Схема БД. Её объекты</a></li><li class="pagination-item ml-auto"><a href=http://orasql.ru/plsql/basics/plsql_procedures/ class="pagination-link pagination-next">Процедуры в PL/SQL ></a></li></ul></nav></div><footer class="footer b-dark-low b-top"><div class="footer-container container centered edges"><div class="footer-body mt-10"><nav class="nav nav-muted nav-menu-sm"><ul class=nav-list><li class=nav-item><a href=/ class=nav-link>Orasql.ru</a></li><li class=nav-item><a href=/ class=nav-link>Учебник</a></li><li class=nav-item><p class="text-medium text-moderated">Email: orasqlru@gmail.com</p></li></ul></nav></div><div class="footer-copy mt-6 pt-6 b-dark-7 b-top"><p class="text-medium text-moderated">© Orasql.ru<br>2019-2021</p></div></div></footer></body></html>

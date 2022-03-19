@@ -1,33 +1,4 @@
-<!doctype html><html><head>
-<meta charset=utf-8>
-<meta name=viewport content="width=device-width,initial-scale=1">
-<link rel=stylesheet href=/css/superkube.min.css>
-<link rel=stylesheet href=/css/main.css>
-<script>var clicky_site_ids=clicky_site_ids||[];clicky_site_ids.push(101305633)</script>
-<script async src=//static.getclicky.com/js></script>
-<title>Учебник Oracle SQL, PL/SQL | Subquery factoring. WITH </title></head><body><div class="navbar bg-dark mb-10">
-<div class="navbar-container container edges centered">
-<div class=navbar-brand>
-<a href=/ class=brand>
-Orasql.ru
-</a>
-</div><div class="navbar-nav ml-6">
-<nav class="nav nav-light nav-semibold">
-<ul class=nav-list>
-<li class=nav-item><a href=/book/ class=nav-link>Книга</a></li></ul></nav><nav class="nav nav-light nav-semibold">
-<ul class=nav-list>
-<li class=nav-item><a href=https://github.com/cyevgeniy/orasqlru class=nav-link>Github</a></li></ul></nav></div></div></div><div id=container class="container-medium edges centered">
-<div class="doc-head mb-4 container-10">
-<h5 class="heading-micro heading-muted">Основы</h5><h1 class="heading-huge heading-heavy">Subquery factoring. WITH </h1></div><div class="doc-toc mt-6 mb-6">
-<nav class="menu menu-underline menu-medium menu-numbered">
-<ul class=menu-list>
-<li class=menu-item>
-<a href=#%d0%bf%d0%be%d0%b4%d0%b3%d0%be%d1%82%d0%be%d0%b2%d0%ba%d0%b0-%d0%b4%d0%b0%d0%bd%d0%bd%d1%8b%d1%85 class=menu-link>Подготовка данных</a>
-</li><li class=menu-item>
-<a href=#%d0%b2%d0%b0%d1%80%d0%b8%d0%b0%d0%bd%d1%82-%d0%b1%d0%b5%d0%b7-with class=menu-link>Вариант без With</a>
-</li><li class=menu-item>
-<a href=#%d0%b2%d0%b0%d1%80%d0%b8%d0%b0%d0%bd%d1%82-%d1%81-with class=menu-link>Вариант с WITH</a>
-</li></ul></nav></div><p>Часть <code>WITH</code> SQL запроса используется для реализации
+<!doctype html><html><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><link rel=stylesheet href=/css/superkube.min.css><link rel=stylesheet href=/css/main.css><script>var clicky_site_ids=clicky_site_ids||[];clicky_site_ids.push(101305633)</script><script async src=//static.getclicky.com/js></script><title>Учебник Oracle SQL, PL/SQL | Subquery factoring. WITH</title></head><body><div class="navbar bg-dark mb-10"><div class="navbar-container container edges centered"><div class=navbar-brand><a href=/ class=brand>Orasql.ru</a></div><div class="navbar-nav ml-6"><nav class="nav nav-light nav-semibold"><ul class=nav-list><li class=nav-item><a href=/book/ class=nav-link>Книга</a></li></ul></nav><nav class="nav nav-light nav-semibold"><ul class=nav-list><li class=nav-item><a href=https://github.com/cyevgeniy/orasqlru class=nav-link>Github</a></li></ul></nav></div></div></div><div id=container class="container-medium edges centered"><div class="doc-head mb-4 container-10"><h5 class="heading-micro heading-muted">Основы</h5><h1 class="heading-huge heading-heavy">Subquery factoring. WITH</h1></div><div class="doc-toc mt-6 mb-6"><nav class="menu menu-underline menu-medium menu-numbered"><ul class=menu-list><li class=menu-item><a href=#%d0%bf%d0%be%d0%b4%d0%b3%d0%be%d1%82%d0%be%d0%b2%d0%ba%d0%b0-%d0%b4%d0%b0%d0%bd%d0%bd%d1%8b%d1%85 class=menu-link>Подготовка данных</a></li><li class=menu-item><a href=#%d0%b2%d0%b0%d1%80%d0%b8%d0%b0%d0%bd%d1%82-%d0%b1%d0%b5%d0%b7-with class=menu-link>Вариант без With</a></li><li class=menu-item><a href=#%d0%b2%d0%b0%d1%80%d0%b8%d0%b0%d0%bd%d1%82-%d1%81-with class=menu-link>Вариант с WITH</a></li></ul></nav></div><p>Часть <code>WITH</code> SQL запроса используется для реализации
 так называемого <em>Subquery factoring</em>. Эта возможность позволяет задать
 подзапрос, который будет доступен в любом месте SQL запроса.
 Subquery factoring в некоторых случаях значительно упрощает чтение и написание запросов.
@@ -110,16 +81,7 @@ factoring БД построит более оптимальный план вы�
 </span></span></span><span style=display:flex><span><span style=color:#bbb>    </span><span style=color:#000;font-weight:700>group</span><span style=color:#bbb> </span><span style=color:#000;font-weight:700>by</span><span style=color:#bbb> </span>book_id)<span style=color:#bbb> </span>pbc<span style=color:#bbb> </span><span style=color:#000;font-weight:700>on</span><span style=color:#bbb> </span>pbc.book_id<span style=color:#bbb> </span><span style=color:#000;font-weight:700>=</span><span style=color:#bbb> </span>pb.id<span style=color:#bbb>
 </span></span></span><span style=display:flex><span><span style=color:#bbb></span><span style=color:#000;font-weight:700>order</span><span style=color:#bbb> </span><span style=color:#000;font-weight:700>by</span><span style=color:#bbb> </span>bo.id<span style=color:#bbb>
 </span></span></span></code></pre></div><p>В обоих случаях мы используем подзапросы — в первом в части SELECT, во втором — в части FROM.
-Оба варианта дадут один и тот же результат:</p><table>
-<thead>
-<tr>
-<th>BOOK_NAME</th><th>SOLD_QTY</th><th>PREV_BOOK_NAME</th><th>PREV_SOLD_QTY</th></tr></thead><tbody>
-<tr>
-<td>book 1</td><td>1</td><td>-</td><td>-</td></tr><tr>
-<td>Код Да Винчи</td><td>3</td><td>-</td><td>-</td></tr><tr>
-<td>Ангелы и Демоны</td><td>2</td><td>Код Да Винчи</td><td>3</td></tr><tr>
-<td>Инферно</td><td>5</td><td>Ангелы и Демоны</td><td>2</td></tr><tr>
-<td>Утраченный символ</td><td>-</td><td>Инферно</td><td>5</td></tr></tbody></table><h2 id=вариант-с-with>Вариант с WITH</h2><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sql data-lang=sql><span style=display:flex><span><span style=color:#000;font-weight:700>with</span><span style=color:#bbb> </span>book_cnt<span style=color:#bbb> </span><span style=color:#000;font-weight:700>as</span>(<span style=color:#bbb>
+Оба варианта дадут один и тот же результат:</p><table><thead><tr><th>BOOK_NAME</th><th>SOLD_QTY</th><th>PREV_BOOK_NAME</th><th>PREV_SOLD_QTY</th></tr></thead><tbody><tr><td>book 1</td><td>1</td><td>-</td><td>-</td></tr><tr><td>Код Да Винчи</td><td>3</td><td>-</td><td>-</td></tr><tr><td>Ангелы и Демоны</td><td>2</td><td>Код Да Винчи</td><td>3</td></tr><tr><td>Инферно</td><td>5</td><td>Ангелы и Демоны</td><td>2</td></tr><tr><td>Утраченный символ</td><td>-</td><td>Инферно</td><td>5</td></tr></tbody></table><h2 id=вариант-с-with>Вариант с WITH</h2><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sql data-lang=sql><span style=display:flex><span><span style=color:#000;font-weight:700>with</span><span style=color:#bbb> </span>book_cnt<span style=color:#bbb> </span><span style=color:#000;font-weight:700>as</span>(<span style=color:#bbb>
 </span></span></span><span style=display:flex><span><span style=color:#bbb>    </span><span style=color:#000;font-weight:700>select</span><span style=color:#bbb> </span>book_id,<span style=color:#bbb> </span><span style=color:#000;font-weight:700>sum</span>(quantity)<span style=color:#bbb> </span>s<span style=color:#bbb>
 </span></span></span><span style=display:flex><span><span style=color:#bbb>    </span><span style=color:#000;font-weight:700>from</span><span style=color:#bbb> </span>book_orders<span style=color:#bbb>
 </span></span></span><span style=display:flex><span><span style=color:#bbb>    </span><span style=color:#000;font-weight:700>group</span><span style=color:#bbb> </span><span style=color:#000;font-weight:700>by</span><span style=color:#bbb> </span>book_id<span style=color:#bbb>
@@ -133,25 +95,7 @@ factoring БД построит более оптимальный план вы�
 </span></span></span><span style=display:flex><span><span style=color:#bbb></span><span style=color:#000;font-weight:700>left</span><span style=color:#bbb> </span><span style=color:#000;font-weight:700>join</span><span style=color:#bbb> </span>books<span style=color:#bbb> </span>pb<span style=color:#bbb> </span><span style=color:#000;font-weight:700>on</span><span style=color:#bbb> </span>pb.id<span style=color:#bbb> </span><span style=color:#000;font-weight:700>=</span><span style=color:#bbb> </span>bo.previous_id<span style=color:#bbb>
 </span></span></span><span style=display:flex><span><span style=color:#bbb></span><span style=color:#000;font-weight:700>left</span><span style=color:#bbb> </span><span style=color:#000;font-weight:700>join</span><span style=color:#bbb> </span>book_cnt<span style=color:#bbb> </span>pbc<span style=color:#bbb> </span><span style=color:#000;font-weight:700>on</span><span style=color:#bbb> </span>pbc.book_id<span style=color:#bbb> </span><span style=color:#000;font-weight:700>=</span><span style=color:#bbb> </span>bo.previous_id<span style=color:#bbb>
 </span></span></span><span style=display:flex><span><span style=color:#bbb></span><span style=color:#000;font-weight:700>order</span><span style=color:#bbb> </span><span style=color:#000;font-weight:700>by</span><span style=color:#bbb> </span>bo.id<span style=color:#bbb>
-</span></span></span></code></pre></div><p>Получим тот же результат:</p><table>
-<thead>
-<tr>
-<th>BOOK_NAME</th><th>SOLD_QTY</th><th>PREV_BOOK_NAME</th><th>PREV_SOLD_QTY</th></tr></thead><tbody>
-<tr>
-<td>book 1</td><td>1</td><td>-</td><td>-</td></tr><tr>
-<td>Код Да Винчи</td><td>3</td><td>-</td><td>-</td></tr><tr>
-<td>Ангелы и Демоны</td><td>2</td><td>Код Да Винчи</td><td>3</td></tr><tr>
-<td>Инферно</td><td>5</td><td>Ангелы и Демоны</td><td>2</td></tr><tr>
-<td>Утраченный символ</td><td>-</td><td>Инферно</td><td>5</td></tr></tbody></table><p>При использовании subquery factoring, мы заранее указываем
+</span></span></span></code></pre></div><p>Получим тот же результат:</p><table><thead><tr><th>BOOK_NAME</th><th>SOLD_QTY</th><th>PREV_BOOK_NAME</th><th>PREV_SOLD_QTY</th></tr></thead><tbody><tr><td>book 1</td><td>1</td><td>-</td><td>-</td></tr><tr><td>Код Да Винчи</td><td>3</td><td>-</td><td>-</td></tr><tr><td>Ангелы и Демоны</td><td>2</td><td>Код Да Винчи</td><td>3</td></tr><tr><td>Инферно</td><td>5</td><td>Ангелы и Демоны</td><td>2</td></tr><tr><td>Утраченный символ</td><td>-</td><td>Инферно</td><td>5</td></tr></tbody></table><p>При использовании subquery factoring, мы заранее указываем
 подзапрос, к который хотим использовать повторно, даём ему
 псевдоним( <code>book_cnt</code>) в нашем случае, и далее обращаемся в
-основном запросе к этому псевдониму как к обычной таблице.</p><nav class="pagination mb-3">
-<ul class=pagination-list>
-<li class=pagination-item>
-<a href=http://orasql.ru/sql/basics/exists/ class="pagination-link pagination-prev"> &lt; Exists. Наличие строк в подзапросе </a>
-</li></ul></nav></div><footer class="footer b-dark-low b-top">
-<div class="footer-container container centered edges">
-<div class="footer-body mt-10">
-<nav class="nav nav-muted nav-menu-sm"><ul class=nav-list>
-<li class=nav-item><a href=/ class=nav-link>Orasql.ru</a></li><li class=nav-item><a href=/ class=nav-link>Учебник</a></li><li class=nav-item><p class="text-medium text-moderated">Email: orasqlru@gmail.com</p></li></ul></nav></div><div class="footer-copy mt-6 pt-6 b-dark-7 b-top">
-<p class="text-medium text-moderated">© Orasql.ru <br> 2019-2021</p></div></div></footer></body></html>
+основном запросе к этому псевдониму как к обычной таблице.</p><nav class="pagination mb-3"><ul class=pagination-list><li class=pagination-item><a href=http://orasql.ru/sql/basics/exists/ class="pagination-link pagination-prev">&lt; Exists. Наличие строк в подзапросе</a></li></ul></nav></div><footer class="footer b-dark-low b-top"><div class="footer-container container centered edges"><div class="footer-body mt-10"><nav class="nav nav-muted nav-menu-sm"><ul class=nav-list><li class=nav-item><a href=/ class=nav-link>Orasql.ru</a></li><li class=nav-item><a href=/ class=nav-link>Учебник</a></li><li class=nav-item><p class="text-medium text-moderated">Email: orasqlru@gmail.com</p></li></ul></nav></div><div class="footer-copy mt-6 pt-6 b-dark-7 b-top"><p class="text-medium text-moderated">© Orasql.ru<br>2019-2021</p></div></div></footer></body></html>

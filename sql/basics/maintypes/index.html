@@ -1,35 +1,4 @@
-<!doctype html><html><head>
-<meta charset=utf-8>
-<meta name=viewport content="width=device-width,initial-scale=1">
-<link rel=stylesheet href=/css/superkube.min.css>
-<link rel=stylesheet href=/css/main.css>
-<script>var clicky_site_ids=clicky_site_ids||[];clicky_site_ids.push(101305633)</script>
-<script async src=//static.getclicky.com/js></script>
-<title>Учебник Oracle SQL, PL/SQL | Основные типы данных</title></head><body><div class="navbar bg-dark mb-10">
-<div class="navbar-container container edges centered">
-<div class=navbar-brand>
-<a href=/ class=brand>
-Orasql.ru
-</a>
-</div><div class="navbar-nav ml-6">
-<nav class="nav nav-light nav-semibold">
-<ul class=nav-list>
-<li class=nav-item><a href=/book/ class=nav-link>Книга</a></li></ul></nav><nav class="nav nav-light nav-semibold">
-<ul class=nav-list>
-<li class=nav-item><a href=https://github.com/cyevgeniy/orasqlru class=nav-link>Github</a></li></ul></nav></div></div></div><div id=container class="container-medium edges centered">
-<div class="doc-head mb-4 container-10">
-<h5 class="heading-micro heading-muted">Основы</h5><h1 class="heading-huge heading-heavy">Основные типы данных</h1></div><div class="doc-toc mt-6 mb-6">
-<nav class="menu menu-underline menu-medium menu-numbered">
-<ul class=menu-list>
-<li class=menu-item>
-<a href=#varchar2 class=menu-link>Varchar2</a>
-</li><li class=menu-item>
-<a href=#number class=menu-link>Number</a>
-</li><li class=menu-item>
-<a href=#date class=menu-link>Date</a>
-</li><li class=menu-item>
-<a href=#boolean class=menu-link>Boolean</a>
-</li></ul></nav></div><p>Таблицы могут содержать не только строки. Рассмотрим основные типы
+<!doctype html><html><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><link rel=stylesheet href=/css/superkube.min.css><link rel=stylesheet href=/css/main.css><script>var clicky_site_ids=clicky_site_ids||[];clicky_site_ids.push(101305633)</script><script async src=//static.getclicky.com/js></script><title>Учебник Oracle SQL, PL/SQL | Основные типы данных</title></head><body><div class="navbar bg-dark mb-10"><div class="navbar-container container edges centered"><div class=navbar-brand><a href=/ class=brand>Orasql.ru</a></div><div class="navbar-nav ml-6"><nav class="nav nav-light nav-semibold"><ul class=nav-list><li class=nav-item><a href=/book/ class=nav-link>Книга</a></li></ul></nav><nav class="nav nav-light nav-semibold"><ul class=nav-list><li class=nav-item><a href=https://github.com/cyevgeniy/orasqlru class=nav-link>Github</a></li></ul></nav></div></div></div><div id=container class="container-medium edges centered"><div class="doc-head mb-4 container-10"><h5 class="heading-micro heading-muted">Основы</h5><h1 class="heading-huge heading-heavy">Основные типы данных</h1></div><div class="doc-toc mt-6 mb-6"><nav class="menu menu-underline menu-medium menu-numbered"><ul class=menu-list><li class=menu-item><a href=#varchar2 class=menu-link>Varchar2</a></li><li class=menu-item><a href=#number class=menu-link>Number</a></li><li class=menu-item><a href=#date class=menu-link>Date</a></li><li class=menu-item><a href=#boolean class=menu-link>Boolean</a></li></ul></nav></div><p>Таблицы могут содержать не только строки. Рассмотрим основные типы
 данных в БД Oracle.</p><h2 id=varchar2>Varchar2</h2><p>Строковый тип. При создании таблицы всегда нужно указывать размер
 строки. Размер может указываться в байтах либо в символах. По-умолчанию
 максимальный размер строки равен 4000 байт, либо 4000 символов. Этот
@@ -50,8 +19,7 @@ rounded_price number(5, -2); -- Число, округленное до 2-сим
 3245.3        |   3200
 12.345        |   0
 </code></pre><h2 id=date>Date</h2><p>Тип Date предназначен для хранения даты и времени. Данный тип данных
-хранить в себе следующую информацию:</p><ul>
-<li>Год</li><li>Месяц</li><li>День(Число)</li><li>Часы</li><li>Минуты</li><li>Секунды</li></ul><p>Не всегда бизнес-логика приложения требует хранения даты вплоть до
+хранить в себе следующую информацию:</p><ul><li>Год</li><li>Месяц</li><li>День(Число)</li><li>Часы</li><li>Минуты</li><li>Секунды</li></ul><p>Не всегда бизнес-логика приложения требует хранения даты вплоть до
 секунды или до дня - иногда нас может интересовать лишь конкретный месяц
 в году, или только год. В таких случаях незначимая информация как
 правило устанавливается в некое начальное значение, например:</p><pre><code>|Что нам нужно хранить      |Что мы сохраняем в БД
@@ -79,15 +47,4 @@ rounded_price number(5, -2); -- Число, округленное до 2-сим
     is_right_c varchar2(1) --&lt;2&gt;
 );
 </code></pre><p>&lt;1> - значение, равное 1 трактуем как истину, иначе - ложь(или
-наоборот) &lt;2> значение, равное символу &lsquo;Y&rsquo; - истинно, &lsquo;N&rsquo; - ложно</p><nav class="pagination mb-3">
-<ul class=pagination-list>
-<li class=pagination-item>
-<a href=http://orasql.ru/sql/basics/tables/ class="pagination-link pagination-prev"> &lt; Таблицы </a>
-</li><li class="pagination-item ml-auto">
-<a href=http://orasql.ru/sql/basics/selectstruct/ class="pagination-link pagination-next"> Пример SELECT запроса > </a>
-</li></ul></nav></div><footer class="footer b-dark-low b-top">
-<div class="footer-container container centered edges">
-<div class="footer-body mt-10">
-<nav class="nav nav-muted nav-menu-sm"><ul class=nav-list>
-<li class=nav-item><a href=/ class=nav-link>Orasql.ru</a></li><li class=nav-item><a href=/ class=nav-link>Учебник</a></li><li class=nav-item><p class="text-medium text-moderated">Email: orasqlru@gmail.com</p></li></ul></nav></div><div class="footer-copy mt-6 pt-6 b-dark-7 b-top">
-<p class="text-medium text-moderated">© Orasql.ru <br> 2019-2021</p></div></div></footer></body></html>
+наоборот) &lt;2> значение, равное символу &lsquo;Y&rsquo; - истинно, &lsquo;N&rsquo; - ложно</p><nav class="pagination mb-3"><ul class=pagination-list><li class=pagination-item><a href=http://orasql.ru/sql/basics/tables/ class="pagination-link pagination-prev">&lt; Таблицы</a></li><li class="pagination-item ml-auto"><a href=http://orasql.ru/sql/basics/selectstruct/ class="pagination-link pagination-next">Пример SELECT запроса ></a></li></ul></nav></div><footer class="footer b-dark-low b-top"><div class="footer-container container centered edges"><div class="footer-body mt-10"><nav class="nav nav-muted nav-menu-sm"><ul class=nav-list><li class=nav-item><a href=/ class=nav-link>Orasql.ru</a></li><li class=nav-item><a href=/ class=nav-link>Учебник</a></li><li class=nav-item><p class="text-medium text-moderated">Email: orasqlru@gmail.com</p></li></ul></nav></div><div class="footer-copy mt-6 pt-6 b-dark-7 b-top"><p class="text-medium text-moderated">© Orasql.ru<br>2019-2021</p></div></div></footer></body></html>

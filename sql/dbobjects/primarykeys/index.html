@@ -1,31 +1,4 @@
-<!doctype html><html><head>
-<meta charset=utf-8>
-<meta name=viewport content="width=device-width,initial-scale=1">
-<link rel=stylesheet href=/css/superkube.min.css>
-<link rel=stylesheet href=/css/main.css>
-<script>var clicky_site_ids=clicky_site_ids||[];clicky_site_ids.push(101305633)</script>
-<script async src=//static.getclicky.com/js></script>
-<title>Учебник Oracle SQL, PL/SQL | Первичные ключи</title></head><body><div class="navbar bg-dark mb-10">
-<div class="navbar-container container edges centered">
-<div class=navbar-brand>
-<a href=/ class=brand>
-Orasql.ru
-</a>
-</div><div class="navbar-nav ml-6">
-<nav class="nav nav-light nav-semibold">
-<ul class=nav-list>
-<li class=nav-item><a href=/book/ class=nav-link>Книга</a></li></ul></nav><nav class="nav nav-light nav-semibold">
-<ul class=nav-list>
-<li class=nav-item><a href=https://github.com/cyevgeniy/orasqlru class=nav-link>Github</a></li></ul></nav></div></div></div><div id=container class="container-medium edges centered">
-<div class="doc-head mb-4 container-10">
-<h5 class="heading-micro heading-muted">Объекты БД</h5><h1 class="heading-huge heading-heavy">Первичные ключи</h1></div><div class="doc-toc mt-6 mb-6">
-<nav class="menu menu-underline menu-medium menu-numbered">
-<ul class=menu-list>
-<li class=menu-item>
-<a href=#%d0%b4%d0%be%d0%b1%d0%b0%d0%b2%d0%bb%d0%b5%d0%bd%d0%b8%d0%b5-%d0%bf%d0%b5%d1%80%d0%b2%d0%b8%d1%87%d0%bd%d0%be%d0%b3%d0%be-%d0%ba%d0%bb%d1%8e%d1%87%d0%b0-%d0%b2-%d1%82%d0%b0%d0%b1%d0%bb%d0%b8%d1%86%d1%83 class=menu-link>Добавление первичного ключа в таблицу</a>
-</li><li class=menu-item>
-<a href=#%d1%81%d0%be%d1%81%d1%82%d0%b0%d0%b2%d0%bd%d1%8b%d0%b5-%d0%bf%d0%b5%d1%80%d0%b2%d0%b8%d1%87%d0%bd%d1%8b%d0%b5-%d0%ba%d0%bb%d1%8e%d1%87%d0%b8 class=menu-link>Составные первичные ключи</a>
-</li></ul></nav></div><p>Рассмотрим следующую ситуацию: пусть у нас есть 2 таблицы. Первая
+<!doctype html><html><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><link rel=stylesheet href=/css/superkube.min.css><link rel=stylesheet href=/css/main.css><script>var clicky_site_ids=clicky_site_ids||[];clicky_site_ids.push(101305633)</script><script async src=//static.getclicky.com/js></script><title>Учебник Oracle SQL, PL/SQL | Первичные ключи</title></head><body><div class="navbar bg-dark mb-10"><div class="navbar-container container edges centered"><div class=navbar-brand><a href=/ class=brand>Orasql.ru</a></div><div class="navbar-nav ml-6"><nav class="nav nav-light nav-semibold"><ul class=nav-list><li class=nav-item><a href=/book/ class=nav-link>Книга</a></li></ul></nav><nav class="nav nav-light nav-semibold"><ul class=nav-list><li class=nav-item><a href=https://github.com/cyevgeniy/orasqlru class=nav-link>Github</a></li></ul></nav></div></div></div><div id=container class="container-medium edges centered"><div class="doc-head mb-4 container-10"><h5 class="heading-micro heading-muted">Объекты БД</h5><h1 class="heading-huge heading-heavy">Первичные ключи</h1></div><div class="doc-toc mt-6 mb-6"><nav class="menu menu-underline menu-medium menu-numbered"><ul class=menu-list><li class=menu-item><a href=#%d0%b4%d0%be%d0%b1%d0%b0%d0%b2%d0%bb%d0%b5%d0%bd%d0%b8%d0%b5-%d0%bf%d0%b5%d1%80%d0%b2%d0%b8%d1%87%d0%bd%d0%be%d0%b3%d0%be-%d0%ba%d0%bb%d1%8e%d1%87%d0%b0-%d0%b2-%d1%82%d0%b0%d0%b1%d0%bb%d0%b8%d1%86%d1%83 class=menu-link>Добавление первичного ключа в таблицу</a></li><li class=menu-item><a href=#%d1%81%d0%be%d1%81%d1%82%d0%b0%d0%b2%d0%bd%d1%8b%d0%b5-%d0%bf%d0%b5%d1%80%d0%b2%d0%b8%d1%87%d0%bd%d1%8b%d0%b5-%d0%ba%d0%bb%d1%8e%d1%87%d0%b8 class=menu-link>Составные первичные ключи</a></li></ul></nav></div><p>Рассмотрим следующую ситуацию: пусть у нас есть 2 таблицы. Первая
 содержит список сотрудников, вторая - размер бонусов к зарплате для
 какой-то части этих сотрудников.</p><p>В жизни есть определенная вероятность того, что двух разных людей могут
 звать одинаково. Так вышло и у нас - 2 абсолютно разных сотрудника имеют
@@ -35,8 +8,7 @@ Orasql.ru
 Однозначный ответ - нет.</p><p><img src=/img/13_relations/pk_problem.png alt></p><p>Каждый отдельно взятый сотрудник - отдельная сущность, и всегда нужно
 иметь возможность различать их между собой. Именно для этого и
 используются первичные ключи.</p><p>Первичный ключ - это такой атрибут, который позволяет однозначно
-идентифицировать отдельно взятую строку в таблице.</p><p>Исходя из этого можно выделить еще некоторые свойства первичного ключа:</p><ol>
-<li>Он не может быть пустым</li><li>Он уникален в пределах отдельно взятой таблицы</li><li>В таблице может быть только один первичный ключ</li></ol><h2 id=добавление-первичного-ключа-в-таблицу>Добавление первичного ключа в таблицу</h2><p>Добавить первичный ключ в таблицу можно несколькими способами. Первый -
+идентифицировать отдельно взятую строку в таблице.</p><p>Исходя из этого можно выделить еще некоторые свойства первичного ключа:</p><ol><li>Он не может быть пустым</li><li>Он уникален в пределах отдельно взятой таблицы</li><li>В таблице может быть только один первичный ключ</li></ol><h2 id=добавление-первичного-ключа-в-таблицу>Добавление первичного ключа в таблицу</h2><p>Добавить первичный ключ в таблицу можно несколькими способами. Первый -
 добавление при создании таблицы:</p><pre><code>create table employees(
     id number primary key, -- Колонка id будет являться первичным ключом
     emp_name varchar2(100 char) not null,
@@ -100,13 +72,4 @@ create table month_bonuses(
     month_bonus date not null primary key,
     bonus_value number not null
 )
-</code></pre><nav class="pagination mb-3">
-<ul class=pagination-list>
-<li class="pagination-item ml-auto">
-<a href=http://orasql.ru/sql/dbobjects/foreignkeys/ class="pagination-link pagination-next"> Внешние ключи > </a>
-</li></ul></nav></div><footer class="footer b-dark-low b-top">
-<div class="footer-container container centered edges">
-<div class="footer-body mt-10">
-<nav class="nav nav-muted nav-menu-sm"><ul class=nav-list>
-<li class=nav-item><a href=/ class=nav-link>Orasql.ru</a></li><li class=nav-item><a href=/ class=nav-link>Учебник</a></li><li class=nav-item><p class="text-medium text-moderated">Email: orasqlru@gmail.com</p></li></ul></nav></div><div class="footer-copy mt-6 pt-6 b-dark-7 b-top">
-<p class="text-medium text-moderated">© Orasql.ru <br> 2019-2021</p></div></div></footer></body></html>
+</code></pre><nav class="pagination mb-3"><ul class=pagination-list><li class="pagination-item ml-auto"><a href=http://orasql.ru/sql/dbobjects/foreignkeys/ class="pagination-link pagination-next">Внешние ключи ></a></li></ul></nav></div><footer class="footer b-dark-low b-top"><div class="footer-container container centered edges"><div class="footer-body mt-10"><nav class="nav nav-muted nav-menu-sm"><ul class=nav-list><li class=nav-item><a href=/ class=nav-link>Orasql.ru</a></li><li class=nav-item><a href=/ class=nav-link>Учебник</a></li><li class=nav-item><p class="text-medium text-moderated">Email: orasqlru@gmail.com</p></li></ul></nav></div><div class="footer-copy mt-6 pt-6 b-dark-7 b-top"><p class="text-medium text-moderated">© Orasql.ru<br>2019-2021</p></div></div></footer></body></html>

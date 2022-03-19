@@ -1,43 +1,4 @@
-<!doctype html><html><head>
-<meta charset=utf-8>
-<meta name=viewport content="width=device-width,initial-scale=1">
-<link rel=stylesheet href=/css/superkube.min.css>
-<link rel=stylesheet href=/css/main.css>
-<script>var clicky_site_ids=clicky_site_ids||[];clicky_site_ids.push(101305633)</script>
-<script async src=//static.getclicky.com/js></script>
-<title>Учебник Oracle SQL, PL/SQL | Функции для работы со строками</title></head><body><div class="navbar bg-dark mb-10">
-<div class="navbar-container container edges centered">
-<div class=navbar-brand>
-<a href=/ class=brand>
-Orasql.ru
-</a>
-</div><div class="navbar-nav ml-6">
-<nav class="nav nav-light nav-semibold">
-<ul class=nav-list>
-<li class=nav-item><a href=/book/ class=nav-link>Книга</a></li></ul></nav><nav class="nav nav-light nav-semibold">
-<ul class=nav-list>
-<li class=nav-item><a href=https://github.com/cyevgeniy/orasqlru class=nav-link>Github</a></li></ul></nav></div></div></div><div id=container class="container-medium edges centered">
-<div class="doc-head mb-4 container-10">
-<h5 class="heading-micro heading-muted">Стандарные функции</h5><h1 class="heading-huge heading-heavy">Функции для работы со строками</h1></div><div class="doc-toc mt-6 mb-6">
-<nav class="menu menu-underline menu-medium menu-numbered">
-<ul class=menu-list>
-<li class=menu-item>
-<a href=#upper-lower class=menu-link>UPPER, LOWER</a>
-</li><li class=menu-item>
-<a href=#%d0%ba%d0%be%d0%bd%d0%ba%d0%b0%d1%82%d0%b5%d0%bd%d0%b0%d1%86%d0%b8%d1%8f-%d1%81%d1%82%d1%80%d0%be%d0%ba class=menu-link>Конкатенация строк</a>
-</li><li class=menu-item>
-<a href=#%d0%bf%d0%be%d0%b8%d1%81%d0%ba-%d0%bf%d0%be%d0%b4%d1%81%d1%82%d1%80%d0%be%d0%ba%d0%b8 class=menu-link>Поиск подстроки</a>
-</li><li class=menu-item>
-<a href=#%d0%bf%d0%be%d0%b4%d0%be%d0%b1%d0%b8%d0%b5-%d1%81%d1%82%d1%80%d0%be%d0%ba-like class=menu-link>Подобие строк. Like</a>
-</li><li class=menu-item>
-<a href=#%d0%bf%d1%80%d0%b8%d0%b2%d0%b5%d0%b4%d0%b5%d0%bd%d0%b8%d0%b5-%d0%ba-%d0%b2%d0%b5%d1%80%d1%85%d0%bd%d0%b5%d0%bc%d1%83-%d1%80%d0%b5%d0%b3%d0%b8%d1%81%d1%82%d1%80%d1%83-initcap class=menu-link>Приведение к верхнему регистру. INITCAP</a>
-</li><li class=menu-item>
-<a href=#%d0%b7%d0%b0%d0%bc%d0%b5%d0%bd%d0%b0-%d0%bf%d0%be%d0%b4%d1%81%d1%82%d1%80%d0%be%d0%ba%d0%b8-replace class=menu-link>Замена подстроки. REPLACE</a>
-</li><li class=menu-item>
-<a href=#%d1%83%d0%b4%d0%b0%d0%bb%d0%b5%d0%bd%d0%b8%d0%b5-%d0%bf%d1%80%d0%be%d0%b1%d0%b5%d0%bb%d0%be%d0%b2-trim class=menu-link>Удаление пробелов. TRIM</a>
-</li><li class=menu-item>
-<a href=#lpad-rpad class=menu-link>LPAD, RPAD</a>
-</li></ul></nav></div><p>Создадим тестовую таблицу.</p><pre><code>create table articles(
+<!doctype html><html><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><link rel=stylesheet href=/css/superkube.min.css><link rel=stylesheet href=/css/main.css><script>var clicky_site_ids=clicky_site_ids||[];clicky_site_ids.push(101305633)</script><script async src=//static.getclicky.com/js></script><title>Учебник Oracle SQL, PL/SQL | Функции для работы со строками</title></head><body><div class="navbar bg-dark mb-10"><div class="navbar-container container edges centered"><div class=navbar-brand><a href=/ class=brand>Orasql.ru</a></div><div class="navbar-nav ml-6"><nav class="nav nav-light nav-semibold"><ul class=nav-list><li class=nav-item><a href=/book/ class=nav-link>Книга</a></li></ul></nav><nav class="nav nav-light nav-semibold"><ul class=nav-list><li class=nav-item><a href=https://github.com/cyevgeniy/orasqlru class=nav-link>Github</a></li></ul></nav></div></div></div><div id=container class="container-medium edges centered"><div class="doc-head mb-4 container-10"><h5 class="heading-micro heading-muted">Стандарные функции</h5><h1 class="heading-huge heading-heavy">Функции для работы со строками</h1></div><div class="doc-toc mt-6 mb-6"><nav class="menu menu-underline menu-medium menu-numbered"><ul class=menu-list><li class=menu-item><a href=#upper-lower class=menu-link>UPPER, LOWER</a></li><li class=menu-item><a href=#%d0%ba%d0%be%d0%bd%d0%ba%d0%b0%d1%82%d0%b5%d0%bd%d0%b0%d1%86%d0%b8%d1%8f-%d1%81%d1%82%d1%80%d0%be%d0%ba class=menu-link>Конкатенация строк</a></li><li class=menu-item><a href=#%d0%bf%d0%be%d0%b8%d1%81%d0%ba-%d0%bf%d0%be%d0%b4%d1%81%d1%82%d1%80%d0%be%d0%ba%d0%b8 class=menu-link>Поиск подстроки</a></li><li class=menu-item><a href=#%d0%bf%d0%be%d0%b4%d0%be%d0%b1%d0%b8%d0%b5-%d1%81%d1%82%d1%80%d0%be%d0%ba-like class=menu-link>Подобие строк. Like</a></li><li class=menu-item><a href=#%d0%bf%d1%80%d0%b8%d0%b2%d0%b5%d0%b4%d0%b5%d0%bd%d0%b8%d0%b5-%d0%ba-%d0%b2%d0%b5%d1%80%d1%85%d0%bd%d0%b5%d0%bc%d1%83-%d1%80%d0%b5%d0%b3%d0%b8%d1%81%d1%82%d1%80%d1%83-initcap class=menu-link>Приведение к верхнему регистру. INITCAP</a></li><li class=menu-item><a href=#%d0%b7%d0%b0%d0%bc%d0%b5%d0%bd%d0%b0-%d0%bf%d0%be%d0%b4%d1%81%d1%82%d1%80%d0%be%d0%ba%d0%b8-replace class=menu-link>Замена подстроки. REPLACE</a></li><li class=menu-item><a href=#%d1%83%d0%b4%d0%b0%d0%bb%d0%b5%d0%bd%d0%b8%d0%b5-%d0%bf%d1%80%d0%be%d0%b1%d0%b5%d0%bb%d0%be%d0%b2-trim class=menu-link>Удаление пробелов. TRIM</a></li><li class=menu-item><a href=#lpad-rpad class=menu-link>LPAD, RPAD</a></li></ul></nav></div><p>Создадим тестовую таблицу.</p><pre><code>create table articles(
     title varchar2(50) not null,
     author varchar2(50) not null,
     msg varchar2(300) not null,
@@ -60,8 +21,7 @@ insert into articles values ('Сходил в ресторан!', 'user003',
 insert into articles values ('Съездили в отпуск!', 'artem69',
     'Наконец-то выбрались с женой и детьми в отпуск, было замечательно!', sysdate - 4);
 </code></pre><p>Таблица <code>articles</code> представляет собой место хранения сообщений
-пользователей, что-то вроде twitter.</p><h2 id=upper-lower>UPPER, LOWER</h2><p>Данные функции уже описывались раньше.</p><ul>
-<li><code>UPPER</code>: приводит строку к верхнему регистру</li><li><code>LOWER</code>: приводит строку к нижнему регистру</li></ul><p>Рекомендуется использовать одну из этих функций, если нужно сравнить две
+пользователей, что-то вроде twitter.</p><h2 id=upper-lower>UPPER, LOWER</h2><p>Данные функции уже описывались раньше.</p><ul><li><code>UPPER</code>: приводит строку к верхнему регистру</li><li><code>LOWER</code>: приводит строку к нижнему регистру</li></ul><p>Рекомендуется использовать одну из этих функций, если нужно сравнить две
 строки между собой без учета регистра символов.</p><h2 id=конкатенация-строк>Конкатенация строк</h2><p>Конкатенация - это &ldquo;склейка&rdquo; строк. Т.е., если у нас есть 2 строки -
 &ldquo;Новый&rdquo;, &ldquo;фотоаппарат&rdquo;, то результатом конкатенации будет строка &ldquo;Новый
 фотоаппарат&rdquo;.</p><p>Для склейки строк в Oracle используется оператор <code>||</code>.</p><pre><code>select 'Автор:' || art.author frmt_author,
@@ -118,8 +78,7 @@ where d.name like 'Чай%'
 from dishes d
 where d.name like 'Чай'
 </code></pre><p><img src=/img/3_select/no_data_found.png alt></p><p>При задании шаблонов в LIKE можно использовать следующие символы
-соответствия:</p><ul>
-<li>&ldquo;%"(знак процента). Ему соответствует 0 или больше символов в
+соответствия:</p><ul><li>&ldquo;%"(знак процента). Ему соответствует 0 или больше символов в
 значении.</li><li>&ldquo;_"(нижнее подчеркивание). Ему соответствует ровно один символ в
 значении.</li></ul><p>Получим все чаи, названия которых придумали маркетологи(а это любой 1
 символ после слова &ldquo;чай&rdquo;):</p><pre><code>select d.*
@@ -146,8 +105,7 @@ insert into dishes values ('Кофе(0.1% кофеина)', 30, 20);
 insert into dishes values ('Кофе(без кофеина)', 30, 20);
 </code></pre><p>Перед нами стоит задача: получить список кофейных блюд, содержащих
 кофеин.</p><p>Можно выделить некоторый список признаков, по которым мы сможем
-определить, что кофе с кофеином:</p><ul>
-<li>Наименование начинается со слова &ldquo;Кофе&rdquo;</li><li>Если кофе с кофеином, то в скобках указывается его процентное
+определить, что кофе с кофеином:</p><ul><li>Наименование начинается со слова &ldquo;Кофе&rdquo;</li><li>Если кофе с кофеином, то в скобках указывается его процентное
 содержание в виде &ldquo;n% кофеина&rdquo;, где n - некоторое число.</li></ul><p>На основании этих заключений можно написать следующий запрос:</p><pre><code>select d.*
 from dishes d
 where d.name like ('Кофе%кофеина')
@@ -173,8 +131,7 @@ from articles art
        a.msg
 from articles a
 where a.author = 'johndoe'
-</code></pre><p><img src=/img/4_strings/replace_photo.png alt></p><h2 id=удаление-пробелов-trim>Удаление пробелов. TRIM</h2><p>Есть 3 основных функции для удаления &ldquo;лишних&rdquo; пробелов из строки:</p><ul>
-<li><code>trim</code> - удалить пробелы вначале и в конце строки</li><li><code>ltrim</code> - удалить пробелы вначале строки (слева)</li><li><code>rtrim</code> - удалить пробелы в конце строки (справа)</li></ul><pre><code>select trim('    John Doe      ') from dual;
+</code></pre><p><img src=/img/4_strings/replace_photo.png alt></p><h2 id=удаление-пробелов-trim>Удаление пробелов. TRIM</h2><p>Есть 3 основных функции для удаления &ldquo;лишних&rdquo; пробелов из строки:</p><ul><li><code>trim</code> - удалить пробелы вначале и в конце строки</li><li><code>ltrim</code> - удалить пробелы вначале строки (слева)</li><li><code>rtrim</code> - удалить пробелы в конце строки (справа)</li></ul><pre><code>select trim('    John Doe      ') from dual;
 select rtrim('    John Doe     ') from dual;
 select ltrim('    John Doe    ') from dual;
 -- То же самое, что и trim
@@ -187,16 +144,6 @@ select ltrim(rtrim('     John Doe    ')) from dual;
        rpad('38', 5, '0') n3,
        rpad('3', 5, '0') n4
 from dual
-</code></pre><p><img src=/img/4_strings/lpad_rpad.png alt></p><p>Первый параметр в этой функции - строка, которую нужно дополнить, второй</p><ul>
-<li>длина строки, которую мы хотим получить, а третий - символы, которыми
+</code></pre><p><img src=/img/4_strings/lpad_rpad.png alt></p><p>Первый параметр в этой функции - строка, которую нужно дополнить, второй</p><ul><li>длина строки, которую мы хотим получить, а третий - символы, которыми
 будем дополнять строку. Третий параметр не обязателен, и если его не
-указывать, то строка будет дополняться пробелами, как в колонке <code>n2_1</code>.</li></ul><nav class="pagination mb-3">
-<ul class=pagination-list>
-<li class="pagination-item ml-auto">
-<a href=http://orasql.ru/sql/standfunc/nullfunctions/ class="pagination-link pagination-next"> Функции для работы с NULL > </a>
-</li></ul></nav></div><footer class="footer b-dark-low b-top">
-<div class="footer-container container centered edges">
-<div class="footer-body mt-10">
-<nav class="nav nav-muted nav-menu-sm"><ul class=nav-list>
-<li class=nav-item><a href=/ class=nav-link>Orasql.ru</a></li><li class=nav-item><a href=/ class=nav-link>Учебник</a></li><li class=nav-item><p class="text-medium text-moderated">Email: orasqlru@gmail.com</p></li></ul></nav></div><div class="footer-copy mt-6 pt-6 b-dark-7 b-top">
-<p class="text-medium text-moderated">© Orasql.ru <br> 2019-2021</p></div></div></footer></body></html>
+указывать, то строка будет дополняться пробелами, как в колонке <code>n2_1</code>.</li></ul><nav class="pagination mb-3"><ul class=pagination-list><li class="pagination-item ml-auto"><a href=http://orasql.ru/sql/standfunc/nullfunctions/ class="pagination-link pagination-next">Функции для работы с NULL ></a></li></ul></nav></div><footer class="footer b-dark-low b-top"><div class="footer-container container centered edges"><div class="footer-body mt-10"><nav class="nav nav-muted nav-menu-sm"><ul class=nav-list><li class=nav-item><a href=/ class=nav-link>Orasql.ru</a></li><li class=nav-item><a href=/ class=nav-link>Учебник</a></li><li class=nav-item><p class="text-medium text-moderated">Email: orasqlru@gmail.com</p></li></ul></nav></div><div class="footer-copy mt-6 pt-6 b-dark-7 b-top"><p class="text-medium text-moderated">© Orasql.ru<br>2019-2021</p></div></div></footer></body></html>

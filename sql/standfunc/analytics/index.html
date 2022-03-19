@@ -1,41 +1,4 @@
-<!doctype html><html><head>
-<meta charset=utf-8>
-<meta name=viewport content="width=device-width,initial-scale=1">
-<link rel=stylesheet href=/css/superkube.min.css>
-<link rel=stylesheet href=/css/main.css>
-<script>var clicky_site_ids=clicky_site_ids||[];clicky_site_ids.push(101305633)</script>
-<script async src=//static.getclicky.com/js></script>
-<title>Учебник Oracle SQL, PL/SQL | Аналитические функции</title></head><body><div class="navbar bg-dark mb-10">
-<div class="navbar-container container edges centered">
-<div class=navbar-brand>
-<a href=/ class=brand>
-Orasql.ru
-</a>
-</div><div class="navbar-nav ml-6">
-<nav class="nav nav-light nav-semibold">
-<ul class=nav-list>
-<li class=nav-item><a href=/book/ class=nav-link>Книга</a></li></ul></nav><nav class="nav nav-light nav-semibold">
-<ul class=nav-list>
-<li class=nav-item><a href=https://github.com/cyevgeniy/orasqlru class=nav-link>Github</a></li></ul></nav></div></div></div><div id=container class="container-medium edges centered">
-<div class="doc-head mb-4 container-10">
-<h5 class="heading-micro heading-muted">Стандарные функции</h5><h1 class="heading-huge heading-heavy">Аналитические функции</h1></div><div class="doc-toc mt-6 mb-6">
-<nav class="menu menu-underline menu-medium menu-numbered">
-<ul class=menu-list>
-<li class=menu-item>
-<a href=#%d0%ba%d0%be%d0%b3%d0%b4%d0%b0-%d0%b0%d0%b3%d1%80%d0%b5%d0%b3%d0%b8%d1%80%d1%83%d1%8e%d1%89%d0%b0%d1%8f-%d1%84%d1%83%d0%bd%d0%ba%d1%86%d0%b8%d1%8f-%d1%81%d1%82%d0%b0%d0%bd%d0%be%d0%b2%d0%b8%d1%82%d1%81%d1%8f-%d0%b0%d0%bd%d0%b0%d0%bb%d0%b8%d1%82%d0%b8%d1%87%d0%b5%d1%81%d0%ba%d0%be%d0%b9 class=menu-link>Когда агрегирующая функция становится аналитической</a>
-</li><li class=menu-item>
-<a href=#%d0%bf%d0%be%d0%b4%d1%81%d1%87%d0%b5%d1%82-%d1%80%d0%b5%d0%b7%d1%83%d0%bb%d1%8c%d1%82%d0%b0%d1%82%d0%be%d0%b2-%d0%bf%d0%be-%d0%b3%d1%80%d1%83%d0%bf%d0%bf%d0%b0%d0%bc-partition-by class=menu-link>Подсчет результатов по группам. Partition by</a>
-</li><li class=menu-item>
-<a href=#%d0%bf%d0%be%d1%80%d1%8f%d0%b4%d0%be%d0%ba-%d0%b2%d1%8b%d1%87%d0%b8%d1%81%d0%bb%d0%b5%d0%bd%d0%b8%d1%8f-order-by class=menu-link>Порядок вычисления. Order by</a>
-</li><li class=menu-item>
-<a href=#%d0%b4%d0%b8%d0%b0%d0%bf%d0%b0%d0%b7%d0%be%d0%bd-%d1%80%d0%b0%d0%b1%d0%be%d1%82%d1%8b-%d0%b0%d0%bd%d0%b0%d0%bb%d0%b8%d1%82%d0%b8%d1%87%d0%b5%d1%81%d0%ba%d0%b8%d1%85-%d1%84%d1%83%d0%bd%d0%ba%d1%86%d0%b8%d0%b9 class=menu-link>Диапазон работы аналитических функций</a>
-</li><li class=menu-item>
-<a href=#%d1%81%d1%82%d1%80%d0%be%d0%ba%d0%b8-%d0%b8-%d0%b7%d0%bd%d0%b0%d1%87%d0%b5%d0%bd%d0%b8%d1%8f class=menu-link>Строки и значения</a>
-</li><li class=menu-item>
-<a href=#%d1%81%d0%bc%d0%b5%d1%89%d0%b5%d0%bd%d0%b8%d1%8f-%d0%bf%d1%80%d0%b8-%d0%be%d0%bf%d1%80%d0%b5%d0%b4%d0%b5%d0%bb%d0%b5%d0%bd%d0%b8%d0%b8-%d0%be%d0%ba%d0%bd%d0%b0 class=menu-link>Смещения при определении окна</a>
-</li><li class=menu-item>
-<a href=#%d0%be%d0%b3%d1%80%d0%b0%d0%bd%d0%b8%d1%87%d0%b5%d0%bd%d0%b8%d1%8f-%d0%bd%d0%b0-order-by class=menu-link>Ограничения на ORDER BY</a>
-</li></ul></nav></div><p>Аналитические функции - очень мощный инструмент в SQL. Со слов Тома
+<!doctype html><html><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><link rel=stylesheet href=/css/superkube.min.css><link rel=stylesheet href=/css/main.css><script>var clicky_site_ids=clicky_site_ids||[];clicky_site_ids.push(101305633)</script><script async src=//static.getclicky.com/js></script><title>Учебник Oracle SQL, PL/SQL | Аналитические функции</title></head><body><div class="navbar bg-dark mb-10"><div class="navbar-container container edges centered"><div class=navbar-brand><a href=/ class=brand>Orasql.ru</a></div><div class="navbar-nav ml-6"><nav class="nav nav-light nav-semibold"><ul class=nav-list><li class=nav-item><a href=/book/ class=nav-link>Книга</a></li></ul></nav><nav class="nav nav-light nav-semibold"><ul class=nav-list><li class=nav-item><a href=https://github.com/cyevgeniy/orasqlru class=nav-link>Github</a></li></ul></nav></div></div></div><div id=container class="container-medium edges centered"><div class="doc-head mb-4 container-10"><h5 class="heading-micro heading-muted">Стандарные функции</h5><h1 class="heading-huge heading-heavy">Аналитические функции</h1></div><div class="doc-toc mt-6 mb-6"><nav class="menu menu-underline menu-medium menu-numbered"><ul class=menu-list><li class=menu-item><a href=#%d0%ba%d0%be%d0%b3%d0%b4%d0%b0-%d0%b0%d0%b3%d1%80%d0%b5%d0%b3%d0%b8%d1%80%d1%83%d1%8e%d1%89%d0%b0%d1%8f-%d1%84%d1%83%d0%bd%d0%ba%d1%86%d0%b8%d1%8f-%d1%81%d1%82%d0%b0%d0%bd%d0%be%d0%b2%d0%b8%d1%82%d1%81%d1%8f-%d0%b0%d0%bd%d0%b0%d0%bb%d0%b8%d1%82%d0%b8%d1%87%d0%b5%d1%81%d0%ba%d0%be%d0%b9 class=menu-link>Когда агрегирующая функция становится аналитической</a></li><li class=menu-item><a href=#%d0%bf%d0%be%d0%b4%d1%81%d1%87%d0%b5%d1%82-%d1%80%d0%b5%d0%b7%d1%83%d0%bb%d1%8c%d1%82%d0%b0%d1%82%d0%be%d0%b2-%d0%bf%d0%be-%d0%b3%d1%80%d1%83%d0%bf%d0%bf%d0%b0%d0%bc-partition-by class=menu-link>Подсчет результатов по группам. Partition by</a></li><li class=menu-item><a href=#%d0%bf%d0%be%d1%80%d1%8f%d0%b4%d0%be%d0%ba-%d0%b2%d1%8b%d1%87%d0%b8%d1%81%d0%bb%d0%b5%d0%bd%d0%b8%d1%8f-order-by class=menu-link>Порядок вычисления. Order by</a></li><li class=menu-item><a href=#%d0%b4%d0%b8%d0%b0%d0%bf%d0%b0%d0%b7%d0%be%d0%bd-%d1%80%d0%b0%d0%b1%d0%be%d1%82%d1%8b-%d0%b0%d0%bd%d0%b0%d0%bb%d0%b8%d1%82%d0%b8%d1%87%d0%b5%d1%81%d0%ba%d0%b8%d1%85-%d1%84%d1%83%d0%bd%d0%ba%d1%86%d0%b8%d0%b9 class=menu-link>Диапазон работы аналитических функций</a></li><li class=menu-item><a href=#%d1%81%d1%82%d1%80%d0%be%d0%ba%d0%b8-%d0%b8-%d0%b7%d0%bd%d0%b0%d1%87%d0%b5%d0%bd%d0%b8%d1%8f class=menu-link>Строки и значения</a></li><li class=menu-item><a href=#%d1%81%d0%bc%d0%b5%d1%89%d0%b5%d0%bd%d0%b8%d1%8f-%d0%bf%d1%80%d0%b8-%d0%be%d0%bf%d1%80%d0%b5%d0%b4%d0%b5%d0%bb%d0%b5%d0%bd%d0%b8%d0%b8-%d0%be%d0%ba%d0%bd%d0%b0 class=menu-link>Смещения при определении окна</a></li><li class=menu-item><a href=#%d0%be%d0%b3%d1%80%d0%b0%d0%bd%d0%b8%d1%87%d0%b5%d0%bd%d0%b8%d1%8f-%d0%bd%d0%b0-order-by class=menu-link>Ограничения на ORDER BY</a></li></ul></nav></div><p>Аналитические функции - очень мощный инструмент в SQL. Со слов Тома
 Кайта, можно написать отдельную книгу по аналитическим функциям,
 настолько они полезны.</p><p>Аналитические функции - это те же агрегирующие функции, но их главная
 особенность в том, что они работают без необходимости группировки строк.</p><p>Аналитические функции выполняются последними в запросе, поэтому они
@@ -259,8 +222,7 @@ join employees e on e.id = es.emp_id
 в пределах от 10 до 20 включительно&rdquo;.</p><p>В первом случае, при указании физических строк, используется ключевое
 слово <code>ROWS</code>, во втором случае, при указании строк по их значениям,
 используется ключевое слово <code>RANGE</code>.</p><h2 id=смещения-при-определении-окна>Смещения при определении окна</h2><p>Итак, при указании окна мы должны задать его верхнюю и нижнюю границу.</p><p>В общем виде указание границы выглядит следующим образом:</p><pre><code>(range или rows) between &quot;Верхняя граница&quot; and &quot;Нижняя граница&quot;
-</code></pre><p>Теперь рассмотрим варианты для этих границ:</p><ul>
-<li><code>UNBOUNDED PRECEDING</code> - указывает, что окно начинается с первой
+</code></pre><p>Теперь рассмотрим варианты для этих границ:</p><ul><li><code>UNBOUNDED PRECEDING</code> - указывает, что окно начинается с первой
 строки в разделе. Может быть указано только для верхней границы, в
 качестве нижней границы использовать нельзя.</li><li><code>UNBOUNDED FOLLOWING</code> - указывает, что окно заканчивается на
 последней строке в разделе. Может быть указано только для нижней
@@ -302,8 +264,7 @@ join employees e on e.id = es.emp_id
         and current row
 ) min
 </code></pre><p>В общем, когда несколько колонок имеют одинаковые значения,
-аналитические функции работают по определенным правилам:</p><ul>
-<li>Функции <code>CUME_DIST</code>, <code>DENSE_RANK</code>, <code>NTILE</code>, <code>PERCENT_RANK</code> и <code>RANK</code>
+аналитические функции работают по определенным правилам:</p><ul><li>Функции <code>CUME_DIST</code>, <code>DENSE_RANK</code>, <code>NTILE</code>, <code>PERCENT_RANK</code> и <code>RANK</code>
 возвращают одинаковый результат для всех строк</li><li>Функция <code>ROW_NUMBER</code> присвоит каждой строке уникальное значение.
 Порядок присваивания будет зависеть от порядка обработки строк БД,
 который мы не можем предугадать</li><li>Все остальные функции будут работать по-разному в зависимости от
@@ -327,8 +288,7 @@ from emp_salary es
 join employees e on e.id = es.emp_id
 </code></pre><p><img src=/img/16_analytic/rows_2_preceding_curr_row.png alt></p><p>Здесь в колонке avg_sal считается средняя заработная плата по трем
 строкам - двум предшествующим и текущей. Порядок следования, как мы
-помним, задается при помощи ORDER BY, поэтому две предшествующие строки</p><ul>
-<li>это строки, у которых значение в колонках sal_date будет меньше либо
+помним, задается при помощи ORDER BY, поэтому две предшествующие строки</p><ul><li>это строки, у которых значение в колонках sal_date будет меньше либо
 равным значению в текущей строке.</li></ul><p>Значение функции округляется до двух знаков после запятой при помощи
 функции <code>round</code>. Аналитическая функция берется в скобки полностью,
 начиная от имени функции и заканчивая определением окна. К значениям,
@@ -385,16 +345,4 @@ join employees e on e.id = es.emp_id
 второй строки была лишь одна предыдущая строка, а у последней не было
 следующей.</p><h2 id=ограничения-на-order-by>Ограничения на ORDER BY</h2><p>ORDER BY в аналитических функциях может использоваться только с одной
 колонкой, за исплючением случаев, когда используется <code>RANGE</code> и окно
-задается одним из следующих способов:</p><ul>
-<li><code>RANGE BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW</code></li><li><code>RANGE BETWEEN CURRENT ROW AND UNBOUNDED FOLLOWING</code></li><li><code>RANGE BETWEEN CURRENT ROW AND CURRENT ROW</code></li><li><code>RANGE BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING</code></li></ul><nav class="pagination mb-3">
-<ul class=pagination-list>
-<li class=pagination-item>
-<a href=http://orasql.ru/sql/standfunc/datefunctions/ class="pagination-link pagination-prev"> &lt; Работа с датами в Oracle </a>
-</li><li class="pagination-item ml-auto">
-<a href=http://orasql.ru/sql/standfunc/distinct/ class="pagination-link pagination-next"> Distinct. Удаление дубликатов > </a>
-</li></ul></nav></div><footer class="footer b-dark-low b-top">
-<div class="footer-container container centered edges">
-<div class="footer-body mt-10">
-<nav class="nav nav-muted nav-menu-sm"><ul class=nav-list>
-<li class=nav-item><a href=/ class=nav-link>Orasql.ru</a></li><li class=nav-item><a href=/ class=nav-link>Учебник</a></li><li class=nav-item><p class="text-medium text-moderated">Email: orasqlru@gmail.com</p></li></ul></nav></div><div class="footer-copy mt-6 pt-6 b-dark-7 b-top">
-<p class="text-medium text-moderated">© Orasql.ru <br> 2019-2021</p></div></div></footer></body></html>
+задается одним из следующих способов:</p><ul><li><code>RANGE BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW</code></li><li><code>RANGE BETWEEN CURRENT ROW AND UNBOUNDED FOLLOWING</code></li><li><code>RANGE BETWEEN CURRENT ROW AND CURRENT ROW</code></li><li><code>RANGE BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING</code></li></ul><nav class="pagination mb-3"><ul class=pagination-list><li class=pagination-item><a href=http://orasql.ru/sql/standfunc/datefunctions/ class="pagination-link pagination-prev">&lt; Работа с датами в Oracle</a></li><li class="pagination-item ml-auto"><a href=http://orasql.ru/sql/standfunc/distinct/ class="pagination-link pagination-next">Distinct. Удаление дубликатов ></a></li></ul></nav></div><footer class="footer b-dark-low b-top"><div class="footer-container container centered edges"><div class="footer-body mt-10"><nav class="nav nav-muted nav-menu-sm"><ul class=nav-list><li class=nav-item><a href=/ class=nav-link>Orasql.ru</a></li><li class=nav-item><a href=/ class=nav-link>Учебник</a></li><li class=nav-item><p class="text-medium text-moderated">Email: orasqlru@gmail.com</p></li></ul></nav></div><div class="footer-copy mt-6 pt-6 b-dark-7 b-top"><p class="text-medium text-moderated">© Orasql.ru<br>2019-2021</p></div></div></footer></body></html>

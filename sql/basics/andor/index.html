@@ -1,24 +1,4 @@
-<!doctype html><html><head>
-<meta charset=utf-8>
-<meta name=viewport content="width=device-width,initial-scale=1">
-<link rel=stylesheet href=/css/superkube.min.css>
-<link rel=stylesheet href=/css/main.css>
-<script>var clicky_site_ids=clicky_site_ids||[];clicky_site_ids.push(101305633)</script>
-<script async src=//static.getclicky.com/js></script>
-<title>Учебник Oracle SQL, PL/SQL | Проверка нескольких условий. AND, OR</title></head><body><div class="navbar bg-dark mb-10">
-<div class="navbar-container container edges centered">
-<div class=navbar-brand>
-<a href=/ class=brand>
-Orasql.ru
-</a>
-</div><div class="navbar-nav ml-6">
-<nav class="nav nav-light nav-semibold">
-<ul class=nav-list>
-<li class=nav-item><a href=/book/ class=nav-link>Книга</a></li></ul></nav><nav class="nav nav-light nav-semibold">
-<ul class=nav-list>
-<li class=nav-item><a href=https://github.com/cyevgeniy/orasqlru class=nav-link>Github</a></li></ul></nav></div></div></div><div id=container class="container-medium edges centered">
-<div class="doc-head mb-4 container-10">
-<h5 class="heading-micro heading-muted">Основы</h5><h1 class="heading-huge heading-heavy">Проверка нескольких условий. AND, OR</h1></div><p>При выборке данных мы можем указывать несколько условий одновременно.
+<!doctype html><html><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><link rel=stylesheet href=/css/superkube.min.css><link rel=stylesheet href=/css/main.css><script>var clicky_site_ids=clicky_site_ids||[];clicky_site_ids.push(101305633)</script><script async src=//static.getclicky.com/js></script><title>Учебник Oracle SQL, PL/SQL | Проверка нескольких условий. AND, OR</title></head><body><div class="navbar bg-dark mb-10"><div class="navbar-container container edges centered"><div class=navbar-brand><a href=/ class=brand>Orasql.ru</a></div><div class="navbar-nav ml-6"><nav class="nav nav-light nav-semibold"><ul class=nav-list><li class=nav-item><a href=/book/ class=nav-link>Книга</a></li></ul></nav><nav class="nav nav-light nav-semibold"><ul class=nav-list><li class=nav-item><a href=https://github.com/cyevgeniy/orasqlru class=nav-link>Github</a></li></ul></nav></div></div></div><div id=container class="container-medium edges centered"><div class="doc-head mb-4 container-10"><h5 class="heading-micro heading-muted">Основы</h5><h1 class="heading-huge heading-heavy">Проверка нескольких условий. AND, OR</h1></div><p>При выборке данных мы можем указывать несколько условий одновременно.
 Для объединения условий можно использовать операторы <code>and</code> (логическое
 &ldquo;И&rdquo;) и <code>or</code>(логическое &ldquo;ИЛИ&rdquo;). Разберем каждый из них на примерах.</p><p>Пример №1: получим список блюд с рейтингом, меньшим чем 320, но со
 стоимостью большей, чем 2:</p><pre><code>select *
@@ -76,8 +56,7 @@ where d.rating = 320 and
 (d.price &gt; 30 or d.rating &lt; 270)
 </code></pre><p><img src=/img/3_select/andor_2.png alt></p><p>Сейчас в выборку попала только свиная отбивная. Давайте разберемся,
 почему. Учитывая скобки, каждая строка в выборке должна удовлетворять
-следующим условиям:</p><ul>
-<li>Рейтинг должен быть равен 320</li><li>Стоимость должна быть больше 30, либо рейтинг должен быть меньше 270</li></ul><p>При этом, эти два условия должны быть истинными одновременно, т.к. между
+следующим условиям:</p><ul><li>Рейтинг должен быть равен 320</li><li>Стоимость должна быть больше 30, либо рейтинг должен быть меньше 270</li></ul><p>При этом, эти два условия должны быть истинными одновременно, т.к. между
 ними указано ключевое слово <code>AND</code>.</p><p>Итак, блюд с рейтингом, равным 320, всего два - &ldquo;Макароны с сыром&rdquo; и
 &ldquo;Свиная отбивная&rdquo;. Т.е. по первому условию в выборку попадают всего 2
 блюда. Теперь по второму условию. У Макарон с сыром стоимость = 20.56,
@@ -87,15 +66,4 @@ where d.rating = 320 and
 чтобы хотя бы одно из его частей было истинным, т.к. используется <code>OR</code>.
 Но, как видно, ни одно из них не является истинным. Это значит, что все
 выражение в скобках является ложным, а значит и данная строка не попадет
-в выборку.</p><nav class="pagination mb-3">
-<ul class=pagination-list>
-<li class=pagination-item>
-<a href=http://orasql.ru/sql/basics/comparison/ class="pagination-link pagination-prev"> &lt; Оператор WHERE. Операторы сравнения </a>
-</li><li class="pagination-item ml-auto">
-<a href=http://orasql.ru/sql/basics/isnull/ class="pagination-link pagination-next"> Проверка значения на NULL > </a>
-</li></ul></nav></div><footer class="footer b-dark-low b-top">
-<div class="footer-container container centered edges">
-<div class="footer-body mt-10">
-<nav class="nav nav-muted nav-menu-sm"><ul class=nav-list>
-<li class=nav-item><a href=/ class=nav-link>Orasql.ru</a></li><li class=nav-item><a href=/ class=nav-link>Учебник</a></li><li class=nav-item><p class="text-medium text-moderated">Email: orasqlru@gmail.com</p></li></ul></nav></div><div class="footer-copy mt-6 pt-6 b-dark-7 b-top">
-<p class="text-medium text-moderated">© Orasql.ru <br> 2019-2021</p></div></div></footer></body></html>
+в выборку.</p><nav class="pagination mb-3"><ul class=pagination-list><li class=pagination-item><a href=http://orasql.ru/sql/basics/comparison/ class="pagination-link pagination-prev">&lt; Оператор WHERE. Операторы сравнения</a></li><li class="pagination-item ml-auto"><a href=http://orasql.ru/sql/basics/isnull/ class="pagination-link pagination-next">Проверка значения на NULL ></a></li></ul></nav></div><footer class="footer b-dark-low b-top"><div class="footer-container container centered edges"><div class="footer-body mt-10"><nav class="nav nav-muted nav-menu-sm"><ul class=nav-list><li class=nav-item><a href=/ class=nav-link>Orasql.ru</a></li><li class=nav-item><a href=/ class=nav-link>Учебник</a></li><li class=nav-item><p class="text-medium text-moderated">Email: orasqlru@gmail.com</p></li></ul></nav></div><div class="footer-copy mt-6 pt-6 b-dark-7 b-top"><p class="text-medium text-moderated">© Orasql.ru<br>2019-2021</p></div></div></footer></body></html>

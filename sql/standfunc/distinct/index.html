@@ -1,37 +1,4 @@
-<!doctype html><html><head>
-<meta charset=utf-8>
-<meta name=viewport content="width=device-width,initial-scale=1">
-<link rel=stylesheet href=/css/superkube.min.css>
-<link rel=stylesheet href=/css/main.css>
-<script>var clicky_site_ids=clicky_site_ids||[];clicky_site_ids.push(101305633)</script>
-<script async src=//static.getclicky.com/js></script>
-<title>Учебник Oracle SQL, PL/SQL | Distinct. Удаление дубликатов</title></head><body><div class="navbar bg-dark mb-10">
-<div class="navbar-container container edges centered">
-<div class=navbar-brand>
-<a href=/ class=brand>
-Orasql.ru
-</a>
-</div><div class="navbar-nav ml-6">
-<nav class="nav nav-light nav-semibold">
-<ul class=nav-list>
-<li class=nav-item><a href=/book/ class=nav-link>Книга</a></li></ul></nav><nav class="nav nav-light nav-semibold">
-<ul class=nav-list>
-<li class=nav-item><a href=https://github.com/cyevgeniy/orasqlru class=nav-link>Github</a></li></ul></nav></div></div></div><div id=container class="container-medium edges centered">
-<div class="doc-head mb-4 container-10">
-<h5 class="heading-micro heading-muted">Стандарные функции</h5><h1 class="heading-huge heading-heavy">Distinct. Удаление дубликатов</h1></div><div class="doc-toc mt-6 mb-6">
-<nav class="menu menu-underline menu-medium menu-numbered">
-<ul class=menu-list>
-<li class=menu-item>
-<a href=#%d0%bf%d0%be%d0%b4%d0%b3%d0%be%d1%82%d0%be%d0%b2%d0%ba%d0%b0-%d0%b4%d0%b0%d0%bd%d0%bd%d1%8b%d1%85 class=menu-link>Подготовка данных</a>
-</li><li class=menu-item>
-<a href=#%d1%83%d0%b4%d0%b0%d0%bb%d0%b5%d0%bd%d0%b8%d0%b5-%d0%b4%d1%83%d0%bf%d0%bb%d0%b8%d0%ba%d0%b0%d1%82%d0%be%d0%b2-%d0%b8%d0%b7-%d0%be%d0%b4%d0%bd%d0%be%d0%b9-%d0%ba%d0%be%d0%bb%d0%be%d0%bd%d0%ba%d0%b8 class=menu-link>Удаление дупликатов из одной колонки</a>
-</li><li class=menu-item>
-<a href=#distinct-%d1%83%d1%87%d0%b8%d1%82%d1%8b%d0%b2%d0%b0%d0%b5%d1%82-%d0%b2%d1%81%d0%b5-%d0%ba%d0%be%d0%bb%d0%be%d0%bd%d0%ba%d0%b8-%d0%b2-%d1%81%d1%82%d1%80%d0%be%d0%ba%d0%b5 class=menu-link>DISTINCT учитывает все колонки в строке</a>
-</li><li class=menu-item>
-<a href=#null-%d1%83%d1%87%d0%b8%d1%82%d1%8b%d0%b2%d0%b0%d0%b5%d1%82%d1%81%d1%8f class=menu-link>NULL учитывается</a>
-</li><li class=menu-item>
-<a href=#distinct-%d1%81-%d0%b0%d0%b3%d1%80%d0%b5%d0%b3%d0%b0%d1%82%d0%bd%d1%8b%d0%bc%d0%b8-%d1%84%d1%83%d0%bd%d0%ba%d1%86%d0%b8%d1%8f%d0%bc%d0%b8 class=menu-link>DISTINCT с агрегатными функциями</a>
-</li></ul></nav></div><p>Оператор <code>DISTINCT</code> в SELECT запросах используется для удаления дублирующихся строк из выборки. В общем виде запрос выглядит следующим образом:</p><pre tabindex=0><code>select distinct col_name1, col_name2, col_name3, ...
+<!doctype html><html><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><link rel=stylesheet href=/css/superkube.min.css><link rel=stylesheet href=/css/main.css><script>var clicky_site_ids=clicky_site_ids||[];clicky_site_ids.push(101305633)</script><script async src=//static.getclicky.com/js></script><title>Учебник Oracle SQL, PL/SQL | Distinct. Удаление дубликатов</title></head><body><div class="navbar bg-dark mb-10"><div class="navbar-container container edges centered"><div class=navbar-brand><a href=/ class=brand>Orasql.ru</a></div><div class="navbar-nav ml-6"><nav class="nav nav-light nav-semibold"><ul class=nav-list><li class=nav-item><a href=/book/ class=nav-link>Книга</a></li></ul></nav><nav class="nav nav-light nav-semibold"><ul class=nav-list><li class=nav-item><a href=https://github.com/cyevgeniy/orasqlru class=nav-link>Github</a></li></ul></nav></div></div></div><div id=container class="container-medium edges centered"><div class="doc-head mb-4 container-10"><h5 class="heading-micro heading-muted">Стандарные функции</h5><h1 class="heading-huge heading-heavy">Distinct. Удаление дубликатов</h1></div><div class="doc-toc mt-6 mb-6"><nav class="menu menu-underline menu-medium menu-numbered"><ul class=menu-list><li class=menu-item><a href=#%d0%bf%d0%be%d0%b4%d0%b3%d0%be%d1%82%d0%be%d0%b2%d0%ba%d0%b0-%d0%b4%d0%b0%d0%bd%d0%bd%d1%8b%d1%85 class=menu-link>Подготовка данных</a></li><li class=menu-item><a href=#%d1%83%d0%b4%d0%b0%d0%bb%d0%b5%d0%bd%d0%b8%d0%b5-%d0%b4%d1%83%d0%bf%d0%bb%d0%b8%d0%ba%d0%b0%d1%82%d0%be%d0%b2-%d0%b8%d0%b7-%d0%be%d0%b4%d0%bd%d0%be%d0%b9-%d0%ba%d0%be%d0%bb%d0%be%d0%bd%d0%ba%d0%b8 class=menu-link>Удаление дупликатов из одной колонки</a></li><li class=menu-item><a href=#distinct-%d1%83%d1%87%d0%b8%d1%82%d1%8b%d0%b2%d0%b0%d0%b5%d1%82-%d0%b2%d1%81%d0%b5-%d0%ba%d0%be%d0%bb%d0%be%d0%bd%d0%ba%d0%b8-%d0%b2-%d1%81%d1%82%d1%80%d0%be%d0%ba%d0%b5 class=menu-link>DISTINCT учитывает все колонки в строке</a></li><li class=menu-item><a href=#null-%d1%83%d1%87%d0%b8%d1%82%d1%8b%d0%b2%d0%b0%d0%b5%d1%82%d1%81%d1%8f class=menu-link>NULL учитывается</a></li><li class=menu-item><a href=#distinct-%d1%81-%d0%b0%d0%b3%d1%80%d0%b5%d0%b3%d0%b0%d1%82%d0%bd%d1%8b%d0%bc%d0%b8-%d1%84%d1%83%d0%bd%d0%ba%d1%86%d0%b8%d1%8f%d0%bc%d0%b8 class=menu-link>DISTINCT с агрегатными функциями</a></li></ul></nav></div><p>Оператор <code>DISTINCT</code> в SELECT запросах используется для удаления дублирующихся строк из выборки. В общем виде запрос выглядит следующим образом:</p><pre tabindex=0><code>select distinct col_name1, col_name2, col_name3, ...
 from table_name
 </code></pre><h2 id=подготовка-данных>Подготовка данных</h2><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sql data-lang=sql><span style=display:flex><span><span style=color:#000;font-weight:700>create</span><span style=color:#bbb> </span><span style=color:#000;font-weight:700>table</span><span style=color:#bbb> </span>employees(<span style=color:#bbb>
 </span></span></span><span style=display:flex><span><span style=color:#bbb>    </span>id<span style=color:#bbb> </span><span style=color:#0086b3>number</span><span style=color:#bbb> </span><span style=color:#000;font-weight:700>not</span><span style=color:#bbb> </span><span style=color:#000;font-weight:700>null</span>,<span style=color:#bbb>
@@ -72,19 +39,7 @@ from table_name
 </span></span></span><span style=display:flex><span><span style=color:#bbb></span><span style=color:#000;font-weight:700>insert</span><span style=color:#bbb> </span><span style=color:#000;font-weight:700>into</span><span style=color:#bbb> </span>employees<span style=color:#bbb>
 </span></span></span><span style=display:flex><span><span style=color:#bbb></span><span style=color:#000;font-weight:700>values</span>(<span style=color:#099>8</span>,<span style=color:#bbb> </span><span style=color:#d14>&#39;Евгения&#39;</span>,<span style=color:#bbb> </span><span style=color:#000;font-weight:700>NULL</span>,<span style=color:#bbb> 
 </span></span></span><span style=display:flex><span><span style=color:#bbb>    </span>to_date(<span style=color:#d14>&#39;18.07.1978&#39;</span>,<span style=color:#bbb> </span><span style=color:#d14>&#39;dd.mm.yyyy&#39;</span>),<span style=color:#bbb> </span><span style=color:#d14>&#39;Бухгалтер&#39;</span>);<span style=color:#bbb>
-</span></span></span></code></pre></div><p>Итого, таблица <code>employees</code> выглядит следующим образом:</p><table>
-<thead>
-<tr>
-<th>ID</th><th>FIRST_NAME</th><th>LAST_NAME</th><th>BD</th><th>JOB</th></tr></thead><tbody>
-<tr>
-<td>1</td><td>Василий</td><td>Петров</td><td>07-OCT-90</td><td>Машинист</td></tr><tr>
-<td>2</td><td>Александр</td><td>Сидоров</td><td>18-JUL-80</td><td>Бухгалтер</td></tr><tr>
-<td>3</td><td>Евгения</td><td>Цветочкина</td><td>18-JUL-78</td><td>Бухгалтер</td></tr><tr>
-<td>4</td><td>Владимир</td><td>Столяров</td><td>18-JUL-77</td><td>Слесарь</td></tr><tr>
-<td>5</td><td>Владимир</td><td>Иванов</td><td>01-OCT-87</td><td>Сторож</td></tr><tr>
-<td>6</td><td>Ирина</td><td>Васина</td><td>20-MAR-62</td><td>Специалист отдела кадров</td></tr><tr>
-<td>7</td><td>Ирина</td><td>Иванова</td><td>31-DEC-90</td><td>Арт-директор</td></tr><tr>
-<td>8</td><td>Евгения</td><td>-</td><td>18-JUL-78</td><td>Бухгалтер</td></tr></tbody></table><h2 id=удаление-дупликатов-из-одной-колонки>Удаление дупликатов из одной колонки</h2><p>Теперь получим список имён сотрудников:</p><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sql data-lang=sql><span style=display:flex><span><span style=color:#000;font-weight:700>select</span><span style=color:#bbb> </span>first_name<span style=color:#bbb>
+</span></span></span></code></pre></div><p>Итого, таблица <code>employees</code> выглядит следующим образом:</p><table><thead><tr><th>ID</th><th>FIRST_NAME</th><th>LAST_NAME</th><th>BD</th><th>JOB</th></tr></thead><tbody><tr><td>1</td><td>Василий</td><td>Петров</td><td>07-OCT-90</td><td>Машинист</td></tr><tr><td>2</td><td>Александр</td><td>Сидоров</td><td>18-JUL-80</td><td>Бухгалтер</td></tr><tr><td>3</td><td>Евгения</td><td>Цветочкина</td><td>18-JUL-78</td><td>Бухгалтер</td></tr><tr><td>4</td><td>Владимир</td><td>Столяров</td><td>18-JUL-77</td><td>Слесарь</td></tr><tr><td>5</td><td>Владимир</td><td>Иванов</td><td>01-OCT-87</td><td>Сторож</td></tr><tr><td>6</td><td>Ирина</td><td>Васина</td><td>20-MAR-62</td><td>Специалист отдела кадров</td></tr><tr><td>7</td><td>Ирина</td><td>Иванова</td><td>31-DEC-90</td><td>Арт-директор</td></tr><tr><td>8</td><td>Евгения</td><td>-</td><td>18-JUL-78</td><td>Бухгалтер</td></tr></tbody></table><h2 id=удаление-дупликатов-из-одной-колонки>Удаление дупликатов из одной колонки</h2><p>Теперь получим список имён сотрудников:</p><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sql data-lang=sql><span style=display:flex><span><span style=color:#000;font-weight:700>select</span><span style=color:#bbb> </span>first_name<span style=color:#bbb>
 </span></span></span><span style=display:flex><span><span style=color:#bbb></span><span style=color:#000;font-weight:700>from</span><span style=color:#bbb> </span>employees<span style=color:#bbb>
 </span></span></span></code></pre></div><pre tabindex=0><code>FIRST_NAME
 ------------
@@ -108,19 +63,7 @@ from table_name
 Ирина
 </code></pre><p>Теперь каждое имя повторяется только один раз.</p><h2 id=distinct-учитывает-все-колонки-в-строке>DISTINCT учитывает все колонки в строке</h2><p>Теперь применим <code>DISTINCT</code> к выборке из нескольких строк:</p><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sql data-lang=sql><span style=display:flex><span><span style=color:#000;font-weight:700>select</span><span style=color:#bbb> </span><span style=color:#000;font-weight:700>distinct</span><span style=color:#bbb> </span>id,<span style=color:#bbb> </span>first_name<span style=color:#bbb>
 </span></span></span><span style=display:flex><span><span style=color:#bbb></span><span style=color:#000;font-weight:700>from</span><span style=color:#bbb> </span>employees<span style=color:#bbb>
-</span></span></span></code></pre></div><table>
-<thead>
-<tr>
-<th>ID</th><th>FIRST_NAME</th></tr></thead><tbody>
-<tr>
-<td>7</td><td>Ирина</td></tr><tr>
-<td>8</td><td>Евгения</td></tr><tr>
-<td>5</td><td>Владимир</td></tr><tr>
-<td>6</td><td>Ирина</td></tr><tr>
-<td>2</td><td>Александр</td></tr><tr>
-<td>1</td><td>Василий</td></tr><tr>
-<td>3</td><td>Евгения</td></tr><tr>
-<td>4</td><td>Владимир</td></tr></tbody></table><p>Теперь дубликаты имен остались, и дело здесь в том, что
+</span></span></span></code></pre></div><table><thead><tr><th>ID</th><th>FIRST_NAME</th></tr></thead><tbody><tr><td>7</td><td>Ирина</td></tr><tr><td>8</td><td>Евгения</td></tr><tr><td>5</td><td>Владимир</td></tr><tr><td>6</td><td>Ирина</td></tr><tr><td>2</td><td>Александр</td></tr><tr><td>1</td><td>Василий</td></tr><tr><td>3</td><td>Евгения</td></tr><tr><td>4</td><td>Владимир</td></tr></tbody></table><p>Теперь дубликаты имен остались, и дело здесь в том, что
 <code>DISTINCT</code> удаляет дублирующиеся строки, а они в данном случае уникальны,
 так как, несмотря на повторяющиеся имена сотрудников, каждая строка имеет уникальное
 значение в колонке <code>ID</code>.</p><h2 id=null-учитывается>NULL учитывается</h2><p><code>Distinct</code> учитывает NULL значения также, как и все остальные:</p><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sql data-lang=sql><span style=display:flex><span><span style=color:#000;font-weight:700>select</span><span style=color:#bbb> </span><span style=color:#000;font-weight:700>distinct</span><span style=color:#bbb> </span>last_name<span style=color:#bbb>
@@ -156,42 +99,15 @@ from table_name
 что здесь <code>DISTINCT</code> применялся только к той функции, в которой был указан.</p><h3 id=distinct-и-group-by>DISTINCT и GROUP BY</h3><p>Получим количество должностей сотрудников и сгруппируем их по именам:</p><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sql data-lang=sql><span style=display:flex><span><span style=color:#000;font-weight:700>select</span><span style=color:#bbb> </span>first_name,<span style=color:#bbb> </span><span style=color:#000;font-weight:700>count</span>(job)<span style=color:#bbb> </span>job_cnt<span style=color:#bbb>
 </span></span></span><span style=display:flex><span><span style=color:#bbb></span><span style=color:#000;font-weight:700>from</span><span style=color:#bbb> </span>employees<span style=color:#bbb> 
 </span></span></span><span style=display:flex><span><span style=color:#bbb></span><span style=color:#000;font-weight:700>group</span><span style=color:#bbb> </span><span style=color:#000;font-weight:700>by</span><span style=color:#bbb> </span>first_name<span style=color:#bbb>
-</span></span></span></code></pre></div><table>
-<thead>
-<tr>
-<th>FIRST_NAME</th><th>JOB_CNT</th></tr></thead><tbody>
-<tr>
-<td>Евгения</td><td>2</td></tr><tr>
-<td>Василий</td><td>1</td></tr><tr>
-<td>Александр</td><td>1</td></tr><tr>
-<td>Владимир</td><td>2</td></tr><tr>
-<td>Ирина</td><td>2</td></tr></tbody></table><p>Здесь должно быть всё понятно — у нас есть по два сотрудника с
+</span></span></span></code></pre></div><table><thead><tr><th>FIRST_NAME</th><th>JOB_CNT</th></tr></thead><tbody><tr><td>Евгения</td><td>2</td></tr><tr><td>Василий</td><td>1</td></tr><tr><td>Александр</td><td>1</td></tr><tr><td>Владимир</td><td>2</td></tr><tr><td>Ирина</td><td>2</td></tr></tbody></table><p>Здесь должно быть всё понятно — у нас есть по два сотрудника с
 именем «Евгения», «Владимир» и «Ирина», у которых указаны значения
 в поле <code>JOB</code>.</p><p>А теперь посчитаем, сколько уникальных наименований должностей приходится на каждое имя:</p><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sql data-lang=sql><span style=display:flex><span><span style=color:#000;font-weight:700>select</span><span style=color:#bbb> </span>first_name,<span style=color:#bbb> </span><span style=color:#000;font-weight:700>count</span>(<span style=color:#000;font-weight:700>distinct</span><span style=color:#bbb> </span>job)<span style=color:#bbb> </span>job_cnt<span style=color:#bbb>
 </span></span></span><span style=display:flex><span><span style=color:#bbb></span><span style=color:#000;font-weight:700>from</span><span style=color:#bbb> </span>employees<span style=color:#bbb> 
 </span></span></span><span style=display:flex><span><span style=color:#bbb></span><span style=color:#000;font-weight:700>group</span><span style=color:#bbb> </span><span style=color:#000;font-weight:700>by</span><span style=color:#bbb> </span>first_name<span style=color:#bbb>
-</span></span></span></code></pre></div><table>
-<thead>
-<tr>
-<th>FIRST_NAME</th><th>JOB_CNT</th></tr></thead><tbody>
-<tr>
-<td>Евгения</td><td>1</td></tr><tr>
-<td>Александр</td><td>1</td></tr><tr>
-<td>Василий</td><td>1</td></tr><tr>
-<td>Владимир</td><td>2</td></tr><tr>
-<td>Ирина</td><td>2</td></tr></tbody></table><p>Обратить следует внимание на строку с именем «Евгения» - теперь
+</span></span></span></code></pre></div><table><thead><tr><th>FIRST_NAME</th><th>JOB_CNT</th></tr></thead><tbody><tr><td>Евгения</td><td>1</td></tr><tr><td>Александр</td><td>1</td></tr><tr><td>Василий</td><td>1</td></tr><tr><td>Владимир</td><td>2</td></tr><tr><td>Ирина</td><td>2</td></tr></tbody></table><p>Обратить следует внимание на строку с именем «Евгения» - теперь
 там указано число 1. Это потому, что в нашей таблице у сотрудников
 с таким именем одна и та же должность — бухгалтер, и количество уникальных
 значений здесь будет равно 1.
 Вообще, здесь следует помнить о <a href=/sql/basics/selectstruct/>порядке выполнения запроса</a> — группировка
 выполняется первее, чем выборка значений, а значит и оператор <code>DISTINCT</code> будет применяться
-к уже сгруппированному набору данных.</p><nav class="pagination mb-3">
-<ul class=pagination-list>
-<li class=pagination-item>
-<a href=http://orasql.ru/sql/standfunc/analytics/ class="pagination-link pagination-prev"> &lt; Аналитические функции </a>
-</li></ul></nav></div><footer class="footer b-dark-low b-top">
-<div class="footer-container container centered edges">
-<div class="footer-body mt-10">
-<nav class="nav nav-muted nav-menu-sm"><ul class=nav-list>
-<li class=nav-item><a href=/ class=nav-link>Orasql.ru</a></li><li class=nav-item><a href=/ class=nav-link>Учебник</a></li><li class=nav-item><p class="text-medium text-moderated">Email: orasqlru@gmail.com</p></li></ul></nav></div><div class="footer-copy mt-6 pt-6 b-dark-7 b-top">
-<p class="text-medium text-moderated">© Orasql.ru <br> 2019-2021</p></div></div></footer></body></html>
+к уже сгруппированному набору данных.</p><nav class="pagination mb-3"><ul class=pagination-list><li class=pagination-item><a href=http://orasql.ru/sql/standfunc/analytics/ class="pagination-link pagination-prev">&lt; Аналитические функции</a></li></ul></nav></div><footer class="footer b-dark-low b-top"><div class="footer-container container centered edges"><div class="footer-body mt-10"><nav class="nav nav-muted nav-menu-sm"><ul class=nav-list><li class=nav-item><a href=/ class=nav-link>Orasql.ru</a></li><li class=nav-item><a href=/ class=nav-link>Учебник</a></li><li class=nav-item><p class="text-medium text-moderated">Email: orasqlru@gmail.com</p></li></ul></nav></div><div class="footer-copy mt-6 pt-6 b-dark-7 b-top"><p class="text-medium text-moderated">© Orasql.ru<br>2019-2021</p></div></div></footer></body></html>

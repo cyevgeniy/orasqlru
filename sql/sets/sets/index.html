@@ -1,33 +1,4 @@
-<!doctype html><html><head>
-<meta charset=utf-8>
-<meta name=viewport content="width=device-width,initial-scale=1">
-<link rel=stylesheet href=/css/superkube.min.css>
-<link rel=stylesheet href=/css/main.css>
-<script>var clicky_site_ids=clicky_site_ids||[];clicky_site_ids.push(101305633)</script>
-<script async src=//static.getclicky.com/js></script>
-<title>Учебник Oracle SQL, PL/SQL | Работа с множествами. Общая информация</title></head><body><div class="navbar bg-dark mb-10">
-<div class="navbar-container container edges centered">
-<div class=navbar-brand>
-<a href=/ class=brand>
-Orasql.ru
-</a>
-</div><div class="navbar-nav ml-6">
-<nav class="nav nav-light nav-semibold">
-<ul class=nav-list>
-<li class=nav-item><a href=/book/ class=nav-link>Книга</a></li></ul></nav><nav class="nav nav-light nav-semibold">
-<ul class=nav-list>
-<li class=nav-item><a href=https://github.com/cyevgeniy/orasqlru class=nav-link>Github</a></li></ul></nav></div></div></div><div id=container class="container-medium edges centered">
-<div class="doc-head mb-4 container-10">
-<h5 class="heading-micro heading-muted">Работа с множествами</h5><h1 class="heading-huge heading-heavy">Работа с множествами. Общая информация</h1></div><div class="doc-toc mt-6 mb-6">
-<nav class="menu menu-underline menu-medium menu-numbered">
-<ul class=menu-list>
-<li class=menu-item>
-<a href=#%d1%81%d0%bb%d0%b5%d0%b4%d0%b8%d1%82%d1%8c-%d0%b7%d0%b0-%d0%bf%d0%be%d1%80%d1%8f%d0%b4%d0%ba%d0%be%d0%bc-%d0%ba%d0%be%d0%bb%d0%be%d0%bd%d0%be%d0%ba class=menu-link>Следить за порядком колонок</a>
-</li><li class=menu-item>
-<a href=#%d1%81%d0%be%d1%80%d1%82%d0%b8%d1%80%d0%be%d0%b2%d0%ba%d0%b0 class=menu-link>Сортировка</a>
-</li><li class=menu-item>
-<a href=#%d0%bf%d1%80%d0%b8%d0%be%d1%80%d0%b8%d1%82%d0%b5%d1%82-%d0%b2%d1%8b%d0%bf%d0%be%d0%bb%d0%bd%d0%b5%d0%bd%d0%b8%d1%8f class=menu-link>Приоритет выполнения</a>
-</li></ul></nav></div><h2 id=следить-за-порядком-колонок>Следить за порядком колонок</h2><p>При использовании операторов UNION, MINUS и INTERSECT нужно внимательно
+<!doctype html><html><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><link rel=stylesheet href=/css/superkube.min.css><link rel=stylesheet href=/css/main.css><script>var clicky_site_ids=clicky_site_ids||[];clicky_site_ids.push(101305633)</script><script async src=//static.getclicky.com/js></script><title>Учебник Oracle SQL, PL/SQL | Работа с множествами. Общая информация</title></head><body><div class="navbar bg-dark mb-10"><div class="navbar-container container edges centered"><div class=navbar-brand><a href=/ class=brand>Orasql.ru</a></div><div class="navbar-nav ml-6"><nav class="nav nav-light nav-semibold"><ul class=nav-list><li class=nav-item><a href=/book/ class=nav-link>Книга</a></li></ul></nav><nav class="nav nav-light nav-semibold"><ul class=nav-list><li class=nav-item><a href=https://github.com/cyevgeniy/orasqlru class=nav-link>Github</a></li></ul></nav></div></div></div><div id=container class="container-medium edges centered"><div class="doc-head mb-4 container-10"><h5 class="heading-micro heading-muted">Работа с множествами</h5><h1 class="heading-huge heading-heavy">Работа с множествами. Общая информация</h1></div><div class="doc-toc mt-6 mb-6"><nav class="menu menu-underline menu-medium menu-numbered"><ul class=menu-list><li class=menu-item><a href=#%d1%81%d0%bb%d0%b5%d0%b4%d0%b8%d1%82%d1%8c-%d0%b7%d0%b0-%d0%bf%d0%be%d1%80%d1%8f%d0%b4%d0%ba%d0%be%d0%bc-%d0%ba%d0%be%d0%bb%d0%be%d0%bd%d0%be%d0%ba class=menu-link>Следить за порядком колонок</a></li><li class=menu-item><a href=#%d1%81%d0%be%d1%80%d1%82%d0%b8%d1%80%d0%be%d0%b2%d0%ba%d0%b0 class=menu-link>Сортировка</a></li><li class=menu-item><a href=#%d0%bf%d1%80%d0%b8%d0%be%d1%80%d0%b8%d1%82%d0%b5%d1%82-%d0%b2%d1%8b%d0%bf%d0%be%d0%bb%d0%bd%d0%b5%d0%bd%d0%b8%d1%8f class=menu-link>Приоритет выполнения</a></li></ul></nav></div><h2 id=следить-за-порядком-колонок>Следить за порядком колонок</h2><p>При использовании операторов UNION, MINUS и INTERSECT нужно внимательно
 следить за порядком колонок в каждом из запросов, ведь несоблюдение
 порядка следования приведет к некорректным результатам.</p><p>Как было рассмотрено, Oracle будет проверять, чтобы тип колонок в каждом
 из запросов совпадал, но проверять, правильно ли расположены колонки
@@ -107,13 +78,4 @@ UNION ALL
 select car_model, release_year
 from cars)
 </code></pre><p>Здесь оператор <code>MINUS</code> будет применяться к набору данных, который
-получится в результате выполнения <code>UNION ALL</code>.</p><nav class="pagination mb-3">
-<ul class=pagination-list>
-<li class=pagination-item>
-<a href=http://orasql.ru/sql/sets/intersect/ class="pagination-link pagination-prev"> &lt; Пересечение запросов </a>
-</li></ul></nav></div><footer class="footer b-dark-low b-top">
-<div class="footer-container container centered edges">
-<div class="footer-body mt-10">
-<nav class="nav nav-muted nav-menu-sm"><ul class=nav-list>
-<li class=nav-item><a href=/ class=nav-link>Orasql.ru</a></li><li class=nav-item><a href=/ class=nav-link>Учебник</a></li><li class=nav-item><p class="text-medium text-moderated">Email: orasqlru@gmail.com</p></li></ul></nav></div><div class="footer-copy mt-6 pt-6 b-dark-7 b-top">
-<p class="text-medium text-moderated">© Orasql.ru <br> 2019-2021</p></div></div></footer></body></html>
+получится в результате выполнения <code>UNION ALL</code>.</p><nav class="pagination mb-3"><ul class=pagination-list><li class=pagination-item><a href=http://orasql.ru/sql/sets/intersect/ class="pagination-link pagination-prev">&lt; Пересечение запросов</a></li></ul></nav></div><footer class="footer b-dark-low b-top"><div class="footer-container container centered edges"><div class="footer-body mt-10"><nav class="nav nav-muted nav-menu-sm"><ul class=nav-list><li class=nav-item><a href=/ class=nav-link>Orasql.ru</a></li><li class=nav-item><a href=/ class=nav-link>Учебник</a></li><li class=nav-item><p class="text-medium text-moderated">Email: orasqlru@gmail.com</p></li></ul></nav></div><div class="footer-copy mt-6 pt-6 b-dark-7 b-top"><p class="text-medium text-moderated">© Orasql.ru<br>2019-2021</p></div></div></footer></body></html>

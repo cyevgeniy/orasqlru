@@ -1,33 +1,4 @@
-<!doctype html><html><head>
-<meta charset=utf-8>
-<meta name=viewport content="width=device-width,initial-scale=1">
-<link rel=stylesheet href=/css/superkube.min.css>
-<link rel=stylesheet href=/css/main.css>
-<script>var clicky_site_ids=clicky_site_ids||[];clicky_site_ids.push(101305633)</script>
-<script async src=//static.getclicky.com/js></script>
-<title>Учебник Oracle SQL, PL/SQL | Взаимодействие PL/SQL и SQL. Переключение контекста</title></head><body><div class="navbar bg-dark mb-10">
-<div class="navbar-container container edges centered">
-<div class=navbar-brand>
-<a href=/ class=brand>
-Orasql.ru
-</a>
-</div><div class="navbar-nav ml-6">
-<nav class="nav nav-light nav-semibold">
-<ul class=nav-list>
-<li class=nav-item><a href=/book/ class=nav-link>Книга</a></li></ul></nav><nav class="nav nav-light nav-semibold">
-<ul class=nav-list>
-<li class=nav-item><a href=https://github.com/cyevgeniy/orasqlru class=nav-link>Github</a></li></ul></nav></div></div></div><div id=container class="container-medium edges centered">
-<div class="doc-head mb-4 container-10">
-<h5 class="heading-micro heading-muted">Основы PL/SQL</h5><h1 class="heading-huge heading-heavy">Взаимодействие PL/SQL и SQL. Переключение контекста</h1></div><div class="doc-toc mt-6 mb-6">
-<nav class="menu menu-underline menu-medium menu-numbered">
-<ul class=menu-list>
-<li class=menu-item>
-<a href=#%d0%b4%d0%b2%d0%b8%d0%b6%d0%ba%d0%b8-sql-%d0%b8-plsql class=menu-link>Движки SQL и PL/SQL</a>
-</li><li class=menu-item>
-<a href=#dry class=menu-link>DRY</a>
-</li><li class=menu-item>
-<a href=#%d0%ba%d0%b0%d0%ba-%d0%b1%d0%be%d1%80%d0%be%d1%82%d1%8c%d1%81%d1%8f-%d1%81%d0%be-%d1%81%d0%bb%d0%be%d0%b6%d0%bd%d0%be%d1%81%d1%82%d1%8c%d1%8e class=menu-link>Как бороться со сложностью</a>
-</li></ul></nav></div><h2 id=движки-sql-и-plsql>Движки SQL и PL/SQL</h2><p>Когда Oracle получает команду выполнить какой-либо SQL запрос, он
+<!doctype html><html><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><link rel=stylesheet href=/css/superkube.min.css><link rel=stylesheet href=/css/main.css><script>var clicky_site_ids=clicky_site_ids||[];clicky_site_ids.push(101305633)</script><script async src=//static.getclicky.com/js></script><title>Учебник Oracle SQL, PL/SQL | Взаимодействие PL/SQL и SQL. Переключение контекста</title></head><body><div class="navbar bg-dark mb-10"><div class="navbar-container container edges centered"><div class=navbar-brand><a href=/ class=brand>Orasql.ru</a></div><div class="navbar-nav ml-6"><nav class="nav nav-light nav-semibold"><ul class=nav-list><li class=nav-item><a href=/book/ class=nav-link>Книга</a></li></ul></nav><nav class="nav nav-light nav-semibold"><ul class=nav-list><li class=nav-item><a href=https://github.com/cyevgeniy/orasqlru class=nav-link>Github</a></li></ul></nav></div></div></div><div id=container class="container-medium edges centered"><div class="doc-head mb-4 container-10"><h5 class="heading-micro heading-muted">Основы PL/SQL</h5><h1 class="heading-huge heading-heavy">Взаимодействие PL/SQL и SQL. Переключение контекста</h1></div><div class="doc-toc mt-6 mb-6"><nav class="menu menu-underline menu-medium menu-numbered"><ul class=menu-list><li class=menu-item><a href=#%d0%b4%d0%b2%d0%b8%d0%b6%d0%ba%d0%b8-sql-%d0%b8-plsql class=menu-link>Движки SQL и PL/SQL</a></li><li class=menu-item><a href=#dry class=menu-link>DRY</a></li><li class=menu-item><a href=#%d0%ba%d0%b0%d0%ba-%d0%b1%d0%be%d1%80%d0%be%d1%82%d1%8c%d1%81%d1%8f-%d1%81%d0%be-%d1%81%d0%bb%d0%be%d0%b6%d0%bd%d0%be%d1%81%d1%82%d1%8c%d1%8e class=menu-link>Как бороться со сложностью</a></li></ul></nav></div><h2 id=движки-sql-и-plsql>Движки SQL и PL/SQL</h2><p>Когда Oracle получает команду выполнить какой-либо SQL запрос, он
 передаёт эту работу SQL движку. Следует взять за правило, что SQL движок
 является более быстрым, чем PL/SQL движок - все его функции встроены
 в ядро БД и написаны на языке C. Это <strong>основной</strong> язык для работы с данными
@@ -99,15 +70,13 @@ PL/SQL функций из SQL запросов.</p><p>Давайте посмо
 монстрообразным SQL запросом или последовательностью вызова PL/SQL
 функций, выполняющих более мелкие задачи по отдельности, но лучше
 всегда стараться использовать SQL. Здесь нельзя не процитировать
-известную мантру Тома Кайта:</p><ol>
-<li>Вы должны сделать это одним SQL выражением</li><li>Если вы не можете сделать это одним SQL выражением, используйте PL/SQL</li><li>Если вы не можете сделать это на PL/SQL, попробуйте хранимые процедуры на Java</li><li>Если вы не можете сделать это на хранимых процедурах Java, используйте
+известную мантру Тома Кайта:</p><ol><li>Вы должны сделать это одним SQL выражением</li><li>Если вы не можете сделать это одним SQL выражением, используйте PL/SQL</li><li>Если вы не можете сделать это на PL/SQL, попробуйте хранимые процедуры на Java</li><li>Если вы не можете сделать это на хранимых процедурах Java, используйте
 хранимые процедуры на C</li><li>Если вы не можете сделать это с помощью хранимых процедур на C,
 вам следует серьёзно подумать о том, зачем вы вообще это делаете.</li></ol><h2 id=dry>DRY</h2><p>Известный принцип <strong>DRY</strong> (<em>Dont Repeat Yourself</em>) [<a href=https://ru.wikipedia.org/wiki/Don%E2%80%99t_repeat_yourself>Wikipedia</a>] гласит, что мы должны
 стремиться к максимальному переиспользованию кода, и в разрезе
 темы переключения контекста слепое следование данному принципу
 может негативно сказаться на скорости выполнения кода.</p><p>Допустим что у нас уже определены функции для получения определённых частей
-информации по заказам. Пусть это будут следующий набор:</p><ul>
-<li><code>get_order_status</code> - получить статус заказа</li><li><code>get_discount_value</code> - получить размер скидки</li><li><code>get_order_owner</code> - получить владельца заказа</li></ul><p>В какой-то момент времени перед нами возникает задача получения
+информации по заказам. Пусть это будут следующий набор:</p><ul><li><code>get_order_status</code> - получить статус заказа</li><li><code>get_discount_value</code> - получить размер скидки</li><li><code>get_order_owner</code> - получить владельца заказа</li></ul><p>В какой-то момент времени перед нами возникает задача получения
 всех этих данных по определённому набору заказов. Зная, что повторное использование
 кода - это хорошо, мы пишем следующий запрос, который решает поставленную задачу:</p><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sql data-lang=sql><span style=display:flex><span><span style=color:#000;font-weight:700>select</span><span style=color:#bbb> </span>o.id,<span style=color:#bbb>
 </span></span></span><span style=display:flex><span><span style=color:#bbb>       </span>o.num,<span style=color:#bbb>
@@ -156,13 +125,4 @@ SQL, но на самом деле вполне себе может. Разра�
 мы упомянем эту возможность отдельно. Напомним, <a href=/sql/basics/with/>subquery factoring</a>
 позволяет разбить запрос на именованные подзапросы, сильно облегчив
 понимание того, что же делает весь запрос в целом. В какой-то степени это как разбиение
-кода на функции в императивных языках, только в SQL запросе.</p><nav class="pagination mb-3">
-<ul class=pagination-list>
-<li class=pagination-item>
-<a href=http://orasql.ru/plsql/basics/plsql_procedures/ class="pagination-link pagination-prev"> &lt; Процедуры в PL/SQL </a>
-</li></ul></nav></div><footer class="footer b-dark-low b-top">
-<div class="footer-container container centered edges">
-<div class="footer-body mt-10">
-<nav class="nav nav-muted nav-menu-sm"><ul class=nav-list>
-<li class=nav-item><a href=/ class=nav-link>Orasql.ru</a></li><li class=nav-item><a href=/ class=nav-link>Учебник</a></li><li class=nav-item><p class="text-medium text-moderated">Email: orasqlru@gmail.com</p></li></ul></nav></div><div class="footer-copy mt-6 pt-6 b-dark-7 b-top">
-<p class="text-medium text-moderated">© Orasql.ru <br> 2019-2021</p></div></div></footer></body></html>
+кода на функции в императивных языках, только в SQL запросе.</p><nav class="pagination mb-3"><ul class=pagination-list><li class=pagination-item><a href=http://orasql.ru/plsql/basics/plsql_procedures/ class="pagination-link pagination-prev">&lt; Процедуры в PL/SQL</a></li><li class="pagination-item ml-auto"><a href=http://orasql.ru/plsql/basics/packages/ class="pagination-link pagination-next">Пакеты ></a></li></ul></nav></div><footer class="footer b-dark-low b-top"><div class="footer-container container centered edges"><div class="footer-body mt-10"><nav class="nav nav-muted nav-menu-sm"><ul class=nav-list><li class=nav-item><a href=/ class=nav-link>Orasql.ru</a></li><li class=nav-item><a href=/ class=nav-link>Учебник</a></li><li class=nav-item><p class="text-medium text-moderated">Email: orasqlru@gmail.com</p></li></ul></nav></div><div class="footer-copy mt-6 pt-6 b-dark-7 b-top"><p class="text-medium text-moderated">© Orasql.ru<br>2019-2021</p></div></div></footer></body></html>

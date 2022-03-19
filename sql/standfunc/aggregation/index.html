@@ -1,31 +1,4 @@
-<!doctype html><html><head>
-<meta charset=utf-8>
-<meta name=viewport content="width=device-width,initial-scale=1">
-<link rel=stylesheet href=/css/superkube.min.css>
-<link rel=stylesheet href=/css/main.css>
-<script>var clicky_site_ids=clicky_site_ids||[];clicky_site_ids.push(101305633)</script>
-<script async src=//static.getclicky.com/js></script>
-<title>Учебник Oracle SQL, PL/SQL | Агрегирующие функции</title></head><body><div class="navbar bg-dark mb-10">
-<div class="navbar-container container edges centered">
-<div class=navbar-brand>
-<a href=/ class=brand>
-Orasql.ru
-</a>
-</div><div class="navbar-nav ml-6">
-<nav class="nav nav-light nav-semibold">
-<ul class=nav-list>
-<li class=nav-item><a href=/book/ class=nav-link>Книга</a></li></ul></nav><nav class="nav nav-light nav-semibold">
-<ul class=nav-list>
-<li class=nav-item><a href=https://github.com/cyevgeniy/orasqlru class=nav-link>Github</a></li></ul></nav></div></div></div><div id=container class="container-medium edges centered">
-<div class="doc-head mb-4 container-10">
-<h5 class="heading-micro heading-muted">Стандарные функции</h5><h1 class="heading-huge heading-heavy">Агрегирующие функции</h1></div><div class="doc-toc mt-6 mb-6">
-<nav class="menu menu-underline menu-medium menu-numbered">
-<ul class=menu-list>
-<li class=menu-item>
-<a href=#%d0%bf%d0%be%d0%b4%d0%b3%d0%be%d1%82%d0%be%d0%b2%d0%ba%d0%b0-%d0%b4%d0%b0%d0%bd%d0%bd%d1%8b%d1%85 class=menu-link>Подготовка данных</a>
-</li><li class=menu-item>
-<a href=#having class=menu-link>Having</a>
-</li></ul></nav></div><p>Агрегирующие функции - это такие функции, которые выполняются не для
+<!doctype html><html><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><link rel=stylesheet href=/css/superkube.min.css><link rel=stylesheet href=/css/main.css><script>var clicky_site_ids=clicky_site_ids||[];clicky_site_ids.push(101305633)</script><script async src=//static.getclicky.com/js></script><title>Учебник Oracle SQL, PL/SQL | Агрегирующие функции</title></head><body><div class="navbar bg-dark mb-10"><div class="navbar-container container edges centered"><div class=navbar-brand><a href=/ class=brand>Orasql.ru</a></div><div class="navbar-nav ml-6"><nav class="nav nav-light nav-semibold"><ul class=nav-list><li class=nav-item><a href=/book/ class=nav-link>Книга</a></li></ul></nav><nav class="nav nav-light nav-semibold"><ul class=nav-list><li class=nav-item><a href=https://github.com/cyevgeniy/orasqlru class=nav-link>Github</a></li></ul></nav></div></div></div><div id=container class="container-medium edges centered"><div class="doc-head mb-4 container-10"><h5 class="heading-micro heading-muted">Стандарные функции</h5><h1 class="heading-huge heading-heavy">Агрегирующие функции</h1></div><div class="doc-toc mt-6 mb-6"><nav class="menu menu-underline menu-medium menu-numbered"><ul class=menu-list><li class=menu-item><a href=#%d0%bf%d0%be%d0%b4%d0%b3%d0%be%d1%82%d0%be%d0%b2%d0%ba%d0%b0-%d0%b4%d0%b0%d0%bd%d0%bd%d1%8b%d1%85 class=menu-link>Подготовка данных</a></li><li class=menu-item><a href=#having class=menu-link>Having</a></li></ul></nav></div><p>Агрегирующие функции - это такие функции, которые выполняются не для
 каждой строки отдельно, а для определенных групп данных.</p><h2 id=подготовка-данных>Подготовка данных</h2><pre><code>create table employees(
     id number not null,
     first_name varchar2(50 char) not null,
@@ -74,8 +47,7 @@ values(6, 'Владимир', 'Кукушкин',
 </code></pre><p>Теперь выполним запрос еще раз:</p><pre><code>select min(bd), max(bd), first_name
 from employees
 group by first_name
-</code></pre><p><img src=/img/9_aggregations/groupby_2.png alt></p><p>Теперь можно заметить несколько особенностей:</p><ul>
-<li>Количество строк не изменилось</li><li>В строке с именем &ldquo;Евгения&rdquo; изменилась максимальная дата рождения</li><li>В строке с именем &ldquo;Владимир&rdquo; изменилась минимальная дата рождения</li></ul><p>Видно, что агрегирующие функции могут применяться не ко всему набору
+</code></pre><p><img src=/img/9_aggregations/groupby_2.png alt></p><p>Теперь можно заметить несколько особенностей:</p><ul><li>Количество строк не изменилось</li><li>В строке с именем &ldquo;Евгения&rdquo; изменилась максимальная дата рождения</li><li>В строке с именем &ldquo;Владимир&rdquo; изменилась минимальная дата рождения</li></ul><p>Видно, что агрегирующие функции могут применяться не ко всему набору
 данных, а к определенным частям этого набора. В данном случае группы
 были разбиты по именам, т.е. 2 записи с именем &ldquo;Евгения&rdquo;, 2 записи с
 именем &ldquo;Владимир&rdquo;, а остальные записи представляют собой отдельные
@@ -87,15 +59,4 @@ from employees
 group by first_name
 having count(*) &gt; 1
 </code></pre><p><img src=/img/9_aggregations/having.png alt></p><p><code>Having</code> работает аналогично условию <code>where</code>, но только для значений
-агрегатных функций.</p><nav class="pagination mb-3">
-<ul class=pagination-list>
-<li class=pagination-item>
-<a href=http://orasql.ru/sql/standfunc/bit/ class="pagination-link pagination-prev"> &lt; Битовые операции </a>
-</li><li class="pagination-item ml-auto">
-<a href=http://orasql.ru/sql/standfunc/datefunctions/ class="pagination-link pagination-next"> Работа с датами в Oracle > </a>
-</li></ul></nav></div><footer class="footer b-dark-low b-top">
-<div class="footer-container container centered edges">
-<div class="footer-body mt-10">
-<nav class="nav nav-muted nav-menu-sm"><ul class=nav-list>
-<li class=nav-item><a href=/ class=nav-link>Orasql.ru</a></li><li class=nav-item><a href=/ class=nav-link>Учебник</a></li><li class=nav-item><p class="text-medium text-moderated">Email: orasqlru@gmail.com</p></li></ul></nav></div><div class="footer-copy mt-6 pt-6 b-dark-7 b-top">
-<p class="text-medium text-moderated">© Orasql.ru <br> 2019-2021</p></div></div></footer></body></html>
+агрегатных функций.</p><nav class="pagination mb-3"><ul class=pagination-list><li class=pagination-item><a href=http://orasql.ru/sql/standfunc/bit/ class="pagination-link pagination-prev">&lt; Битовые операции</a></li><li class="pagination-item ml-auto"><a href=http://orasql.ru/sql/standfunc/datefunctions/ class="pagination-link pagination-next">Работа с датами в Oracle ></a></li></ul></nav></div><footer class="footer b-dark-low b-top"><div class="footer-container container centered edges"><div class="footer-body mt-10"><nav class="nav nav-muted nav-menu-sm"><ul class=nav-list><li class=nav-item><a href=/ class=nav-link>Orasql.ru</a></li><li class=nav-item><a href=/ class=nav-link>Учебник</a></li><li class=nav-item><p class="text-medium text-moderated">Email: orasqlru@gmail.com</p></li></ul></nav></div><div class="footer-copy mt-6 pt-6 b-dark-7 b-top"><p class="text-medium text-moderated">© Orasql.ru<br>2019-2021</p></div></div></footer></body></html>

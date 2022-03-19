@@ -1,35 +1,4 @@
-<!doctype html><html><head>
-<meta charset=utf-8>
-<meta name=viewport content="width=device-width,initial-scale=1">
-<link rel=stylesheet href=/css/superkube.min.css>
-<link rel=stylesheet href=/css/main.css>
-<script>var clicky_site_ids=clicky_site_ids||[];clicky_site_ids.push(101305633)</script>
-<script async src=//static.getclicky.com/js></script>
-<title>Учебник Oracle SQL, PL/SQL | Транзакции в Oracle</title></head><body><div class="navbar bg-dark mb-10">
-<div class="navbar-container container edges centered">
-<div class=navbar-brand>
-<a href=/ class=brand>
-Orasql.ru
-</a>
-</div><div class="navbar-nav ml-6">
-<nav class="nav nav-light nav-semibold">
-<ul class=nav-list>
-<li class=nav-item><a href=/book/ class=nav-link>Книга</a></li></ul></nav><nav class="nav nav-light nav-semibold">
-<ul class=nav-list>
-<li class=nav-item><a href=https://github.com/cyevgeniy/orasqlru class=nav-link>Github</a></li></ul></nav></div></div></div><div id=container class="container-medium edges centered">
-<div class="doc-head mb-4 container-10">
-<h5 class="heading-micro heading-muted">Транзакции</h5><h1 class="heading-huge heading-heavy">Транзакции в Oracle</h1></div><div class="doc-toc mt-6 mb-6">
-<nav class="menu menu-underline menu-medium menu-numbered">
-<ul class=menu-list>
-<li class=menu-item>
-<a href=#%d1%87%d1%82%d0%be-%d1%82%d0%b0%d0%ba%d0%be%d0%b5-%d1%82%d1%80%d0%b0%d0%bd%d0%b7%d0%b0%d0%ba%d1%86%d0%b8%d0%b8 class=menu-link>Что такое транзакции</a>
-</li><li class=menu-item>
-<a href=#commit-rollback class=menu-link>COMMIT. ROLLBACK</a>
-</li><li class=menu-item>
-<a href=#%d1%82%d1%80%d0%b0%d0%bd%d0%b7%d0%b0%d0%ba%d1%86%d0%b8%d0%b8-%d0%b2-%d0%bc%d0%bd%d0%be%d0%b3%d0%be%d0%bf%d0%be%d0%bb%d1%8c%d0%b7%d0%be%d0%b2%d0%b0%d1%82%d0%b5%d0%bb%d1%8c%d1%81%d0%ba%d0%be%d0%b9-%d1%81%d1%80%d0%b5%d0%b4%d0%b5 class=menu-link>Транзакции в многопользовательской среде</a>
-</li><li class=menu-item>
-<a href=#%d0%b8%d1%82%d0%be%d0%b3%d0%be class=menu-link>Итого</a>
-</li></ul></nav></div><h2 id=что-такое-транзакции>Что такое транзакции</h2><p>Транзакции - это набор изменений данных, хранящихся в БД, который должен
+<!doctype html><html><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><link rel=stylesheet href=/css/superkube.min.css><link rel=stylesheet href=/css/main.css><script>var clicky_site_ids=clicky_site_ids||[];clicky_site_ids.push(101305633)</script><script async src=//static.getclicky.com/js></script><title>Учебник Oracle SQL, PL/SQL | Транзакции в Oracle</title></head><body><div class="navbar bg-dark mb-10"><div class="navbar-container container edges centered"><div class=navbar-brand><a href=/ class=brand>Orasql.ru</a></div><div class="navbar-nav ml-6"><nav class="nav nav-light nav-semibold"><ul class=nav-list><li class=nav-item><a href=/book/ class=nav-link>Книга</a></li></ul></nav><nav class="nav nav-light nav-semibold"><ul class=nav-list><li class=nav-item><a href=https://github.com/cyevgeniy/orasqlru class=nav-link>Github</a></li></ul></nav></div></div></div><div id=container class="container-medium edges centered"><div class="doc-head mb-4 container-10"><h5 class="heading-micro heading-muted">Транзакции</h5><h1 class="heading-huge heading-heavy">Транзакции в Oracle</h1></div><div class="doc-toc mt-6 mb-6"><nav class="menu menu-underline menu-medium menu-numbered"><ul class=menu-list><li class=menu-item><a href=#%d1%87%d1%82%d0%be-%d1%82%d0%b0%d0%ba%d0%be%d0%b5-%d1%82%d1%80%d0%b0%d0%bd%d0%b7%d0%b0%d0%ba%d1%86%d0%b8%d0%b8 class=menu-link>Что такое транзакции</a></li><li class=menu-item><a href=#commit-rollback class=menu-link>COMMIT. ROLLBACK</a></li><li class=menu-item><a href=#%d1%82%d1%80%d0%b0%d0%bd%d0%b7%d0%b0%d0%ba%d1%86%d0%b8%d0%b8-%d0%b2-%d0%bc%d0%bd%d0%be%d0%b3%d0%be%d0%bf%d0%be%d0%bb%d1%8c%d0%b7%d0%be%d0%b2%d0%b0%d1%82%d0%b5%d0%bb%d1%8c%d1%81%d0%ba%d0%be%d0%b9-%d1%81%d1%80%d0%b5%d0%b4%d0%b5 class=menu-link>Транзакции в многопользовательской среде</a></li><li class=menu-item><a href=#%d0%b8%d1%82%d0%be%d0%b3%d0%be class=menu-link>Итого</a></li></ul></nav></div><h2 id=что-такое-транзакции>Что такое транзакции</h2><p>Транзакции - это набор изменений данных, хранящихся в БД, который должен
 быть либо выполнен, либо отменен. До сих пор все примеры учебника,
 которые изменяли данные, как правило состояли из одного запроса, и все
 наши транзакции состояли из одного запроса. Если вы пользовались
@@ -51,8 +20,7 @@ Orasql.ru
 одного из копируемых файлов. А в том случае, если бы копирование прошло
 без прерываний, то все файлы, наоборот, гарантированно бы присутствовали
 в устройстве-получателе.</p><p>Рассмотрим такой процесс, как продажа автомобиля. Распишем, какие
-действия должны производиться при продаже:</p><ol>
-<li>Количество доступных автомобилей должно уменьшиться на 1</li><li>Должен быть составлен договор купли/продажи</li><li>Мы должны сохранить информацию о том, кто продал автомобиль, чтобы
+действия должны производиться при продаже:</p><ol><li>Количество доступных автомобилей должно уменьшиться на 1</li><li>Должен быть составлен договор купли/продажи</li><li>Мы должны сохранить информацию о том, кто продал автомобиль, чтобы
 учесть это при начислении премии сотрудникам</li></ol><p>Очевидно, что данный процесс должен быть произведен одной транзакцией,
 то есть все пункты этого процесса должны быть произведены, либо, в
 случае ошибки, или нашего собственного решения, ни одно из этих действий
@@ -143,11 +111,4 @@ values('Петя Иванов', 132);
 -- Изменения, произведенные тремя запросами, будут
 -- сохранены в базе данных
 commit;
-</code></pre><nav class="pagination mb-3">
-<ul class=pagination-list>
-</ul></nav></div><footer class="footer b-dark-low b-top">
-<div class="footer-container container centered edges">
-<div class="footer-body mt-10">
-<nav class="nav nav-muted nav-menu-sm"><ul class=nav-list>
-<li class=nav-item><a href=/ class=nav-link>Orasql.ru</a></li><li class=nav-item><a href=/ class=nav-link>Учебник</a></li><li class=nav-item><p class="text-medium text-moderated">Email: orasqlru@gmail.com</p></li></ul></nav></div><div class="footer-copy mt-6 pt-6 b-dark-7 b-top">
-<p class="text-medium text-moderated">© Orasql.ru <br> 2019-2021</p></div></div></footer></body></html>
+</code></pre><nav class="pagination mb-3"><ul class=pagination-list></ul></nav></div><footer class="footer b-dark-low b-top"><div class="footer-container container centered edges"><div class="footer-body mt-10"><nav class="nav nav-muted nav-menu-sm"><ul class=nav-list><li class=nav-item><a href=/ class=nav-link>Orasql.ru</a></li><li class=nav-item><a href=/ class=nav-link>Учебник</a></li><li class=nav-item><p class="text-medium text-moderated">Email: orasqlru@gmail.com</p></li></ul></nav></div><div class="footer-copy mt-6 pt-6 b-dark-7 b-top"><p class="text-medium text-moderated">© Orasql.ru<br>2019-2021</p></div></div></footer></body></html>

@@ -1,31 +1,4 @@
-<!doctype html><html><head>
-<meta charset=utf-8>
-<meta name=viewport content="width=device-width,initial-scale=1">
-<link rel=stylesheet href=/css/superkube.min.css>
-<link rel=stylesheet href=/css/main.css>
-<script>var clicky_site_ids=clicky_site_ids||[];clicky_site_ids.push(101305633)</script>
-<script async src=//static.getclicky.com/js></script>
-<title>Учебник Oracle SQL, PL/SQL | Вложенные и именованные блоки</title></head><body><div class="navbar bg-dark mb-10">
-<div class="navbar-container container edges centered">
-<div class=navbar-brand>
-<a href=/ class=brand>
-Orasql.ru
-</a>
-</div><div class="navbar-nav ml-6">
-<nav class="nav nav-light nav-semibold">
-<ul class=nav-list>
-<li class=nav-item><a href=/book/ class=nav-link>Книга</a></li></ul></nav><nav class="nav nav-light nav-semibold">
-<ul class=nav-list>
-<li class=nav-item><a href=https://github.com/cyevgeniy/orasqlru class=nav-link>Github</a></li></ul></nav></div></div></div><div id=container class="container-medium edges centered">
-<div class="doc-head mb-4 container-10">
-<h5 class="heading-micro heading-muted">Основы PL/SQL</h5><h1 class="heading-huge heading-heavy">Вложенные и именованные блоки</h1></div><div class="doc-toc mt-6 mb-6">
-<nav class="menu menu-underline menu-medium menu-numbered">
-<ul class=menu-list>
-<li class=menu-item>
-<a href=#%d0%b2%d0%bb%d0%be%d0%b6%d0%b5%d0%bd%d0%bd%d1%8b%d0%b5-%d0%b1%d0%bb%d0%be%d0%ba%d0%b8 class=menu-link>Вложенные блоки</a>
-</li><li class=menu-item>
-<a href=#%d0%bc%d0%b5%d1%82%d0%ba%d0%b8-%d0%b1%d0%bb%d0%be%d0%ba%d0%be%d0%b2 class=menu-link>Метки блоков</a>
-</li></ul></nav></div><p>В <a href=/plsql/basics/plsql_anonymous_blocks/>прошлый раз</a> был рассмотрен
+<!doctype html><html><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><link rel=stylesheet href=/css/superkube.min.css><link rel=stylesheet href=/css/main.css><script>var clicky_site_ids=clicky_site_ids||[];clicky_site_ids.push(101305633)</script><script async src=//static.getclicky.com/js></script><title>Учебник Oracle SQL, PL/SQL | Вложенные и именованные блоки</title></head><body><div class="navbar bg-dark mb-10"><div class="navbar-container container edges centered"><div class=navbar-brand><a href=/ class=brand>Orasql.ru</a></div><div class="navbar-nav ml-6"><nav class="nav nav-light nav-semibold"><ul class=nav-list><li class=nav-item><a href=/book/ class=nav-link>Книга</a></li></ul></nav><nav class="nav nav-light nav-semibold"><ul class=nav-list><li class=nav-item><a href=https://github.com/cyevgeniy/orasqlru class=nav-link>Github</a></li></ul></nav></div></div></div><div id=container class="container-medium edges centered"><div class="doc-head mb-4 container-10"><h5 class="heading-micro heading-muted">Основы PL/SQL</h5><h1 class="heading-huge heading-heavy">Вложенные и именованные блоки</h1></div><div class="doc-toc mt-6 mb-6"><nav class="menu menu-underline menu-medium menu-numbered"><ul class=menu-list><li class=menu-item><a href=#%d0%b2%d0%bb%d0%be%d0%b6%d0%b5%d0%bd%d0%bd%d1%8b%d0%b5-%d0%b1%d0%bb%d0%be%d0%ba%d0%b8 class=menu-link>Вложенные блоки</a></li><li class=menu-item><a href=#%d0%bc%d0%b5%d1%82%d0%ba%d0%b8-%d0%b1%d0%bb%d0%be%d0%ba%d0%be%d0%b2 class=menu-link>Метки блоков</a></li></ul></nav></div><p>В <a href=/plsql/basics/plsql_anonymous_blocks/>прошлый раз</a> был рассмотрен
 самый простой вариант блоков в PL/SQL - анонимные блоки.</p><p>В этой части мы рассмотрим возможность вкладывать блоки внутрь других
 блоков, а также давать блокам имена.</p><h2 id=вложенные-блоки>Вложенные блоки</h2><pre><code>declare
     l_a number := 10;
@@ -81,15 +54,4 @@ end;
 <code>l_a</code>, и используя метки блоков <code>&lt;&lt;main>></code> и <code>&lt;&lt;child>></code>, мы можем
 указывать, какую же именно переменную использовать - из внешнего, либо
 из внутреннего блока.</p><p>По возможности, подобных случаев следует избегать, так как они усложняют
-чтение программы.</p><nav class="pagination mb-3">
-<ul class=pagination-list>
-<li class=pagination-item>
-<a href=http://orasql.ru/plsql/basics/plsql_anonymous_blocks/ class="pagination-link pagination-prev"> &lt; Анонимные блоки </a>
-</li><li class="pagination-item ml-auto">
-<a href=http://orasql.ru/plsql/basics/plsql_first_program/ class="pagination-link pagination-next"> Первая программа на PL/SQL > </a>
-</li></ul></nav></div><footer class="footer b-dark-low b-top">
-<div class="footer-container container centered edges">
-<div class="footer-body mt-10">
-<nav class="nav nav-muted nav-menu-sm"><ul class=nav-list>
-<li class=nav-item><a href=/ class=nav-link>Orasql.ru</a></li><li class=nav-item><a href=/ class=nav-link>Учебник</a></li><li class=nav-item><p class="text-medium text-moderated">Email: orasqlru@gmail.com</p></li></ul></nav></div><div class="footer-copy mt-6 pt-6 b-dark-7 b-top">
-<p class="text-medium text-moderated">© Orasql.ru <br> 2019-2021</p></div></div></footer></body></html>
+чтение программы.</p><nav class="pagination mb-3"><ul class=pagination-list><li class=pagination-item><a href=http://orasql.ru/plsql/basics/plsql_anonymous_blocks/ class="pagination-link pagination-prev">&lt; Анонимные блоки</a></li><li class="pagination-item ml-auto"><a href=http://orasql.ru/plsql/basics/plsql_first_program/ class="pagination-link pagination-next">Первая программа на PL/SQL ></a></li></ul></nav></div><footer class="footer b-dark-low b-top"><div class="footer-container container centered edges"><div class="footer-body mt-10"><nav class="nav nav-muted nav-menu-sm"><ul class=nav-list><li class=nav-item><a href=/ class=nav-link>Orasql.ru</a></li><li class=nav-item><a href=/ class=nav-link>Учебник</a></li><li class=nav-item><p class="text-medium text-moderated">Email: orasqlru@gmail.com</p></li></ul></nav></div><div class="footer-copy mt-6 pt-6 b-dark-7 b-top"><p class="text-medium text-moderated">© Orasql.ru<br>2019-2021</p></div></div></footer></body></html>

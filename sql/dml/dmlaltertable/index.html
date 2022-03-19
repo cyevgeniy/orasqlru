@@ -1,41 +1,4 @@
-<!doctype html><html><head>
-<meta charset=utf-8>
-<meta name=viewport content="width=device-width,initial-scale=1">
-<link rel=stylesheet href=/css/superkube.min.css>
-<link rel=stylesheet href=/css/main.css>
-<script>var clicky_site_ids=clicky_site_ids||[];clicky_site_ids.push(101305633)</script>
-<script async src=//static.getclicky.com/js></script>
-<title>Учебник Oracle SQL, PL/SQL | Изменение структуры таблицы. ALTER TABLE</title></head><body><div class="navbar bg-dark mb-10">
-<div class="navbar-container container edges centered">
-<div class=navbar-brand>
-<a href=/ class=brand>
-Orasql.ru
-</a>
-</div><div class="navbar-nav ml-6">
-<nav class="nav nav-light nav-semibold">
-<ul class=nav-list>
-<li class=nav-item><a href=/book/ class=nav-link>Книга</a></li></ul></nav><nav class="nav nav-light nav-semibold">
-<ul class=nav-list>
-<li class=nav-item><a href=https://github.com/cyevgeniy/orasqlru class=nav-link>Github</a></li></ul></nav></div></div></div><div id=container class="container-medium edges centered">
-<div class="doc-head mb-4 container-10">
-<h5 class="heading-micro heading-muted">DML. Изменение данных и структуры БД</h5><h1 class="heading-huge heading-heavy">Изменение структуры таблицы. ALTER TABLE</h1></div><div class="doc-toc mt-6 mb-6">
-<nav class="menu menu-underline menu-medium menu-numbered">
-<ul class=menu-list>
-<li class=menu-item>
-<a href=#%d0%bf%d0%be%d0%b4%d0%b3%d0%be%d1%82%d0%be%d0%b2%d0%ba%d0%b0-%d0%b4%d0%b0%d0%bd%d0%bd%d1%8b%d1%85 class=menu-link>Подготовка данных</a>
-</li><li class=menu-item>
-<a href=#%d0%b4%d0%be%d0%b1%d0%b0%d0%b2%d0%bb%d0%b5%d0%bd%d0%b8%d0%b5-%d0%ba%d0%be%d0%bb%d0%be%d0%bd%d0%ba%d0%b8-%d0%b2-%d1%82%d0%b0%d0%b1%d0%bb%d0%b8%d1%86%d1%83 class=menu-link>Добавление колонки в таблицу</a>
-</li><li class=menu-item>
-<a href=#%d1%83%d0%b4%d0%b0%d0%bb%d0%b5%d0%bd%d0%b8%d0%b5-%d0%ba%d0%be%d0%bb%d0%be%d0%bd%d0%ba%d0%b8-%d0%b8%d0%b7-%d1%82%d0%b0%d0%b1%d0%bb%d0%b8%d1%86%d1%8b class=menu-link>Удаление колонки из таблицы</a>
-</li><li class=menu-item>
-<a href=#%d0%bf%d0%b5%d1%80%d0%b5%d0%b8%d0%bc%d0%b5%d0%bd%d0%be%d0%b2%d0%b0%d0%bd%d0%b8%d0%b5-%d0%ba%d0%be%d0%bb%d0%be%d0%bd%d0%ba%d0%b8 class=menu-link>Переименование колонки</a>
-</li><li class=menu-item>
-<a href=#%d0%b8%d0%b7%d0%bc%d0%b5%d0%bd%d0%b5%d0%bd%d0%b8%d0%b5-%d1%82%d0%b8%d0%bf%d0%b0-%d0%b4%d0%b0%d0%bd%d0%bd%d1%8b%d1%85-%d0%ba%d0%be%d0%bb%d0%be%d0%bd%d0%ba%d0%b8 class=menu-link>Изменение типа данных колонки</a>
-</li><li class=menu-item>
-<a href=#%d0%b8%d0%b7%d0%bc%d0%b5%d0%bd%d0%b5%d0%bd%d0%b8%d0%b5-%d0%b0%d1%82%d1%80%d0%b8%d0%b1%d1%83%d1%82%d0%b0-not-null-%d0%b2-%d0%ba%d0%be%d0%bb%d0%be%d0%bd%d0%ba%d0%b5 class=menu-link>Изменение атрибута NOT NULL в колонке</a>
-</li><li class=menu-item>
-<a href=#%d0%bf%d0%b5%d1%80%d0%b5%d0%b8%d0%bc%d0%b5%d0%bd%d0%be%d0%b2%d0%b0%d0%bd%d0%b8%d0%b5-%d1%82%d0%b0%d0%b1%d0%bb%d0%b8%d1%86%d1%8b class=menu-link>Переименование таблицы</a>
-</li></ul></nav></div><p>Уже созданные таблицы можно изменять. Для этого используется команда SQL
+<!doctype html><html><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><link rel=stylesheet href=/css/superkube.min.css><link rel=stylesheet href=/css/main.css><script>var clicky_site_ids=clicky_site_ids||[];clicky_site_ids.push(101305633)</script><script async src=//static.getclicky.com/js></script><title>Учебник Oracle SQL, PL/SQL | Изменение структуры таблицы. ALTER TABLE</title></head><body><div class="navbar bg-dark mb-10"><div class="navbar-container container edges centered"><div class=navbar-brand><a href=/ class=brand>Orasql.ru</a></div><div class="navbar-nav ml-6"><nav class="nav nav-light nav-semibold"><ul class=nav-list><li class=nav-item><a href=/book/ class=nav-link>Книга</a></li></ul></nav><nav class="nav nav-light nav-semibold"><ul class=nav-list><li class=nav-item><a href=https://github.com/cyevgeniy/orasqlru class=nav-link>Github</a></li></ul></nav></div></div></div><div id=container class="container-medium edges centered"><div class="doc-head mb-4 container-10"><h5 class="heading-micro heading-muted">DML. Изменение данных и структуры БД</h5><h1 class="heading-huge heading-heavy">Изменение структуры таблицы. ALTER TABLE</h1></div><div class="doc-toc mt-6 mb-6"><nav class="menu menu-underline menu-medium menu-numbered"><ul class=menu-list><li class=menu-item><a href=#%d0%bf%d0%be%d0%b4%d0%b3%d0%be%d1%82%d0%be%d0%b2%d0%ba%d0%b0-%d0%b4%d0%b0%d0%bd%d0%bd%d1%8b%d1%85 class=menu-link>Подготовка данных</a></li><li class=menu-item><a href=#%d0%b4%d0%be%d0%b1%d0%b0%d0%b2%d0%bb%d0%b5%d0%bd%d0%b8%d0%b5-%d0%ba%d0%be%d0%bb%d0%be%d0%bd%d0%ba%d0%b8-%d0%b2-%d1%82%d0%b0%d0%b1%d0%bb%d0%b8%d1%86%d1%83 class=menu-link>Добавление колонки в таблицу</a></li><li class=menu-item><a href=#%d1%83%d0%b4%d0%b0%d0%bb%d0%b5%d0%bd%d0%b8%d0%b5-%d0%ba%d0%be%d0%bb%d0%be%d0%bd%d0%ba%d0%b8-%d0%b8%d0%b7-%d1%82%d0%b0%d0%b1%d0%bb%d0%b8%d1%86%d1%8b class=menu-link>Удаление колонки из таблицы</a></li><li class=menu-item><a href=#%d0%bf%d0%b5%d1%80%d0%b5%d0%b8%d0%bc%d0%b5%d0%bd%d0%be%d0%b2%d0%b0%d0%bd%d0%b8%d0%b5-%d0%ba%d0%be%d0%bb%d0%be%d0%bd%d0%ba%d0%b8 class=menu-link>Переименование колонки</a></li><li class=menu-item><a href=#%d0%b8%d0%b7%d0%bc%d0%b5%d0%bd%d0%b5%d0%bd%d0%b8%d0%b5-%d1%82%d0%b8%d0%bf%d0%b0-%d0%b4%d0%b0%d0%bd%d0%bd%d1%8b%d1%85-%d0%ba%d0%be%d0%bb%d0%be%d0%bd%d0%ba%d0%b8 class=menu-link>Изменение типа данных колонки</a></li><li class=menu-item><a href=#%d0%b8%d0%b7%d0%bc%d0%b5%d0%bd%d0%b5%d0%bd%d0%b8%d0%b5-%d0%b0%d1%82%d1%80%d0%b8%d0%b1%d1%83%d1%82%d0%b0-not-null-%d0%b2-%d0%ba%d0%be%d0%bb%d0%be%d0%bd%d0%ba%d0%b5 class=menu-link>Изменение атрибута NOT NULL в колонке</a></li><li class=menu-item><a href=#%d0%bf%d0%b5%d1%80%d0%b5%d0%b8%d0%bc%d0%b5%d0%bd%d0%be%d0%b2%d0%b0%d0%bd%d0%b8%d0%b5-%d1%82%d0%b0%d0%b1%d0%bb%d0%b8%d1%86%d1%8b class=menu-link>Переименование таблицы</a></li></ul></nav></div><p>Уже созданные таблицы можно изменять. Для этого используется команда SQL
 <code>ALTER</code>. Данная команда относится к группе DDL.</p><h2 id=подготовка-данных>Подготовка данных</h2><p>Тестировать будем на таблице <code>employees</code>. Изначально она будет состоять
 только из одной колонки <code>id</code>:</p><pre><code>create table employees(
     id number not null primary key
@@ -175,13 +138,4 @@ NULL-значения.</p><h2 id=переименование-таблицы>П�
 наличии ссылок на нее. В нашем примере таблица успешно переименуется,
 несмотря на дочернюю таблицу <code>emp_bonuses</code>. Внешний ключ при этом никуда
 не девается, в таблицу <code>emp_bonuses</code> по-прежнему нельзя добавить
-значения, нарушающие условия внешнего ключа.</p><nav class="pagination mb-3">
-<ul class=pagination-list>
-<li class=pagination-item>
-<a href=http://orasql.ru/sql/dml/dmlmerge/ class="pagination-link pagination-prev"> &lt; Слияние данных. MERGE </a>
-</li></ul></nav></div><footer class="footer b-dark-low b-top">
-<div class="footer-container container centered edges">
-<div class="footer-body mt-10">
-<nav class="nav nav-muted nav-menu-sm"><ul class=nav-list>
-<li class=nav-item><a href=/ class=nav-link>Orasql.ru</a></li><li class=nav-item><a href=/ class=nav-link>Учебник</a></li><li class=nav-item><p class="text-medium text-moderated">Email: orasqlru@gmail.com</p></li></ul></nav></div><div class="footer-copy mt-6 pt-6 b-dark-7 b-top">
-<p class="text-medium text-moderated">© Orasql.ru <br> 2019-2021</p></div></div></footer></body></html>
+значения, нарушающие условия внешнего ключа.</p><nav class="pagination mb-3"><ul class=pagination-list><li class=pagination-item><a href=http://orasql.ru/sql/dml/dmlmerge/ class="pagination-link pagination-prev">&lt; Слияние данных. MERGE</a></li></ul></nav></div><footer class="footer b-dark-low b-top"><div class="footer-container container centered edges"><div class="footer-body mt-10"><nav class="nav nav-muted nav-menu-sm"><ul class=nav-list><li class=nav-item><a href=/ class=nav-link>Orasql.ru</a></li><li class=nav-item><a href=/ class=nav-link>Учебник</a></li><li class=nav-item><p class="text-medium text-moderated">Email: orasqlru@gmail.com</p></li></ul></nav></div><div class="footer-copy mt-6 pt-6 b-dark-7 b-top"><p class="text-medium text-moderated">© Orasql.ru<br>2019-2021</p></div></div></footer></body></html>
