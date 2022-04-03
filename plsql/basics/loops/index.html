@@ -1,0 +1,211 @@
+<!doctype html><html><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><link rel=stylesheet href=/css/superkube.min.css><link rel=stylesheet href=/css/main.css><script>var clicky_site_ids=clicky_site_ids||[];clicky_site_ids.push(101305633)</script><script async src=//static.getclicky.com/js></script><title>Учебник Oracle SQL, PL/SQL | Циклы в PL/SQL</title></head><body><div class="navbar bg-dark mb-10"><div class="navbar-container container edges centered"><div class=navbar-brand><a href=/ class=brand>Orasql.ru</a></div><div class="navbar-nav ml-6"><nav class="nav nav-light nav-semibold"><ul class=nav-list><li class=nav-item><a href=/book/ class=nav-link>Книга</a></li></ul></nav><nav class="nav nav-light nav-semibold"><ul class=nav-list><li class=nav-item><a href=https://github.com/cyevgeniy/orasqlru class=nav-link>Github</a></li></ul></nav></div></div></div><div id=container class="container-medium edges centered"><div class="doc-head mb-4 container-10"><h5 class="heading-micro heading-muted">Основы PL/SQL</h5><h1 class="heading-huge heading-heavy">Циклы в PL/SQL</h1></div><div class="doc-toc mt-6 mb-6"><nav class="menu menu-underline menu-medium menu-numbered"><ul class=menu-list><li class=menu-item><a href=#loop class=menu-link>Loop</a></li><li class=menu-item><a href=#for class=menu-link>For</a></li><li class=menu-item><a href=#while class=menu-link>While</a></li><li class=menu-item><a href=#%d0%b2%d0%bb%d0%be%d0%b6%d0%b5%d0%bd%d0%bd%d1%8b%d0%b5-%d1%86%d0%b8%d0%ba%d0%bb%d1%8b class=menu-link>Вложенные циклы</a></li><li class=menu-item><a href=#continue-%d0%bf%d0%b5%d1%80%d0%b5%d1%85%d0%be%d0%b4-%d0%bd%d0%b0-%d1%81%d0%bb%d0%b5%d0%b4%d1%83%d1%8e%d1%89%d1%83%d1%8e-%d0%b8%d1%82%d0%b5%d1%80%d0%b0%d1%86%d0%b8%d1%8e-%d1%86%d0%b8%d0%ba%d0%bb%d0%b0 class=menu-link>Continue. Переход на следующую итерацию цикла</a></li></ul></nav></div><p>Циклы используются для повторения какого-либо действия
+несколько раз.</p><h2 id=loop>Loop</h2><p>Простейший цикл в PL/SQL выглядит так:</p><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sql data-lang=sql><span style=display:flex><span>loop<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb> </span><span style=color:#998;font-style:italic>-- какое-либо действие
+</span></span></span><span style=display:flex><span><span style=color:#998;font-style:italic></span><span style=color:#000;font-weight:700>end</span><span style=color:#bbb> </span>loop;<span style=color:#bbb>
+</span></span></span></code></pre></div><p>Данный цикл будет выполнять код между <code>loop</code> и <code>end loop</code>
+бесконечно. Для того, чтобы завершить цикл, можно использовать
+команду <code>exit</code>:</p><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sql data-lang=sql><span style=display:flex><span><span style=color:#000;font-weight:700>declare</span><span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>    </span>i<span style=color:#bbb> </span><span style=color:#0086b3>number</span><span style=color:#bbb> </span>:<span style=color:#000;font-weight:700>=</span><span style=color:#bbb> </span><span style=color:#099>5</span>;<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb></span><span style=color:#000;font-weight:700>begin</span><span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>    </span>loop<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>        </span><span style=color:#000;font-weight:700>if</span><span style=color:#bbb> </span>i<span style=color:#bbb> </span><span style=color:#000;font-weight:700>=</span><span style=color:#bbb> </span><span style=color:#099>0</span><span style=color:#bbb> </span><span style=color:#000;font-weight:700>then</span><span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>            </span>exit;<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>        </span><span style=color:#000;font-weight:700>end</span><span style=color:#bbb> </span><span style=color:#000;font-weight:700>if</span>;<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>        
+</span></span></span><span style=display:flex><span><span style=color:#bbb>        </span>dbms_output.put_line(i);<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>        </span>i<span style=color:#bbb> </span>:<span style=color:#000;font-weight:700>=</span><span style=color:#bbb> </span>i<span style=color:#bbb> </span><span style=color:#000;font-weight:700>-</span><span style=color:#bbb> </span><span style=color:#099>1</span>;<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>    </span><span style=color:#000;font-weight:700>end</span><span style=color:#bbb> </span>loop;<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb></span><span style=color:#000;font-weight:700>end</span>;<span style=color:#bbb>
+</span></span></span></code></pre></div><p>Результат:</p><pre tabindex=0><code>5
+4
+3
+2
+1
+</code></pre><p>Переменная <code>i</code> отвечает за оставшееся количество повторений. Такие переменные
+в программировании ещё называют <em>счётчиками цикла</em>.</p><p>Для более удобного выхода из цикла можно использовать конструкцию
+<code>exit when</code>:</p><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sql data-lang=sql><span style=display:flex><span><span style=color:#000;font-weight:700>declare</span><span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>    </span>i<span style=color:#bbb> </span><span style=color:#0086b3>number</span><span style=color:#bbb> </span>:<span style=color:#000;font-weight:700>=</span><span style=color:#bbb> </span><span style=color:#099>5</span>;<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb></span><span style=color:#000;font-weight:700>begin</span><span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>    </span><span style=color:#998;font-style:italic>-- Такой же цикл, как и в предыдущем примере, только
+</span></span></span><span style=display:flex><span><span style=color:#998;font-style:italic></span><span style=color:#bbb>    </span><span style=color:#998;font-style:italic>-- читается гораздо лучше
+</span></span></span><span style=display:flex><span><span style=color:#998;font-style:italic></span><span style=color:#bbb>    </span>loop<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>        </span>exit<span style=color:#bbb> </span><span style=color:#000;font-weight:700>when</span><span style=color:#bbb> </span>i<span style=color:#bbb> </span><span style=color:#000;font-weight:700>=</span><span style=color:#bbb> </span><span style=color:#099>0</span>;<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>        
+</span></span></span><span style=display:flex><span><span style=color:#bbb>        </span>dbms_output.put_line(i);<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>        </span>i<span style=color:#bbb> </span>:<span style=color:#000;font-weight:700>=</span><span style=color:#bbb> </span>i<span style=color:#bbb> </span><span style=color:#000;font-weight:700>-</span><span style=color:#bbb> </span><span style=color:#099>1</span>;<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>    </span><span style=color:#000;font-weight:700>end</span><span style=color:#bbb> </span>loop;<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb></span><span style=color:#000;font-weight:700>end</span>;<span style=color:#bbb>
+</span></span></span></code></pre></div><p><code>Exit</code> можно использовать только внутри цикла, внутри обычного блока его использование
+приведёт к ошибке:</p><pre tabindex=0><code>-- Ошибка!
+begin
+    exit;
+end;
+</code></pre><h2 id=for>For</h2><p>Цикл <code>for</code> удобно использовать для автоматического изменения
+счётчика цикла:</p><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sql data-lang=sql><span style=display:flex><span><span style=color:#000;font-weight:700>begin</span><span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>    </span><span style=color:#000;font-weight:700>for</span><span style=color:#bbb> </span>i<span style=color:#bbb> </span><span style=color:#000;font-weight:700>in</span><span style=color:#bbb> </span><span style=color:#099>1</span>..<span style=color:#099>5</span><span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>    </span>loop<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>        </span>dbms_output.put_line(i);<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>    </span><span style=color:#000;font-weight:700>end</span><span style=color:#bbb> </span>loop;<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb></span><span style=color:#000;font-weight:700>end</span>;<span style=color:#bbb>
+</span></span></span></code></pre></div><p>Результат:</p><pre tabindex=0><code>1
+2
+3
+4
+5
+</code></pre><p>Здесь не использовались ни проверки на необходимость выйти из цикла,
+ни изменение счётчика цикла - конструкция <code>for</code> всё сделала за нас.
+Мы обращаемся к переменной <code>i</code> - она видима только внутри тела цикла, и
+недоступна вне его.</p><p>В <code>for</code> указывается нижняя граница счётчика цикла, и верхняя. Изменение
+производится увеличением счётчика на единицу. Нижняя граница всегда должна быть
+меньше либо равной верхней границе:</p><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sql data-lang=sql><span style=display:flex><span><span style=color:#998;font-style:italic>-- Выведет:
+</span></span></span><span style=display:flex><span><span style=color:#998;font-style:italic>-- -5
+</span></span></span><span style=display:flex><span><span style=color:#998;font-style:italic>-- -4
+</span></span></span><span style=display:flex><span><span style=color:#998;font-style:italic>-- -3
+</span></span></span><span style=display:flex><span><span style=color:#998;font-style:italic>-- -2
+</span></span></span><span style=display:flex><span><span style=color:#998;font-style:italic>-- -1
+</span></span></span><span style=display:flex><span><span style=color:#998;font-style:italic>-- 0
+</span></span></span><span style=display:flex><span><span style=color:#998;font-style:italic>-- 1
+</span></span></span><span style=display:flex><span><span style=color:#998;font-style:italic></span><span style=color:#000;font-weight:700>begin</span><span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>    </span><span style=color:#000;font-weight:700>for</span><span style=color:#bbb> </span>i<span style=color:#bbb> </span><span style=color:#000;font-weight:700>in</span><span style=color:#bbb> </span><span style=color:#000;font-weight:700>-</span><span style=color:#099>5</span>..<span style=color:#099>1</span><span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>    </span>loop<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>        </span>dbms_output.put_line(i);<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>    </span><span style=color:#000;font-weight:700>end</span><span style=color:#bbb> </span>loop;<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb></span><span style=color:#000;font-weight:700>end</span>;<span style=color:#bbb>
+</span></span></span></code></pre></div><p>Если верхняя граница равна нижней, цикл выполнится ровно один раз:</p><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sql data-lang=sql><span style=display:flex><span><span style=color:#998;font-style:italic>-- Выведет одну строку:
+</span></span></span><span style=display:flex><span><span style=color:#998;font-style:italic>-- 1
+</span></span></span><span style=display:flex><span><span style=color:#998;font-style:italic></span><span style=color:#000;font-weight:700>begin</span><span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>    </span><span style=color:#000;font-weight:700>for</span><span style=color:#bbb> </span>i<span style=color:#bbb> </span><span style=color:#000;font-weight:700>in</span><span style=color:#bbb> </span><span style=color:#099>1</span>..<span style=color:#099>1</span><span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>    </span>loop<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>        </span>dbms_output.put_line(i);<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>    </span><span style=color:#000;font-weight:700>end</span><span style=color:#bbb> </span>loop;<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb></span><span style=color:#000;font-weight:700>end</span>;<span style=color:#bbb>
+</span></span></span></code></pre></div><p>В сторону уменьшения работать не будет - тело цикла
+<code>for i in 3..1</code> не выполнится ни разу.</p><p>Стоит также обратить внимание, что мы не объявляли
+переменную <code>i</code> в секции <code>declare</code> - она создаётся автоматически.
+Более того, если мы объявим переменную вне цикла <code>for</code>, то после
+завершения цикла внешняя переменная останется без изменений:</p><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sql data-lang=sql><span style=display:flex><span><span style=color:#000;font-weight:700>declare</span><span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>    </span>i<span style=color:#bbb> </span><span style=color:#0086b3>number</span><span style=color:#bbb> </span>:<span style=color:#000;font-weight:700>=</span><span style=color:#bbb> </span><span style=color:#099>10</span>;<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb></span><span style=color:#000;font-weight:700>begin</span><span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>    </span><span style=color:#000;font-weight:700>for</span><span style=color:#bbb> </span>i<span style=color:#bbb> </span><span style=color:#000;font-weight:700>in</span><span style=color:#bbb> </span><span style=color:#099>1</span>..<span style=color:#099>4</span><span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>    </span>loop<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>        </span><span style=color:#000;font-weight:700>null</span>;<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>    </span><span style=color:#000;font-weight:700>end</span><span style=color:#bbb> </span>loop;<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>    
+</span></span></span><span style=display:flex><span><span style=color:#bbb>    </span><span style=color:#998;font-style:italic>-- Выведет 10, а не 4, как можно было бы подумать
+</span></span></span><span style=display:flex><span><span style=color:#998;font-style:italic></span><span style=color:#bbb>    </span>dbms_output.put_line(i);<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb></span><span style=color:#000;font-weight:700>end</span>;<span style=color:#bbb>
+</span></span></span></code></pre></div><h2 id=while>While</h2><p>Цикл <code>while</code> будет работать до тех пор,
+пока условие, указанное после него, истинно:</p><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sql data-lang=sql><span style=display:flex><span><span style=color:#000;font-weight:700>declare</span><span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>    </span>i<span style=color:#bbb> </span><span style=color:#0086b3>number</span><span style=color:#bbb> </span>:<span style=color:#000;font-weight:700>=</span><span style=color:#bbb> </span><span style=color:#099>5</span>;<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb></span><span style=color:#000;font-weight:700>begin</span><span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>    </span>while<span style=color:#bbb> </span>i<span style=color:#bbb> </span><span style=color:#000;font-weight:700>&gt;</span><span style=color:#bbb> </span><span style=color:#099>0</span><span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>    </span>loop<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>        </span>dbms_output.put_line(i);<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>        </span>i<span style=color:#bbb> </span>:<span style=color:#000;font-weight:700>=</span><span style=color:#bbb> </span>i<span style=color:#bbb> </span><span style=color:#000;font-weight:700>-</span><span style=color:#099>1</span>;<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>    </span><span style=color:#000;font-weight:700>end</span><span style=color:#bbb> </span>loop;<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb></span><span style=color:#000;font-weight:700>end</span>;<span style=color:#bbb>
+</span></span></span></code></pre></div><h2 id=вложенные-циклы>Вложенные циклы</h2><p>Циклы могут быть вложенными. В целом, здесь нет ничего
+сложного, обратим мнимание лишь на несколько моментов.</p><p><strong>Вложенные циклы <code>for</code> могут иметь счётчики с одним и тем же именем</strong>:</p><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sql data-lang=sql><span style=display:flex><span><span style=color:#000;font-weight:700>begin</span><span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>    </span><span style=color:#000;font-weight:700>for</span><span style=color:#bbb> </span>i<span style=color:#bbb> </span><span style=color:#000;font-weight:700>in</span><span style=color:#bbb> </span><span style=color:#099>1</span>..<span style=color:#099>2</span><span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>    </span>loop<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>        </span>dbms_output.put_line(<span style=color:#d14>&#39;i1= &#39;</span><span style=color:#bbb> </span><span style=color:#000;font-weight:700>||</span><span style=color:#bbb> </span>i);<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>        </span><span style=color:#000;font-weight:700>for</span><span style=color:#bbb> </span>i<span style=color:#bbb> </span><span style=color:#000;font-weight:700>in</span><span style=color:#bbb> </span><span style=color:#099>1</span>..<span style=color:#099>2</span><span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>        </span>loop<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>            </span>dbms_output.put_line(<span style=color:#d14>&#39;i2= &#39;</span><span style=color:#bbb> </span><span style=color:#000;font-weight:700>||</span><span style=color:#bbb> </span>i);<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>        </span><span style=color:#000;font-weight:700>end</span><span style=color:#bbb> </span>loop;<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>    </span><span style=color:#000;font-weight:700>end</span><span style=color:#bbb> </span>loop;<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb></span><span style=color:#000;font-weight:700>end</span>;<span style=color:#bbb>
+</span></span></span></code></pre></div><p>Выведет:</p><pre tabindex=0><code>i1= 1
+i2= 1
+i2= 2
+i1= 2
+i2= 1
+i2= 2
+</code></pre><p>Как видно, значения счётчика из внешнего цикла не
+перепуталось со значением счётчика из внутреннего.
+Это произошло потому, что мы обращались к счётчикам
+внутри тела цикла, к которому они относятся. Если мы
+перенесём вывод счётчика внешнего цикла внутрь тела
+внутреннего, работать не будет:</p><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sql data-lang=sql><span style=display:flex><span><span style=color:#000;font-weight:700>begin</span><span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>    </span><span style=color:#000;font-weight:700>for</span><span style=color:#bbb> </span>i<span style=color:#bbb> </span><span style=color:#000;font-weight:700>in</span><span style=color:#bbb> </span><span style=color:#099>1</span>..<span style=color:#099>2</span><span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>    </span>loop<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>        </span><span style=color:#000;font-weight:700>for</span><span style=color:#bbb> </span>i<span style=color:#bbb> </span><span style=color:#000;font-weight:700>in</span><span style=color:#bbb> </span><span style=color:#099>1</span>..<span style=color:#099>2</span><span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>        </span>loop<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>            </span>dbms_output.put_line(<span style=color:#d14>&#39;i1= &#39;</span><span style=color:#bbb> </span><span style=color:#000;font-weight:700>||</span><span style=color:#bbb> </span>i);<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>            </span>dbms_output.put_line(<span style=color:#d14>&#39;i2= &#39;</span><span style=color:#bbb> </span><span style=color:#000;font-weight:700>||</span><span style=color:#bbb> </span>i);<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>        </span><span style=color:#000;font-weight:700>end</span><span style=color:#bbb> </span>loop;<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>    </span><span style=color:#000;font-weight:700>end</span><span style=color:#bbb> </span>loop;<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb></span><span style=color:#000;font-weight:700>end</span>;<span style=color:#bbb>
+</span></span></span></code></pre></div><pre tabindex=0><code>i1= 1
+i2= 1
+i1= 2 -- А должно быть 1
+i2= 2
+i1= 1
+i2= 1
+i1= 2
+i2= 2
+</code></pre><p>Решить эту проблему помогают метки блоков:</p><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sql data-lang=sql><span style=display:flex><span><span style=color:#000;font-weight:700>begin</span><span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>    </span><span style=color:#000;font-weight:700>&lt;&lt;</span>main<span style=color:#000;font-weight:700>&gt;&gt;</span><span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>    </span><span style=color:#000;font-weight:700>for</span><span style=color:#bbb> </span>i<span style=color:#bbb> </span><span style=color:#000;font-weight:700>in</span><span style=color:#bbb> </span><span style=color:#099>1</span>..<span style=color:#099>2</span><span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>    </span>loop<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>        </span><span style=color:#000;font-weight:700>&lt;&lt;</span>child<span style=color:#000;font-weight:700>&gt;&gt;</span><span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>        </span><span style=color:#000;font-weight:700>for</span><span style=color:#bbb> </span>i<span style=color:#bbb> </span><span style=color:#000;font-weight:700>in</span><span style=color:#bbb> </span><span style=color:#099>1</span>..<span style=color:#099>2</span><span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>        </span>loop<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>            
+</span></span></span><span style=display:flex><span><span style=color:#bbb>            </span>dbms_output.put_line(<span style=color:#d14>&#39;i1= &#39;</span><span style=color:#bbb> </span><span style=color:#000;font-weight:700>||</span><span style=color:#bbb> </span>main.i);<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>            </span>dbms_output.put_line(<span style=color:#d14>&#39;i2= &#39;</span><span style=color:#bbb> </span><span style=color:#000;font-weight:700>||</span><span style=color:#bbb> </span>child.i);<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>        </span><span style=color:#000;font-weight:700>end</span><span style=color:#bbb> </span>loop;<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>    </span><span style=color:#000;font-weight:700>end</span><span style=color:#bbb> </span>loop;<span style=color:#bbb>            
+</span></span></span><span style=display:flex><span><span style=color:#bbb></span><span style=color:#000;font-weight:700>end</span>;<span style=color:#bbb>
+</span></span></span></code></pre></div><p>Результат:</p><pre tabindex=0><code>i1= 1
+i2= 1
+i1= 1
+i2= 2
+i1= 2
+i2= 1
+i1= 2
+i2= 2
+</code></pre><p>Синтаксис для обращения к переменным с использованием меток
+выглядит так: <code>имя метки.переменная</code>. При использовании вложенных
+циклов часто используют отдельный вариант синтаксиса завершения
+цикла, чтобы было понятнее, какой именно цикл заканчивает свою работу:</p><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sql data-lang=sql><span style=display:flex><span><span style=color:#000;font-weight:700>begin</span><span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>    </span><span style=color:#000;font-weight:700>&lt;&lt;</span>main<span style=color:#000;font-weight:700>&gt;&gt;</span><span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>    </span><span style=color:#000;font-weight:700>for</span><span style=color:#bbb> </span>i<span style=color:#bbb> </span><span style=color:#000;font-weight:700>in</span><span style=color:#bbb> </span><span style=color:#099>1</span>..<span style=color:#099>2</span><span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>    </span>loop<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>        </span><span style=color:#000;font-weight:700>&lt;&lt;</span>child<span style=color:#000;font-weight:700>&gt;&gt;</span><span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>        </span><span style=color:#000;font-weight:700>for</span><span style=color:#bbb> </span>i<span style=color:#bbb> </span><span style=color:#000;font-weight:700>in</span><span style=color:#bbb> </span><span style=color:#099>1</span>..<span style=color:#099>2</span><span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>        </span>loop<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>            </span>dbms_output.put_line(<span style=color:#d14>&#39;i1= &#39;</span><span style=color:#bbb> </span><span style=color:#000;font-weight:700>||</span><span style=color:#bbb> </span>main.i);<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>            </span>dbms_output.put_line(<span style=color:#d14>&#39;i2= &#39;</span><span style=color:#bbb> </span><span style=color:#000;font-weight:700>||</span><span style=color:#bbb> </span>child.i);<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>        </span><span style=color:#998;font-style:italic>-- указываем имя идентификатора блока
+</span></span></span><span style=display:flex><span><span style=color:#998;font-style:italic></span><span style=color:#bbb>        </span><span style=color:#000;font-weight:700>end</span><span style=color:#bbb> </span>loop<span style=color:#bbb> </span>child;<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>    </span><span style=color:#000;font-weight:700>end</span><span style=color:#bbb> </span>loop<span style=color:#bbb> </span>main;<span style=color:#bbb>            
+</span></span></span><span style=display:flex><span><span style=color:#bbb></span><span style=color:#000;font-weight:700>end</span>;<span style=color:#bbb>
+</span></span></span></code></pre></div><h2 id=continue-переход-на-следующую-итерацию-цикла>Continue. Переход на следующую итерацию цикла</h2><p>Команда <code>continue</code> используется для перехода к следующей итерации
+цикла. Часть тела цикла после данной команды не будет выполнена.</p><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sql data-lang=sql><span style=display:flex><span><span style=color:#998;font-style:italic>-- Выведет пять строк с числами от 1 до 5.
+</span></span></span><span style=display:flex><span><span style=color:#998;font-style:italic>-- Числа с приплюсованной двойкой не будут выведены,
+</span></span></span><span style=display:flex><span><span style=color:#998;font-style:italic>-- так как их вывод находится после continue.
+</span></span></span><span style=display:flex><span><span style=color:#998;font-style:italic></span><span style=color:#000;font-weight:700>begin</span><span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>    </span><span style=color:#000;font-weight:700>for</span><span style=color:#bbb> </span>i<span style=color:#bbb> </span><span style=color:#000;font-weight:700>in</span><span style=color:#bbb> </span><span style=color:#099>1</span>..<span style=color:#099>5</span><span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>    </span>loop<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>        </span>dbms_output.put_line(i);<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>        </span><span style=color:#000;font-weight:700>continue</span>;<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>        </span>dbms_output.put_line(i<span style=color:#bbb> </span><span style=color:#000;font-weight:700>+</span><span style=color:#bbb> </span><span style=color:#099>2</span>);<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>    </span><span style=color:#000;font-weight:700>end</span><span style=color:#bbb> </span>loop;<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb></span><span style=color:#000;font-weight:700>end</span>;<span style=color:#bbb>
+</span></span></span></code></pre></div><p>Как и с командой <code>exit</code>, есть и более удобный вариант
+этой команды - <code>continue when</code>:</p><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sql data-lang=sql><span style=display:flex><span><span style=color:#000;font-weight:700>begin</span><span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>    </span><span style=color:#000;font-weight:700>for</span><span style=color:#bbb> </span>i<span style=color:#bbb> </span><span style=color:#000;font-weight:700>in</span><span style=color:#bbb> </span><span style=color:#099>1</span>..<span style=color:#099>10</span><span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>    </span>loop<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>        </span><span style=color:#000;font-weight:700>continue</span><span style=color:#bbb> </span><span style=color:#000;font-weight:700>when</span><span style=color:#bbb> </span>i<span style=color:#bbb> </span><span style=color:#000;font-weight:700>mod</span><span style=color:#bbb> </span><span style=color:#099>2</span><span style=color:#bbb> </span><span style=color:#000;font-weight:700>=</span><span style=color:#bbb> </span><span style=color:#099>0</span>;<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>        </span>dbms_output.put_line(i);<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>    </span><span style=color:#000;font-weight:700>end</span><span style=color:#bbb> </span>loop;<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb></span><span style=color:#000;font-weight:700>end</span>;<span style=color:#bbb>
+</span></span></span></code></pre></div><p>Результат:</p><pre tabindex=0><code>1
+3
+5
+7
+9
+</code></pre><p>В начале каждой итерации мы проверяем остаток от деления на два,
+и если он равен нулю, сразу переходи к следующей итерации, таким
+образом выводя только нечётные числа.</p><nav class="pagination mb-3"><ul class=pagination-list><li class=pagination-item><a href=http://orasql.ru/plsql/basics/packages/ class="pagination-link pagination-prev">&lt; Пакеты</a></li></ul></nav></div><footer class="footer b-dark-low b-top"><div class="footer-container container centered edges"><div class="footer-body mt-10"><nav class="nav nav-muted nav-menu-sm"><ul class=nav-list><li class=nav-item><a href=/ class=nav-link>Orasql.ru</a></li><li class=nav-item><a href=/ class=nav-link>Учебник</a></li><li class=nav-item><p class="text-medium text-moderated">Email: orasqlru@gmail.com</p></li></ul></nav></div><div class="footer-copy mt-6 pt-6 b-dark-7 b-top"><p class="text-medium text-moderated">© Orasql.ru<br>2019-2021</p></div></div></footer></body></html>
