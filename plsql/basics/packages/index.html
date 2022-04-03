@@ -84,7 +84,8 @@
 </span></span></span></code></pre></div><h2 id=компиляция-пакета>Компиляция пакета</h2><p>В учебнике мы предполагаем, что текст пакета должен храниться в <em>файлах</em>,
 как SQL скрипты. Спецификацию и тело, как правило, хранят в разных файлах,
 с расширениями &ldquo;.sql&rdquo;. Можно использовать любые другие расширения, например
-&ldquo;.pks&rdquo; для спецификации и &ldquo;.pkb&rdquo; для тела - это н. Когда нужно изменить пакет, код в этих файлах меняется,
+&ldquo;.pks&rdquo; для спецификации и &ldquo;.pkb&rdquo; для тела - подобные расширения также часто
+используются. Когда нужно изменить пакет, код в этих файлах меняется,
 после чего эти скрипты перезапускаются.</p><p>Если нужно произвести перекомпиляцию пакета, который уже создан,
 без его изменения, можно воспользоваться командой <code>alter package</code>:</p><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sql data-lang=sql><span style=display:flex><span><span style=color:#000;font-weight:700>alter</span><span style=color:#bbb> </span>package<span style=color:#bbb> </span>pck_utils<span style=color:#bbb> </span>compile<span style=color:#bbb> </span>package;<span style=color:#bbb>
 </span></span></span></code></pre></div><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sql data-lang=sql><span style=display:flex><span><span style=color:#000;font-weight:700>alter</span><span style=color:#bbb> </span>package<span style=color:#bbb> </span>pck_utils<span style=color:#bbb> </span>compile<span style=color:#bbb> </span>specification;<span style=color:#bbb>
@@ -120,7 +121,7 @@ end;
 называется перегрузкой(overloading). Простейший пример
 перегруженных функций(процедур) - это <code>dbms_output.put_line</code>.
 Мы можем вызывать данную процедуру как со строками, так и с
-датами и числами. Создадим свой пакет для вывода информации
+датами или числами. Создадим свой пакет для вывода информации
 на экран, только с более коротким именем процедуры, для удобной
 работы:</p><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sql data-lang=sql><span style=display:flex><span><span style=color:#000;font-weight:700>create</span><span style=color:#bbb> </span><span style=color:#000;font-weight:700>or</span><span style=color:#bbb> </span><span style=color:#000;font-weight:700>replace</span><span style=color:#bbb> </span>package<span style=color:#bbb> </span>pck_output<span style=color:#bbb> </span><span style=color:#000;font-weight:700>as</span><span style=color:#bbb>
 </span></span></span><span style=display:flex><span><span style=color:#bbb>
@@ -178,7 +179,7 @@ procedure proc1(username varchar2);
 </span></span></span><span style=display:flex><span><span style=color:#bbb></span>current_number<span style=color:#bbb> </span><span style=color:#0086b3>number</span><span style=color:#bbb> </span>:<span style=color:#000;font-weight:700>=</span><span style=color:#bbb> </span><span style=color:#099>10</span>;<span style=color:#bbb>
 </span></span></span><span style=display:flex><span><span style=color:#bbb>
 </span></span></span><span style=display:flex><span><span style=color:#bbb></span><span style=color:#000;font-weight:700>end</span><span style=color:#bbb> </span>pck_test;<span style=color:#bbb>
-</span></span></span></code></pre></div><p>Данный пакет содержит одну переменную <code>current_number</code>
+</span></span></span></code></pre></div><p>Пакет содержит одну переменную <code>current_number</code>
 со значением по-умолчанию, равным 10. Предположим, с пакетом будут
 работать две сессии, А и Б:</p><p>Сессия А:</p><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sql data-lang=sql><span style=display:flex><span><span style=color:#000;font-weight:700>begin</span><span style=color:#bbb>
 </span></span></span><span style=display:flex><span><span style=color:#bbb>    </span>dbms_output.put_line(pck_test.current_number);<span style=color:#bbb>
