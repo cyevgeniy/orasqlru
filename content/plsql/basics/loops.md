@@ -1,7 +1,7 @@
 ---
 Title: "Циклы в PL/SQL"
 weight: 12
-draft: true
+draft: false
 toc: true
 ---
 
