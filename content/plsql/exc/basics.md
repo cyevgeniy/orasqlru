@@ -1,7 +1,9 @@
 ---
 Title: "Обработка ошибок в PL/SQL"
 weight: 1
+toc: true
 ---
+
 
 ## EXCEPTION блок
 
@@ -52,30 +54,184 @@ end;
 
 | Ошибка | Когда возникает|
 |-|-|
-|ACCESS_INTO_NULL |Your program attempts to assign values to the attributes of an uninitialized (atomically null) object.|
-|CASE_NOT_FOUND |None of the choices in the WHEN clauses of a CASE statement is selected, and there is no ELSE clause. |
-|COLLECTION_IS_NULL| Your program attempts to apply collection methods other than EXISTS to an uninitialized (atomically null) nested table or varray, or the program attempts to assign values to the elements of an uninitialized nested table or varray.|
+|ACCESS_INTO_NULL |Попытка присвоить значение атрибуту неинициализированного объекта.|
+|CASE_NOT_FOUND |В выражении `CASE` не нашлось подходящего условия `When`, и в нём отсутствует условие `Else`.|
+|COLLECTION_IS_NULL| Попытка вызвать любой метод коллеции(за исключением `Exists`) в неинициализированной вложенной таблице или ассоциативном массиве, или попытка присвоить значения элементам неинициализированной вложенной таблице или ассоциативного массива.|
 |CURSOR_ALREADY_OPEN |Попытка открыть уже открытый курсор. Курсор должен быть закрыт до момента его открытия. Цикл FOR автоматически открывает курсор, который использует, поэтому его нельзя открывать внутри тела цикла.|
 |DUP_VAL_ON_INDEX |Попытка вставить в таблицу значения, которые нарушают ограничения, созданные уникальным индексом. Иными словами, ошибка возникает, когда в колонки уникального индекса добавляются дублирующие записи.|
-|INVALID_CURSOR |Your program attempts an illegal cursor operation such as closing an unopened cursor.|
-|INVALID_NUMBER|In a SQL statement, the conversion of a character string into a number fails because the string does not represent a valid number. (In procedural statements, VALUE_ERROR is raised.) This exception is also raised when the LIMIT-clause expression in a bulk FETCH statement does not evaluate to a positive number.|
+|INVALID_CURSOR |Попытка вызова недопустимой операции с курсором, например закрытие не открытого курсора.|
+|INVALID_NUMBER| Ошибка приведения строки в число в SQL запросе, потому что строка не является числовым представлением (В PL/SQL коде в таких случаях выбрасывается VALUE_ERROR). Также может возникнуть, если значение параметра `LIMIT` в выражении `Bulk collect` не является положительным числом. |
 |LOGIN_DENIED|Попытка подключиться к БД с неправильным логином или паролем.|
 |NO_DATA_FOUND|Выражение `SELECT INTO` не возвращает ни одной строки, или программа ссылается на удалённый элемент во вложенной таблице или неинициализированному объекту в ассоциативной таблице. Агрегатные функции в SQL, такие как AVG или SUM, всегда возвращают значение или null. Поэтому, `SELECT INTO`, которое вызывает только агрегатные функции, никогда не выбросит `NO_DATA_FOUND`. Выражение `FETCH` работает так, что ожидает отсутствия строк в определённый момент, поэтому ошибка также не выбрасывается.|
 |NOT_LOGGED_ON |Обращение к БД будучи неподключенным к ней|
 |PROGRAM_ERROR| Внутренняя проблема в PL/SQL.|
-|ROWTYPE_MISMATCH|The host cursor variable and PL/SQL cursor variable involved in an assignment have incompatible return types. For example, when an open host cursor variable is passed to a stored subprogram, the return types of the actual and formal parameters must be compatible.|
-|SELF_IS_NULL|Your program attempts to call a MEMBER method on a null instance. That is, the built-in parameter SELF (which is always the first parameter passed to a MEMBER method) is null.|
+|ROWTYPE_MISMATCH|Курсорные переменные, задействованные в присваивании, имеют разные типы.|
+|SELF_IS_NULL| Попытка вызвать метод неинициализированного объекта.|
 |STORAGE_ERROR|Переполнение памяти или память повреждена.|
-|SUBSCRIPT_BEYOND_COUNT|Your program references a nested table or varray element using an index number larger than the number of elements in the collection.|
-|SUBSCRIPT_OUTSIDE_LIMIT|Your program references a nested table or varray element using an index number (-1 for example) that is outside the legal range.|
-|SYS_INVALID_ROWID|The conversion of a character string into a universal rowid fails because the character string does not represent a valid rowid.|
-|TIMEOUT_ON_RESOURCE|A time-out occurs while Oracle is waiting for a resource.|
+|SUBSCRIPT_BEYOND_COUNT| Попытка обратиться к элементу вложенной таблицы или ассоциативного массива по индексу, который больше, чем количество элементов в коллекции.|
+|SUBSCRIPT_OUTSIDE_LIMIT|Попытка обратиться к элементу коллекции по индексу(например, -1) вне допустимого диапазона.|
+|SYS_INVALID_ROWID| Ошибка конвертации строки в rowid.|
+|TIMEOUT_ON_RESOURCE| Возникает при ожидании доступности ресурса.|
 |TOO_MANY_ROWS|Выражение `SELECT INTO` возвращает более одной строки.|
-|VALUE_ERROR|An arithmetic, conversion, truncation, or size-constraint error occurs. For example, when your program selects a column value into a character variable, if the value is longer than the declared length of the variable, PL/SQL aborts the assignment and raises VALUE_ERROR. In procedural statements, VALUE_ERROR is raised if the conversion of a character string into a number fails. (In SQL statements, INVALID_NUMBER is raised.)|
+|VALUE_ERROR|Арифметическая ошибка, ошибка конвертации, или превышение размерности типа. Может возникнуть, к примеру, если в переменную с типом `number(1)` попытаться присвоить значение `239`.|
 |ZERO_DIVIDE|Попытка деления на ноль.|
 
-## Определение собственных ошибок
+## Объявление собственных ошибок
+
+```sql
+declare
+    -- Объявление собственного исключения
+    exc_too_low_salary exception;
+    l_salary number := 100;
+begin
+    if l_salary < 200 then
+        -- Бросаем ошибку.
+        raise exc_too_low_salary;
+    end if;
+
+exception
+    when exc_too_low_salary then
+        dbms_output.put_line('Обработчик исключения');
+end;
+```
+
+Область видимости собственного исключения в данном случае - блок, в котором оно
+объявлено. Вне этого блока обработать исключение не получится.
+
+Для более удобной работы с собственными исключениями их можно вынести в отдельный пакет:
+
+```
+create or replace pck_hr_errors is
+
+-- Объявляем исключения в спецификации пакета.
+-- Тела пакет не имеет, только спецификацию.
+
+exc_wrong_name      exception;
+exc_too_low_salary  exception;
+exc_incorrect_pass  exception;
+
+end;
+```
+
+Далее работать с этими исключениями можно подобным образом:
+
+```
+begin
+    -- Какой-то код
+    ...
+exception
+    when pck_hr_errors.exc_too_low_salary then
+        -- Обработка исключения
+        ...
+end;
+```
+
+## Обработка непредопределённых ошибок
+
+Не все ошибки в Oracle являются предопределёнными. Когда возникает необходимость
+их обрабатывать, нужно связать переменную типа `exception` с кодом ошибки, которую нужно обработать:
+
+```
+declare
+    -- объявляем ошибку
+    e_incorrect_date exception;
+    -- связываем ошибку с кодом
+    pragma exception_init(e_incorrect_date, -1830);
+begin
+    dbms_output.put_line(to_date('2022-02-01', 'dd.mm.yyyy'));
+exception
+    when e_incorrect_date then
+        dbms_output.put_line ('Неправильный формат даты');
+end;
+```
+
+Следует помнить, что коды ошибок являются *отрицательными* числами.
+
+## Переопределение предопределённых ошибок
+
+Мы *можем* объявить собственную ошибку с тем же именем, что и предопределённая
+ошибка:
+
+```sql
+declare
+    n number;
+    zero_divide exception;
+begin
+    n := 32 / 0;
+exception
+    when zero_divide then
+        dbms_output.put_line("Zero divide exception");
+end;
+```
+
+Тем не менее, делать так не рекомендуется, чтобы не усложнять код.
+
 
 ## Ошибки и вложенные блоки
 
+Если ошибка не обрабатывается в пределах блока `begin ..end`,
+она выбрасывается за его пределы. Далее эта ошибка может быть
+обработана блоком `exception` внешнего блока. Если и там ошибка
+не обрабатывается, она выбрасывается и за его пределы, и так
+далее.
 
+```sql
+declare
+    a number;
+
+-- Внешний блок
+begin
+    -- Вложенный блок
+    begin
+        a := 1 / 0;
+        -- Важно помнить, что после возникновения ошибки
+        -- выполнение кода в пределах блока прекращается.
+        -- Следующий код не будет выполнен
+        dbms_output.put_line('Этот код не будет выполнен');
+    end;
+exception
+    when zero_divide:
+        dbms_otuput.put_line('Ошибка обработана внешним блоком');
+end;
+```
+
+## raise_application_error
+
+Если ошибка, брошенная Oracle, достигает клиентского приложения,
+то она имеет примерно такой текст: `ORA-01722 invalid number`.
+
+Процедура `raise_application_error` позволяет вызвать исключение
+с заданным номером и связать его с сообщением:
+
+```
+begin
+    raise_application_error(-20134, 'Неправильный номер паспорта');
+end;
+```
+
+Диапазон возможных кодов ошибок [-20999, 20000]. Сообщение должно
+помещаться в тип `varchar2(2000)`.
+
+Можно указать третий boolean параметр, который в случае
+значения `true` добавит текущую ошибку в список предыдущих
+ошибок, возникших в приложении. По умолчанию значение равно `false`,
+что значит, про сообщение об ошибке заменяет все предыдущие ошибки
+собой.
+
+Мы можем объявить собственное исключение, связать его с номером
+в диапазоне [-20999, 20000] и использовать для обработки исключений,
+брошенных с помощью `raise_application_error`:
+
+```
+declare
+    e_wrong_passport exception;
+    
+    -- связываем ошибку с кодом
+    pragma exception_init(e_wrong_passport, -20999);
+begin
+    raise_application_error(-20999, 'Неправильный номер паспорта');
+exception
+    when e_wrong_password then
+        dbms_output.put_line ('Неправильный номер паспорта');
+end;
+```
