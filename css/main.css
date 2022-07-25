@@ -1,5 +1,5 @@
 .navbar .brand {
-    --brand-color: var(--nav-light-link-color);
+    --brand-color: #ffffff;
     --brand-hover-color: var(--nav-light-link-hover-color);
 }
 
