@@ -10,3 +10,15 @@
 .bg-toc-plsql {
     --background-color: var(--palette-violet-lightest);
 }
+
+.text-light-mid {
+  --text-color: var(--palette-white-70);
+}
+
+.section-block:nth-child(odd) {
+   background-color: var(--palette-white);
+}
+
+.section-block:nth-child(even) {
+   background-color: var(--palette-positive-light);
+}
