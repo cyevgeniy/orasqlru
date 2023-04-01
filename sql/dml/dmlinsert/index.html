@@ -1,0 +1,65 @@
+<!doctype html><html><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><link rel=stylesheet href=/css/design.css><link rel=stylesheet href=/css/layout.css><link rel=stylesheet href=/css/base.css><link rel=stylesheet href=/css/navigation.css><script async src="https://www.googletagmanager.com/gtag/js?id=UA-144211477-1"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag("js",new Date),gtag("config","UA-144211477-1")</script><title>Учебник Oracle SQL, PL/SQL | Оператор INSERT</title></head><body><div class=menu><a href=/ class=menu__item>Orasql.ru</a>
+<a href=/#sql class=menu__item>Учебник Oracle SQL</a>
+<a href=/#plsql class=menu__item>Учебник PL/SQL</a></div><div class=content><h1>Оператор INSERT</h1><p>Как уже говорилось ранее, <code>INSERT</code> предназначен для вставки данных в
+таблицу. Существует несколько вариантов его использования.</p><h2 id=вставка-с-указанием-колонок>Вставка с указанием колонок</h2><p>В таком варианте после указания таблицы в скобках перечисляются колонки,
+в которые будут записываться указываемые данные.</p><pre><code>insert into employees(id, name, age)
+values(1, 'John', 35)
+</code></pre><p>Данный способ является предпочтительным, т.к. он более информативен -
+сразу видно, что за данные вставляются в таблицу.</p><p>Также, при использовании такого способа, можно изменять порядок
+перечисления данных для строки:</p><pre><code>insert into employees(age, name, id)
+values(30, 'Dave', 2)
+</code></pre><h2 id=вставка-без-указания-колонок>Вставка без указания колонок</h2><p>При таком варианте список столбцов таблицы не перечисляется, а сразу
+указываются значения, которые вставляются в таблицу:</p><pre><code>insert into employees
+values(1, 'John', 35)
+</code></pre><p>Такой способ подразумевает, что мы будем перечислять значения для всех
+колонок в таблице, причем в том порядке, в котором они следуют в
+таблице.</p><p>Такой способ лучше не использовать, т.к. он:</p><ul><li>Неинформативен. Невозможно сказать, что значит 1, а что 35 без
+просмотра структуры таблицы</li><li>Нестабилен к изменениям. Добавление/удаление колонки из таблицы
+потребует добавления/удаления значения из запроса.</li></ul><p>Разберем последний минус данного подхода. Предположим, что в таблице
+<code>employees</code> колонка <code>age</code> необязательна, т.е. может содержать <code>NULL</code>.</p><p>В случае, когда мы указываем колонки, мы можем сделать так:</p><pre><code>insert into employees(id, name)
+values(1, 'John')
+</code></pre><p>Если использовать вариант без указания колонок, то мы будем вынуждены
+прописывать значения для всех колонок:</p><pre><code>insert into employees(id, name, age)
+values(1, 'John', null)
+</code></pre><p>Попытка указать всего 2 значения при вставке приведет к ошибке
+<code>ORA-00947: not enough values</code>:</p><pre><code>-- выдаст ошибку ORA-00947: not enough values
+insert into employees
+values(1, 'John')
+</code></pre><p>То же самое будет и в случае, если мы добавим в таблицу необязательную
+колонку - написанный ранее запрос с перечислением колонок будет
+работать, а запрос, в котором колонки не указывались - нет.</p><h2 id=insert-into--select>INSERT INTO &mldr; SELECT</h2><p>Данный способ очень мощная и гибкая возможность. Она позволяет
+использовать значения, возвращаемые оператором <code>select</code> в качестве
+значений для вставки.</p><p>В общем виде подобный запрос выглядит так:</p><pre><code>insert into table_1(column_1, column_2, column_3...)
+select col_1,
+       col_2,
+       col_3,
+       ....
+from table_2
+</code></pre><p>Более конкретный пример может выглядеть так: предположим, что нас
+попросили записать в таблицу <code>emp_report</code> список сотрудников, которые
+старше 40 лет. Из этой таблицы потом экспортируют данные в отчет для
+руководства.</p><pre><code>insert into emp_report(emp_id, name)
+select emp.id,
+       emp.name
+from employees emp
+where emp.age &gt; 40
+</code></pre><p>В случае, если запрос <code>select</code> не вернул никаких данных, то в таблицу
+также не будет вставлено ни одной строки.</p><p>В следующем примере данные не будут добавлены в таблицу(предполагается,
+что в таблице <code>employees</code> нет сотрудников с отрицательным возрастом):</p><pre><code>insert into emp_report(emp_id, name)
+select emp.id,
+       emp.name
+from employees emp
+where emp.age &lt; 0
+</code></pre><p>Запрос, получающий данные, может быть достаточно сложным - в нем могут
+использоваться соединения таблиц, различные условия, подзапросы и т.п.</p><p>Предположим, нас попросили добавить также и количество детей у
+сотрудника. Список детей по сотрудникам хранится в таблице <code>emp_childs</code>.
+Тогда запрос вставки данных мог выглядеть следующим образом:</p><pre><code>insert into emp_report(emp_id, name, childs_count)
+select emp.id,
+       emp.name,
+       count(chlds.id) childs_count
+from employees emp
+join emp_childs chlds on chlds.emp_id = emp.id
+where emp.age &gt; 40
+group by emp.id, emp.name
+</code></pre></div><footer class="footer b-dark-low b-top"><div class="footer-container container centered edges"><p class="text-medium text-moderated">© Orasql.ru<br>2019-2023</p></div></div></footer></body></html>

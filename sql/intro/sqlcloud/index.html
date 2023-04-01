@@ -1,0 +1,27 @@
+<!doctype html><html><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><link rel=stylesheet href=/css/design.css><link rel=stylesheet href=/css/layout.css><link rel=stylesheet href=/css/base.css><link rel=stylesheet href=/css/navigation.css><script async src="https://www.googletagmanager.com/gtag/js?id=UA-144211477-1"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag("js",new Date),gtag("config","UA-144211477-1")</script><title>Учебник Oracle SQL, PL/SQL | Выполнение SQL. Облачные сервисы</title></head><body><div class=menu><a href=/ class=menu__item>Orasql.ru</a>
+<a href=/#sql class=menu__item>Учебник Oracle SQL</a>
+<a href=/#plsql class=menu__item>Учебник PL/SQL</a></div><div class=content><h1>Выполнение SQL. Облачные сервисы</h1><p>Для того, чтобы начать работу с БД(причем любой), она должна быть
+где-либо установлена, и к ней должен быть доступ на подключение и
+выполнение запросов.</p><h2 id=livesql>LiveSQL</h2><p>В этом учебнике для выполнения sql-запросов будет использоваться сервис
+<a href=https://livesql.oracle.com/>Live SQL</a>. Он позволяет выполнять SQL в
+облаке, что непременно большой плюс - там гораздо быстрее
+зарегистрироваться, чем скачивать, устанавливать и настраивать себе БД
+Oracle.</p><p>Работать с livesql очень просто; опишем стандартные шаги, необходимые
+для запуска своих sql-запросов.</p><p>Входим под своей учеткой, после чего в левом боковом меню выбираем &ldquo;SQL
+WorkSheet&rdquo;:</p><p><img src=/img/1_intro/livesql_1.png alt></p><p>В открывшемся окне вводим наши SQL-запросы:</p><p><img src=/img/1_intro/livesql_2.png alt></p><p>Чтобы выполнить запрос, написанный в SQL Worksheet, нажимаем на кнопку
+&ldquo;Run&rdquo;, которая находится сверху над полем для ввода текста запроса:</p><p><img src=/img/1_intro/livesql_3.png alt></p><p>Впринципе, работа с LiveSQL не должна вызывать вопросов, но на всякий
+случай вот видео с youtube(на английском) c подробным описанием работы в
+нем: <a href=https://youtu.be/4oxsxJQQC-s>https://youtu.be/4oxsxJQQC-s</a>.</p><h2 id=sql-fiddle>SQL Fiddle</h2><p><a href=http://sqlfiddle.com/>SQL Fiddle</a> - еще один популярный сервис для
+работы с SQL. Поддерживает разные базы данных. Для работы SQLFiddle даже
+не требует регистрации.</p><p>Далее будет описано, как работать с данным сервисом.</p><p>Сначала заходим на <a href=http://sqlfiddle.com/>SQL Fiddle</a>.</p><p>Т.к. сервис поддерживает работу с несколькими БД, нужно выбрать ту, с
+которой будем работать - это Oracle:</p><p><img src=/img/1_intro/sqlfiddle_1.png alt></p><p>Перед началом работы SQL Fiddle требует создания схемы. Это значит, что
+таблицы, с которыми нужно работать, должны быть созданы на этом этапе.
+Вводим текст ddl-скрипта (скрипта, который создает таблицы и др. объекты
+БД), после чего нажимаем на кнопку &ldquo;Build Schema&rdquo;:</p><p><img src=/img/1_intro/sqlfiddle_4.png alt></p><p>После того, как схема будет построена, можно выполнять SQL-запросы. Они
+вводятся в правой панели(она называется &ldquo;Query Panel&rdquo;). Чтобы выполнить
+запрос, нажимаем на кнопку &ldquo;Run Sql&rdquo;:</p><p><img src=/img/1_intro/sqlfiddle_2.png alt></p><p>Результаты выполнения запросов отображаются под панелями создания схемы
+и ввода sql:</p><p><img src=/img/1_intro/sqlfiddle_3.png alt></p><h2 id=запуск-примеров-учебника>Запуск примеров учебника</h2><p>Запускать примеры из учебника можно в любой среде. Тем не менее, в силу
+того, что тема транзакций будет рассматриваться в самом конце, лучше
+всего(и удобнее) использовать сервис LiveSQL.</p><p>В дальнейшем, при изучении PL/SQL, придется выбрать какую-нибудь IDE, но
+при изучении базового SQL это необязательно.</p></div><footer class="footer b-dark-low b-top"><div class="footer-container container centered edges"><p class="text-medium text-moderated">© Orasql.ru<br>2019-2023</p></div></div></footer></body></html>

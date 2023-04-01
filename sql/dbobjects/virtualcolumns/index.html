@@ -1,0 +1,46 @@
+<!doctype html><html><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><link rel=stylesheet href=/css/design.css><link rel=stylesheet href=/css/layout.css><link rel=stylesheet href=/css/base.css><link rel=stylesheet href=/css/navigation.css><script async src="https://www.googletagmanager.com/gtag/js?id=UA-144211477-1"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag("js",new Date),gtag("config","UA-144211477-1")</script><title>Учебник Oracle SQL, PL/SQL | Виртуальные колонки</title></head><body><div class=menu><a href=/ class=menu__item>Orasql.ru</a>
+<a href=/#sql class=menu__item>Учебник Oracle SQL</a>
+<a href=/#plsql class=menu__item>Учебник PL/SQL</a></div><div class=content><h1>Виртуальные колонки</h1><h2 id=создание-виртуальных-колонок>Создание виртуальных колонок</h2><p>Виртуальные колонки были добавлены в 11 версии Oracle.</p><p>Виртуальные колонки - это колонки, которые вычисляются на основе других
+колонок таблицы. Например:</p><pre><code>create table cars(
+    id number primary key,
+    model varchar2(100) not null,
+    engine_volume number,
+    max_speed_km number not null,
+    max_speed_ml generated always as
+         (max_speed_km / 1.609));
+
+comment on column cars.max_speed_km is
+    'Максимальная скорость, км/ч';
+comment on column cars.max_speed_ml is
+    'Максимальная скорость, миль/ч';
+</code></pre><p>Здесь максимальная скорость в милях вычисляется на основании данных о
+максимальной скорости автомобиля в километрах.</p><p>Фраза <code>generated always</code> используется для улучшения читаемости - чтобы
+было понятнее, что колонка будет вычисляемой. Объявить колонку
+<code>max_speed_ml</code> можно было и без нее:</p><pre><code>max_speed_ml as (max_speed_km / 1609.344)
+</code></pre><p>Указывать тип данных в колонке необязательно - Oracle сможет определить
+его на основании выражения, которое ее описывает.</p><p>Когда мы добавляем данные в таблицу, виртуальные колонки не должны нигде
+указываться, т.к. они будут вычислены автоматически:</p><pre><code>insert into cars(id, model, engine_volume, max_speed_km)
+values(1, 'Tesla', NULL, 250);
+</code></pre><p>Теперь посмотрим на данные в таблице:</p><pre><code>| ID | MODEL | ENGINE_VOLUME | MAX_SPEED_KM | MAX_SPEED_ML |
+|  1 | Tesla | -             |          250 | 155.37       |
+</code></pre><p>На самом деле значение в вычисляемой колонке будет другим, т.к. мы не
+использовали округление при его вычислении. Для удобства отображения мы
+оставили лишь 2 знака после запятой.</p><h2 id=добавление-виртуальной-колонки-к-уже-существующей-таблице>Добавление виртуальной колонки к уже существующей таблице</h2><pre><code>alter table cars
+add(
+    max_speed_m generated always as
+        (max_speed_km * 1000)
+);
+</code></pre><p>Теперь в таблице хранится и скорость автомобиля в метрах в час:</p><pre><code>select id,
+       max_speed_km,
+       round(max_speed_ml, 2) msm,
+       max_speed_m
+from cars
+
+| ID | MAX_SPEED_KM |    MSM | MAX_SPEED_M |
+|  1 |          250 | 155.38 |      250000 |
+</code></pre><h2 id=когда-использовать-виртуальные-колонки>Когда использовать виртуальные колонки</h2><p>Виртуальные колонки позволяют не использовать
+<a href=/sql/dbobjects/views/>представления</a> в тех случаях, когда колонки,
+которые часто требуются наравне с &ldquo;чистыми&rdquo; данными таблицы, можно
+вычислить на основании этих самых чистых данных.</p><p>В таком случае ваша схема БД будет проще - за всеми необходимыми данными
+обращаемся напрямую к таблице.</p></div><footer class="footer b-dark-low b-top"><div class="footer-container container centered edges"><p class="text-medium text-moderated">© Orasql.ru<br>2019-2023</p></div></div></footer></body></html>

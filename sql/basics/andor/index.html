@@ -1,0 +1,72 @@
+<!doctype html><html><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><link rel=stylesheet href=/css/design.css><link rel=stylesheet href=/css/layout.css><link rel=stylesheet href=/css/base.css><link rel=stylesheet href=/css/navigation.css><script async src="https://www.googletagmanager.com/gtag/js?id=UA-144211477-1"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag("js",new Date),gtag("config","UA-144211477-1")</script><title>Учебник Oracle SQL, PL/SQL | Проверка нескольких условий. AND, OR</title></head><body><div class=menu><a href=/ class=menu__item>Orasql.ru</a>
+<a href=/#sql class=menu__item>Учебник Oracle SQL</a>
+<a href=/#plsql class=menu__item>Учебник PL/SQL</a></div><div class=content><h1>Проверка нескольких условий. AND, OR</h1><p>При выборке данных мы можем указывать несколько условий одновременно.
+Для объединения условий можно использовать операторы <code>and</code> (логическое
+&ldquo;И&rdquo;) и <code>or</code>(логическое &ldquo;ИЛИ&rdquo;). Разберем каждый из них на примерах.</p><p>Пример №1: получим список блюд с рейтингом, меньшим чем 320, но со
+стоимостью большей, чем 2:</p><pre><code>select *
+from dishes
+where rating &lt; 320
+and price &gt; 2
+</code></pre><p><img src=/img/3_select/rating_l320_price_g2.png alt></p><p>Пример №2: получим список блюд, рейтинг которых варьируется от 280 до
+320 включительно, и цена которых меньше 30:</p><pre><code>select d.*
+from dishes d
+where rating ≥ 280
+and rating ≤ 320
+and price &lt; 30
+</code></pre><p><img src=/img/3_select/rating_ge280le320_pricel30.png alt></p><p>При использовании ключевого слова <code>AND</code> следует всегда помнить о том,
+что если хотя бы одно из условий будет ложным, то результат всего
+выражения также будет ложным:</p><pre><code>select d.*
+from dishes d
+where rating ≥ 280
+and rating ≤ 320
+and price &lt; 30
+and 1 = 0
+</code></pre><p><img src=/img/3_select/no_data_found.png alt></p><p>В приведенном выше примере выражение <code>1 = 0</code> является ложным, а значит и
+всё условие также становится ложным, что приводит к отсутствию данных в
+выборке.</p><p>При использовании ключевого слова <code>AND</code> следует всегда помнить о том,
+что если хотя бы одно из условий будет ложным, то результат всего
+выражения также будет ложным.</p><p>Пример №3: Получить список блюд, рейтинг которых либо 320, либо 280:</p><pre><code>select d.*
+from dishes d
+where rating =280
+or rating = 320
+</code></pre><p><img src=/img/3_select/rating_320or280.png alt></p><p>При использовании ключевого слова <code>OR</code> все выражение будет считаться
+истинным, если хотя бы одно условие из перечисленных будет истинным.</p><p>Например, следующий запрос вернет все строки из таблицы dishes:</p><pre><code>select d.*
+from dishes d
+where rating = -1
+or 1 &lt; 2
+</code></pre><p><img src=/img/3_select/all_data.png alt></p><p>Несмотря на то, что у нас нет ни одного блюда с рейтингом, равным -1,
+запрос вернул все строки, так как для каждой строки будет истинным
+условие &ldquo;1 &lt; 2&rdquo;.</p><p>Используя комбинирование <code>AND</code> и <code>OR</code>, можно составлять более сложные
+условия.</p><p>Пример №4: Получить список блюд, рейтинг которых равен 320 и стоимость
+больше 30, либо рейтинг которых меньше, чем 270:</p><pre><code>select d.*
+from dishes d
+where (d.rating = 320 and d.price &gt; 30)
+or d.rating &lt; 270
+</code></pre><p><img src=/img/3_select/andor_1.png alt></p><p>В приведенном выше примере использовались скобки для группировки
+условий. Скобки используются для того, чтобы определить приоритет
+вычисления выражения. Здесь все, как если бы мы считали обычное
+математическое выражение - то, что в скобках, вычисляется отдельно.</p><p>Свиная отбивная попала в выборку потому, что она удовлетворяет условию
+<code>d.rating = 320 and d.price > 30</code> (Ее стоимость 30.5, а рейтинг = 320).
+Борщ попал в выборку потому, что он удовлетворяет условию
+<code>d.rating &lt; 270</code> (его рейтинг равен 130). Так как между двумя условиями
+(выражение в скобках рассматриваем как одно условие) стоит <code>OR</code>, то в
+выборку попадает любая строка, которая удовлетворяет хотя бы одному из
+этих условий.</p><p>Для того, чтобы лучше понять, какую роль здесь выполняют скобки,
+выполним тот же запрос, но только расставим в нем скобки по-другому:</p><pre><code>select d.*
+from dishes d
+where d.rating = 320 and
+(d.price &gt; 30 or d.rating &lt; 270)
+</code></pre><p><img src=/img/3_select/andor_2.png alt></p><p>Сейчас в выборку попала только свиная отбивная. Давайте разберемся,
+почему. Учитывая скобки, каждая строка в выборке должна удовлетворять
+следующим условиям:</p><ul><li>Рейтинг должен быть равен 320</li><li>Стоимость должна быть больше 30, либо рейтинг должен быть меньше 270</li></ul><p>При этом, эти два условия должны быть истинными одновременно, т.к. между
+ними указано ключевое слово <code>AND</code>.</p><p>Итак, блюд с рейтингом, равным 320, всего два - &ldquo;Макароны с сыром&rdquo; и
+&ldquo;Свиная отбивная&rdquo;. Т.е. по первому условию в выборку попадают всего 2
+блюда. Теперь по второму условию. У Макарон с сыром стоимость = 20.56,
+рейтинг = 320. Посмотрим, будет ли истинным второе условие для них; для
+этого просто мысленно подставим значения в условие: <code>20.56 > 30</code> или
+<code>320 &lt; 270</code>. Для того, чтобы данное условие было истинным, достаточно,
+чтобы хотя бы одно из его частей было истинным, т.к. используется <code>OR</code>.
+Но, как видно, ни одно из них не является истинным. Это значит, что все
+выражение в скобках является ложным, а значит и данная строка не попадет
+в выборку.</p></div><footer class="footer b-dark-low b-top"><div class="footer-container container centered edges"><p class="text-medium text-moderated">© Orasql.ru<br>2019-2023</p></div></div></footer></body></html>

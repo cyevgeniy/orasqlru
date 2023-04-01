@@ -1,0 +1,66 @@
+<!doctype html><html><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><link rel=stylesheet href=/css/design.css><link rel=stylesheet href=/css/layout.css><link rel=stylesheet href=/css/base.css><link rel=stylesheet href=/css/navigation.css><script async src="https://www.googletagmanager.com/gtag/js?id=UA-144211477-1"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag("js",new Date),gtag("config","UA-144211477-1")</script><title>Учебник Oracle SQL, PL/SQL | Псевдостолбцы в Oracle</title></head><body><div class=menu><a href=/ class=menu__item>Orasql.ru</a>
+<a href=/#sql class=menu__item>Учебник Oracle SQL</a>
+<a href=/#plsql class=menu__item>Учебник PL/SQL</a></div><div class=content><h1>Псевдостолбцы в Oracle</h1><p>К псевдостолбцам можно относиться как к обычным колонкам в таблице, за
+тем лишь исключением, что данные, которые они представляют, в таблице не
+хранятся.</p><p>Некоторые псевдостолбцы доступны только в определенном контексте,
+например, лишь при использовании рекурсивных запросов.</p><p>Мы рассмотрим не все псевдостолбцы, доступны в Oracle, а лишь самые
+основные и часто используемые. Полный их список и описание можно
+почитать в
+<a href=https://docs.oracle.com/cd/B19306_01/server.102/b14200/pseudocolumns.htm>докумениации</a>.</p><p>Мы будем использовать таблицу <code>dishes</code>, которая создается в части про
+<a href=/sql/basics/comparison/>операторы сравнения</a>.</p><h2 id=rownum>ROWNUM</h2><p>Данный псевдостолбец возвращает порядковый номер, под которым Oracle
+выбирает строку из таблицы. Для первой строки значение <code>ROWNUM</code> будет
+равно 1, для второй - 2, и т.д.</p><p>Один из классических примеров использования <code>ROWNUM</code> - ограничение
+количества получаемых строк из таблицы:</p><pre><code>select d.*
+from dishes d
+where rownum &lt; 3
+</code></pre><p><img src=/img/11_pseudocolumns/rownum_less_3.png alt></p><p>Если в запросе используется сортировка, то она может изменить порядок
+строк. Т.е. строка из таблицы могла получаться первой, и ей мог быть
+присвоен rownum = 1, но после того, как все строки были получены, они
+были отсортированы в другом порядке:</p><pre><code>select d.*, rownum
+from dishes d
+where rownum &lt; 6
+order by price asc
+</code></pre><p><img src=/img/11_pseudocolumns/rownum_order_by.png alt></p><p>Что же делать, если мы хотим пронумеровать наши строки начиная от 1
+таким образом, чтобы у самого дешевого блюда был номер 1, у более
+дорогого - 2 и т.п.?</p><p>Для этого можно использовать <a href=/sql/basics/subqueries/>подзапросы</a>:</p><pre><code>select dishes_ordered.*, rownum
+from (
+  select d.*
+  from dishes d
+  order by price asc
+) dishes_ordered
+</code></pre><p><img src=/img/11_pseudocolumns/rownum_ordered.png alt></p><p>Теперь все будет работать, т.к. сортировка данных была произведена в
+подзапросе еще *до того, как данные будут получаться внешним
+запросом*, а значит и до того, как каждой строке будет присваиваться
+значение <code>ROWNUM</code>.</p><p>Следует отметить, что использование оператора &ldquo;>&rdquo; с <code>ROWNUM</code> не имеет
+смысла. Рассмотрим это на примере:</p><pre><code>select d.*
+from dishes d
+where rownum &gt; 3
+</code></pre><p>Этот запрос ничего не выведет, несмотря на то, что строк в таблице
+больше трех. Все потому, что <code>rownum</code> хранит в себе номер строки, под
+которым Oracle получает ее из таблицы или соединения. В примере выше у
+первой строки(какой бы она не была, она все равно будет первой) значение
+<code>rownum</code> будет равно 1. Это значит, что условие <code>rownum > 3</code> будет
+ложным, и строка не будет добавлена в выборку. Следующая строка опять
+будет иметь <code>rownum = 1</code>, что опять приведет значение условия в False, и
+так будет для всех строк из таблицы <code>dishes</code>.</p><h3 id=top-n-query>Top-N query</h3><p>Получим топ-3 блюда по рейтингу с помощью <code>rownum</code>:</p><pre><code>select rt.name,
+       rt.price,
+       rt.rating,
+       ROWNUM
+from (
+  select d.*
+  from dishes d
+  order by d.rating desc nulls last
+) rt
+where ROWNUM &lt;= 3
+</code></pre><p><img src=/img/11_pseudocolumns/rownum_topn.png alt></p><p>Подобного рода запросы относятся к так называемым &ldquo;top-N queries&rdquo;, т.е.
+они получают часть данных, основываясь на каком-либо критерии сортировки
+( в данном случае это рейтинг блюд).</p><h2 id=rowid>ROWID</h2><p><code>ROWID</code> содержит в себе адрес строки в таблице. На практике он
+используется не часто, но иногда его значение может понадобиться
+сторонним библиотекам.</p><p>Сам <code>rowid</code> уникально идентифицирует определенную строку в таблице, но
+это не означает, что <code>rowid</code> уникален в пределах всей базы данных.</p><p>Значение <code>rowid</code> нельзя использовать для того, чтобы ссылаться на
+определенную строку в таблице, т.к. оно может измениться.</p><p>Для примера просто получим все строки из таблицы <code>dishes</code> с их <code>rowid</code>:</p><pre><code>select rowid, d.name
+from dishes d
+</code></pre><p><img src=/img/11_pseudocolumns/rowid.png alt></p><h2 id=level>LEVEL</h2><p>Данный псевдостолбец доступен только в рекурсивных запросах. Подробнее
+про него можно почитать в части про
+<a href=/sql/basics/recursive/>рекурсивные запросы</a>.</p></div><footer class="footer b-dark-low b-top"><div class="footer-container container centered edges"><p class="text-medium text-moderated">© Orasql.ru<br>2019-2023</p></div></div></footer></body></html>

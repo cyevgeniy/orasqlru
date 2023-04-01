@@ -1,0 +1,115 @@
+<!doctype html><html><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><link rel=stylesheet href=/css/design.css><link rel=stylesheet href=/css/layout.css><link rel=stylesheet href=/css/base.css><link rel=stylesheet href=/css/navigation.css><script async src="https://www.googletagmanager.com/gtag/js?id=UA-144211477-1"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag("js",new Date),gtag("config","UA-144211477-1")</script><title>Учебник Oracle SQL, PL/SQL | Соединения таблиц</title></head><body><div class=menu><a href=/ class=menu__item>Orasql.ru</a>
+<a href=/#sql class=menu__item>Учебник Oracle SQL</a>
+<a href=/#plsql class=menu__item>Учебник PL/SQL</a></div><div class=content><h1>Соединения таблиц</h1><p>Работать с одной таблицей в БД приходится редко. Как правило, данные
+распределены по нескольким таблицам, которые связаны между собой.</p><h2 id=подготовка-данных>Подготовка данных</h2><p>Для демонстрации соединений понадобится несколько таблиц.</p><pre><code>create table app_users(
+    login varchar2(50 char) primary key,
+    registration_date date default sysdate not null,
+    email varchar2(200 char) not null
+);
+
+comment on table app_users is 'Пользователи';
+
+create table app_roles(
+    role_id number(10) primary key,
+    role_name varchar2(50) not null
+);
+
+comment on table app_roles is 'Роли в системе';
+
+create table user_roles(
+    login varchar2(50 char) not null,
+    role_id number(10) not null,
+    constraint user_roles_login_fk foreign key(login)
+    references app_users(login),
+    constraint user_roles_role_id_fk foreign key(role_id)
+    references app_roles(role_id)
+);
+
+insert into app_users 
+values('johndoe', sysdate, 'johndoe@johndoemail.com');
+
+insert into app_users 
+values('alex', sysdate, 'alexman@mail.com');
+
+insert into app_users 
+values('kate', sysdate, 'kate@somemaill.com');
+
+insert into app_users 
+values('mike', sysdate, 'mike@mikemailll.com');
+
+insert into app_users 
+values('dmitry', sysdate, 'dmitry@somemaill.com');
+
+insert into app_users 
+values('mr_dude', sysdate, 'mr_dude@email.dude');
+
+insert into app_roles values(1, 'admin');
+insert into app_roles values(2, 'boss');
+insert into app_roles values(3, 'employee');
+insert into app_roles values(4, 'support');
+
+insert into user_roles values('johndoe', 1);
+insert into user_roles values('johndoe', 2);
+insert into user_roles values('johndoe', 3);
+insert into user_roles values('alex', 3);
+insert into user_roles values('kate', 3);
+insert into user_roles values('mike', 2);
+insert into user_roles values('dmitry', 3);
+</code></pre><p>Информация о пользователях хранится в нескольких таблицах. Для того,
+чтобы получить данные &ldquo;вместе&rdquo;, придется использовать соединения.</p><h2 id=join>Join</h2><p>Получим список пользователей вместе с ролями, которыми они обладают в
+системе:</p><pre><code>select au.login, au.email, ar.role_name
+from app_users au
+JOIN user_roles ur on au.login = ur.login
+JOIN app_roles ar on ar.role_id = ur.role_id
+</code></pre><p>Получим следующий результат:</p><p><img src=/img/5_joins/joins_intro.png alt></p><p>Приведенный запрос можно читать по порядку:</p><ol><li>Берем все записи из таблицы <code>user_roles</code></li><li>Теперь &ldquo;приклеиваем&rdquo; справа к нашему набору данных строки из таблицы
+<code>app_roles</code>, у которых в колонке <code>role_id</code> содержатся такие же
+значения, как и в колонке <code>role_id</code> таблицы <code>user_roles</code>. При этом
+строки, у которых эти значения не совпадают, убираются из
+результирующего набора</li><li>К получившемуся на шаге 2 набору данных &ldquo;приклеиваем&rdquo; справа строки
+из таблицы app_users, у которых значение в колонке login совпадает
+со значением колонки <code>login</code> в таблице <code>user_roles</code>. Опять же,
+строки, у которых эти значение не совпадают, удаляются из
+результирующего набора данных.</li><li>Из получившегося набора данных, выбираем только колонки <code>login</code>,
+<code>email</code>, <code>role_name</code>. После &ldquo;склейки&rdquo; данных наш набор содержит все
+колонки, которые содержатся в используемых таблицах, так что мы
+могли показать значения вообще любых колонок из любой из этих трех
+таблиц(либо вообще все).</li></ol><p>Рассмотрим соединение строк для пользователя с ником <code>johndoe</code>:
+Сначала соединяются таблицы <code>app_users</code> и <code>user_roles</code>.
+В результат соединения попадают строки, у которых совпадает логин пользователя.</p><p><img src=/img/5_joins/joins-1.svg alt></p><p>В результате соединения мы получим следующий набор данных(колонку с датой регистрации не показываем):</p><p><img src=/img/5_joins/joins-2.svg alt></p><p>Здесь следует обратить внимание на то, что значения строк из таблицы
+<code>app_users</code> повторяются для каждой из строк в таблице <code>user_roles</code>.
+Затем мы соединяем получившийся набор данных с таблицей <code>APP_ROLES</code>, и
+к выборке приклеиваются ещё три строки, имеющие совпадение, на этот раз
+по значению в колонке <code>ROLE_ID</code>. При этом строки, которые не имеют совпадения, в выборку не добавляются:</p><p><img src=/img/5_joins/joins-3.svg alt></p><h2 id=left-join>Left join</h2><p>Предыдущий запрос выводил только тех пользователей, у которых
+действительно были назначены некие роли в приложении. Теперь покажем
+всех пользователей и их роли. Для этого будет использоваться
+<code>LEFT JOIN</code>. Он отличается от обычного <code>JOIN</code> тем, что он не убирает
+строки из уже имеющегося набора данных когда &ldquo;приклеивает&rdquo; справа новые
+данные.</p><pre><code>select au.login, au.email, ar.role_name
+from app_users au
+LEFT JOIN user_roles ur on au.login = ur.login
+LEFT JOIN app_roles ar on ar.role_id = ur.role_id
+</code></pre><p><img src=/img/5_joins/left_join_result.png alt></p><p>Как видно, теперь к результирующей выборке добавился пользователь
+<code>mr_dude</code>, которому не были назначены права.</p><p>Схематично процесс &ldquo;приклеивания&rdquo; показан на рисунке:</p><p><img src=/img/5_joins/simple_join.png alt></p><p>Исходная таблица и первый <code>JOIN</code>(или <code>LEFT JOIN</code>) дают некий набор
+данных, который обозначен цифрой &ldquo;1&rdquo;. Все, далее стоит этот набор данных
+рассматривать как одну таблицу, к которой еще раз &ldquo;приклеиваются&rdquo; данные
+с помощью еще одного соединения.</p><p>Еще одна схема соединений:</p><p><img src=/img/5_joins/JOIN.png alt></p><p>Она показывает, что если одной записи в левой части нашего &ldquo;текущего&rdquo;
+набора данных соответствует несколько строк в &ldquo;добавляемой&rdquo; таблице, то
+количество строк после соединения увеличится - для одна строка из левой
+части набора данных будет соединена *с каждой* строкой из правой части
+данных.</p><h2 id=соединение-таблиц-без-join>Соединение таблиц без join</h2><p>Пример из части, где описывалось соединение <code>join</code>, может быть записан и
+без использования этого самого <code>join</code>.</p><pre><code>select au.login, au.email, ar.role_name
+from app_users au
+JOIN user_roles ur on au.login = ur.login
+JOIN app_roles ar on ar.role_id = ur.role_id
+
+select au.login, au.email, ar.role_name
+from app_users au,
+user_roles ur,
+app_roles ar
+where au.login = ur.login
+and   ar.role_id = ur.role_id
+</code></pre><p>Эти два запроса идентичны.</p><p>Вообще, Oracle позволяет записать и left/right join - соединения
+подобным образом, указывая правила соединения в части <code>where</code> запроса.
+Данный синтаксис использовался до версии БД = 9i и здесь рассматриваться
+не будет.</p></div><footer class="footer b-dark-low b-top"><div class="footer-container container centered edges"><p class="text-medium text-moderated">© Orasql.ru<br>2019-2023</p></div></div></footer></body></html>

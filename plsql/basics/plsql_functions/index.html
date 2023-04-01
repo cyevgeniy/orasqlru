@@ -1,0 +1,199 @@
+<!doctype html><html><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><link rel=stylesheet href=/css/design.css><link rel=stylesheet href=/css/layout.css><link rel=stylesheet href=/css/base.css><link rel=stylesheet href=/css/navigation.css><script async src="https://www.googletagmanager.com/gtag/js?id=UA-144211477-1"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag("js",new Date),gtag("config","UA-144211477-1")</script><title>Учебник Oracle SQL, PL/SQL | Функции в PL/SQL</title></head><body><div class=menu><a href=/ class=menu__item>Orasql.ru</a>
+<a href=/#sql class=menu__item>Учебник Oracle SQL</a>
+<a href=/#plsql class=menu__item>Учебник PL/SQL</a></div><div class=content><h1>Функции в PL/SQL</h1><h2 id=какую-проблему-помогают-решить-функции>Какую проблему помогают решить функции</h2><p>Общее описание функций уже было дано в предыдущей части, добавим лишь
+то, что функции - это один из способов сделать наш код более простым,
+понятным, компактным, а также избежать повторного написания однотипного
+кода.</p><h2 id=пример-создания-простой-функции>Пример создания простой функции</h2><p>Предположим, что мы работаем над системой, в которой часто приходится
+считать размер скидок в зависимости от стоимости купленного товара.
+Размер скидки интересует нас с точностью до двух знаков после запятой.</p><p>Вот так может выглядеть код для вычисления нашей скидки:</p><pre><code>declare
+    -- Сумма скидки
+    l_discount number;
+    -- Стоимость товара
+    l_price number := 350;
+begin
+    l_discount := round(l_price * (10 / 100), 2);
+    
+    dbms_output.put_line(l_discount);
+end;
+/
+</code></pre><p>В результате на экран выведется размер скидки - 35.</p><p>Мы посчитали размер скидки по одному товару. А что, если нам нужно
+посчитать скидку по трем товарам в отдельности? Пишем код:</p><pre><code>declare
+    l_discount_1 number;
+    l_discount_2 number;
+    l_discount_3 number;
+    l_price_1 number := 350;
+    l_price_2 number := 100;
+    l_price_3 number := 25;
+begin
+    l_discount_1 := round(l_price_1 * (10 / 100), 2);
+    l_discount_2 := round(l_price_2 * (10 / 100), 2);
+    l_discount_3 := round(l_price_3 * (10 / 100), 2);
+
+    dbms_output.put_line(l_discount_1);
+    dbms_output.put_line(l_discount_2);
+    dbms_output.put_line(l_discount_3);
+end;
+/
+</code></pre><p>Вывод:</p><pre><code>35
+10
+2.5
+</code></pre><p>Может показаться, что все выглядит вполне себе хорошо - необходимая
+логика реализована, в чем проблема?</p><p>Представим, что в какой-то момент начальство говорит вам о том, что
+размер скидки должен округляться до одного знака после запятой, а не до
+двух? Нам придется изменить это в трех местах. То же относится и к
+размеру скидки - что, если в определенный момент времени скидка станет
+не 10, а 20 или 30 процентов?</p><p>Помимо всего прочего, код выше выглядит сложно, без необходимой на то
+причины. Мы могли бы создать функцию, которая будет считать размер этой
+скидки и возвращать её нам:</p><pre><code>create function getDiscount(
+    pprice number
+) return number
+is
+begin
+    return round(pprice * (10 / 100), 2);
+end;
+/
+</code></pre><p>Если запустить код выше, то в текущей схеме БД станет доступна функция
+getDiscount. Используем ее, чтобы модифицировать предыдущий пример:</p><pre><code>declare
+    l_discount_1 number;
+    l_discount_2 number;
+    l_discount_3 number;
+    l_price_1 number := 350;
+    l_price_2 number := 100;
+    l_price_3 number := 25;
+begin
+    l_discount_1 := getDiscount(l_price_1);
+    l_discount_2 := getDiscount(l_price_2);
+    l_discount_3 := getDiscount(l_price_3);
+
+    dbms_output.put_line(l_discount_1);
+    dbms_output.put_line(l_discount_2);
+    dbms_output.put_line(l_discount_3);
+end;
+/
+</code></pre><p>Вывод:</p><pre><code>35
+10
+2.5
+</code></pre><p>Теперь, чтобы сделать изменение в логике подсчета скидки, это нужно
+сделать всего в одном месте, и сразу же размер скидки будет считаться по
+новым правилам.</p><p>По-умолчанию, при попытке создать функцию с именем, которое уже
+существует в текущей схеме, Oracle выдаст ошибку. Для того, чтобы этого
+не возникало, при описании функции используется конструкция
+<code>create or replace</code>.</p><p>Рассмотрим подробнее синтаксис создания функции в PL/SQL.</p><pre><code>-- Используем create or replace,
+-- чтобы заменить предыдущую функцию
+-- с таким же именем на новую
+create or replace function funcName(
+    param1 number
+) return number
+is
+begin
+    return 1;
+end;
+/
+</code></pre><p>Основные элементы которые нужно указать при создани функции это:</p><ul><li>Имя функции</li><li>Параметры(могут отсутствовать)</li><li>Тип возвращаемого значения</li><li>Тело функции</li><li>Команда Return</li></ul><p><img src=/img/plsql/function_structure.png alt></p><p>Вообще, существует большое количество дополнительных синтаксических
+конструкций при создании функций, как например указание того, что
+функция является табличной или детерминированной, но на данном этапе мы
+не будем их рассматривать, так как они используются лишь в специфичных
+случаях.</p><p>Выше мы создали функцию с именем funcName, которая принимает один
+параметр с типом number и возвращает значение типа number( в нашем
+примере это всегда число 1).</p><p>Если параметров несколько, они перечисляются через запятую, например:</p><pre><code>create function funcName(
+    p1 number,
+    p2 varchar2
+) return boolean
+is
+begin
+    return false;
+end;  
+/
+</code></pre><p>Команда return используется для того, чтобы вернуть значение из функции.
+Сразу после этого работа функции завершается, то есть код, который
+указан после <code>return</code>, до которого дошло выполнение, никогда не будет
+вызван:</p><pre><code>create function funcName() return bool
+is
+begin
+    return false;
+    -- Функция всегда будет возвращать False,
+    -- следующий return никогда не будет выполнен
+    return true;
+end;
+/
+</code></pre><p>Следует обратить внимание, что при описании параметров функции мы не
+указываем размерность типов.</p><p>Следующее описание функции вызовет ошибку:</p><pre><code>create function funcName(
+    p1 number(10,2),
+    p2 varchar2(100 char)
+) return boolean
+is
+begin
+    return false;
+end;
+/
+</code></pre><p>Функции могут быть и без аргументов:</p><pre><code>-- Возвращает процент скидки
+create function discValue() return number is
+begin
+    return 10;
+end;
+/
+</code></pre><h2 id=функции-с-ошибками-все-равно-создаются>Функции с ошибками все равно создаются</h2><p>Если мы попытаемся создать функцию с ошибкой, то она все равно создастся
+в схеме БД, но использовать ее будет нельзя, т.к. она будет иметь статус
+invalid.</p><p>Создадим следующую функцию:</p><pre><code>create function invalidFunc() return number is
+begin
+    return false;
+end;
+/
+</code></pre><p>Здесь у нас ошибка, т.к. функция должна возвращать тип number, а мы
+возвращаем значение типа boolean. Oracle выдаст что-нибудь в этом духе:</p><pre><code>Errors: FUNCTION INVALIDFUNC
+Line/Col: 1/22 PLS-00103: Encountered the symbol &quot;)&quot; when
+expecting one of the following:
+
+   &lt;an identifier&gt; &lt;a double-quoted delimited-identifier&gt;
+   current delete exists prior
+</code></pre><p>Ok, пробуем создать функцию без ошибок:</p><pre><code>create function invalidFunc() return number is
+begin
+    return 1;
+end;
+/
+</code></pre><p>И в итоге получаем сообщение
+<code>ORA-00955: name is already used by an existing object</code>, что означает
+что в схеме уже есть объект с таким именем. В нашем случае - это функция
+<code>invalidFunc</code>, которая была создана во время предыдущей попытки.</p><p>Поэтому, чтобы заменить предыдущий вариант функции на новый, нужно
+использовать конструкцию <code>create or replace</code>.</p><h2 id=удаление-функции>Удаление функции</h2><p>Чтобы удалить функцию из схемы, используется команда <code>drop function</code>:</p><pre><code>drop function invalidFunc;
+</code></pre><h2 id=локальные-переменные>Локальные переменные</h2><p>Не всегда функции бывают такими простыми, что их логика помещается в
+одну команду <code>return</code>.</p><p>Для реализации более сложной бизнес-логики или для улучшения
+&ldquo;читаемости&rdquo; кода лучше можно использовать локальные переменные фукнции</p><ul><li>переменные, которые доступны для использования только внутри функции и
+нигде больше. Они объявляются между ключевым словом <code>IS</code> и <code>BEGIN</code>.</li></ul><p>Попробуем переписать нашу функцию <code>getDiscount</code> с использованием
+локальных переменных:</p><pre><code>create or replace function getDiscount(
+    pprice number
+) return number
+is
+    discPerc constant number := 10;
+    discount number;
+begin
+    discount := round(pprice * (discPerc / 100), 2);
+
+    return discount;
+end;
+/
+</code></pre><h2 id=использование-функций-в-sql-запросах>Использование функций в SQL запросах</h2><p>Функции PL/SQL можно использовать в SQL запросах. Для демонстрации этого
+создадим таблицу с товарами и ценами:</p><pre><code>create table products(
+    id number primary key,
+    name varchar2(300 char),
+    price number
+);
+
+insert into products
+values(1, 'Фотоаппарат', 1340);
+
+insert into products
+values(2, 'Клавиатура', 55);
+
+insert into products
+values(3, 'Планшет', 800);
+</code></pre><p>Теперь получим список товаров и размер скидки на них:</p><pre><code>select name, price, getDiscount(price) disc
+from products
+</code></pre><p>Результат:</p><pre><code>NAME         PRICE  DISC
+=========================
+Фотоаппарат | 1340 | 134
+Клавиатура  | 55   | 5.5
+Планшет     | 800  | 80
+=========================
+</code></pre></div><footer class="footer b-dark-low b-top"><div class="footer-container container centered edges"><p class="text-medium text-moderated">© Orasql.ru<br>2019-2023</p></div></div></footer></body></html>

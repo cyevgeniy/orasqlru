@@ -1,0 +1,51 @@
+<!doctype html><html><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><link rel=stylesheet href=/css/design.css><link rel=stylesheet href=/css/layout.css><link rel=stylesheet href=/css/base.css><link rel=stylesheet href=/css/navigation.css><script async src="https://www.googletagmanager.com/gtag/js?id=UA-144211477-1"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag("js",new Date),gtag("config","UA-144211477-1")</script><title>Учебник Oracle SQL, PL/SQL | Оператор WHERE. Операторы сравнения</title></head><body><div class=menu><a href=/ class=menu__item>Orasql.ru</a>
+<a href=/#sql class=menu__item>Учебник Oracle SQL</a>
+<a href=/#plsql class=menu__item>Учебник PL/SQL</a></div><div class=content><h1>Оператор WHERE. Операторы сравнения</h1><p>Использование оператора <code>where</code> позволяет добавить фильтр на те данные,
+которые будет обрабатывать sql, будь то выборка, вставка, обновление или
+удаление.</p><p>Для демонстрации будем использовать те же данные, что и в примере с
+<a href=../orderby/index.html>order by</a> :</p><pre><code>create table dishes(
+name varchar2(100) not null,
+price number(5,2) not null,
+rating number(5)
+);
+
+comment on column dishes.name is
+    'Наименование блюда';
+comment on column dishes.price is
+    'Стоимость за одну порцию';
+comment on column dishes.rating is
+    'Популярность блюда';
+
+insert into dishes(name, price, rating)
+values ('Макароны с сыром', 20.56, 320);
+
+insert into dishes(name, price, rating)
+values ('Борщ', 10, 130);
+
+insert into dishes(name, price, rating)
+values ('Чай с лимоном', 1.34, 270);
+
+insert into dishes(name, price, rating)
+values ('Чай с молоком', 1.20, 280);
+
+insert into dishes(name, price, rating)
+values ('Свиная отбивная', 30.50, 320);
+
+insert into dishes(name, price, rating)
+values ('Овощной салат', 5.70, null);
+</code></pre><h2 id=операторы-сравнения>Операторы сравнения</h2><p>В <code>where</code> можно использовать следующие реляционные операторы:</p><pre><code>&lt;, &gt;, &lt;=, &gt;=, !=, &lt;&gt;
+</code></pre><p>Последние 2 оператора обозначают одно и то же - &ldquo;Не равно&rdquo;.</p><p>Рассмотрим применение данных операторов на примерах.</p><h3 id=оператор-меньше>Оператор &ldquo;Меньше&rdquo;(&lt;)</h3><pre><code>select d.*
+from dishes d
+where d.rating &lt; 320
+</code></pre><p>Данный запрос вернет список всех блюд, рейтинг которых меньше, чем 320:</p><p><img src=/img/3_select/rating_less_320.png alt></p><h3 id=оператор-больше>Оператор &ldquo;Больше&rdquo;(>)</h3><pre><code>select d.*
+from dishes d
+where d.rating &gt; 270
+</code></pre><p>Данный запрос вернет список блюд с рейтингом, большим, чем 270:</p><p><img src=/img/3_select/rating_greater_270.png alt></p><h3 id=оператор-больше-либо-равно>Оператор &ldquo;Больше либо равно&rdquo;(≥)</h3><pre><code>select d.*
+from dishes d
+where d.rating &gt;= 270
+</code></pre><p>Данный запрос вернет список блюд с рейтингом, большим либо равным 270:</p><p><img src=/img/3_select/rating_greaterequal_270.png alt></p><h3 id=оператор-меньше-либо-равно>Оператор &ldquo;Меньше либо равно&rdquo;(≤)</h3><pre><code>select d.*
+from dishes d
+where d.rating ≤ 320
+</code></pre><p>Данный запрос возвращает все блюда, рейтинг которых меньше либо равен
+320:</p><p><img src=/img/3_select/rating_lessequal_320.png alt></p></div><footer class="footer b-dark-low b-top"><div class="footer-container container centered edges"><p class="text-medium text-moderated">© Orasql.ru<br>2019-2023</p></div></div></footer></body></html>

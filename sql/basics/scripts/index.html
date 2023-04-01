@@ -1,0 +1,58 @@
+<!doctype html><html><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><link rel=stylesheet href=/css/design.css><link rel=stylesheet href=/css/layout.css><link rel=stylesheet href=/css/base.css><link rel=stylesheet href=/css/navigation.css><script async src="https://www.googletagmanager.com/gtag/js?id=UA-144211477-1"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag("js",new Date),gtag("config","UA-144211477-1")</script><title>Учебник Oracle SQL, PL/SQL | Написание SQL- кода</title></head><body><div class=menu><a href=/ class=menu__item>Orasql.ru</a>
+<a href=/#sql class=menu__item>Учебник Oracle SQL</a>
+<a href=/#plsql class=menu__item>Учебник PL/SQL</a></div><div class=content><h1>Написание SQL- кода</h1><p>Код SQL, как и любой другой, можно сохранять в файлы. Расширение этих
+файлов на самом деле не имеет значения, но принято сохранять sql-скрипты
+с расширением .sql.</p><p>Некоторые IDE могут сохранять SQL-код и с другими расширениями
+файлов(например PL/SQL Developer - для т.н. тестовых скриптов он
+использует расширение *.tst.</p><h2 id=комментарии>Комментарии</h2><p>В SQL можно и нужно добавлять комментарии. Это участки текста,
+предназначенные для чтения другими людьми, и которые не обрабатываются
+базой данных.</p><p>Комментарий может быть однострочным:</p><pre><code>-- Получить базовую информацию о записях в блоге
+select a.title,
+       a.name,
+       a.create_date
+from posts a
+</code></pre><p>Многострочные комментарии также поддерживаются:</p><pre><code>/* Отобразить записи в блоге
+   для пользователя johndoe
+   в порядке их публикации
+*/
+select a.title,
+       a.post
+from posts a
+where a.username = 'JOHNDOE'
+order by a.publish_date
+</code></pre><p>Многострочные комментарии начинаются с символов &ldquo;/\*&rdquo; и заканчиваются
+символами &ldquo;*/&rdquo;. Вообще говоря, такой комментарий может быть и
+однострочным:</p><pre><code>/* Однострочный комментарий */
+select a.title
+from posts a
+</code></pre><h2 id=разделение-команд-sql>Разделение команд SQL</h2><p>В одном скрипте может находиться несколько команд SQL. Между собой эти
+команды должны разделяться символом &ldquo;;&rdquo; (точка с запятой).</p><p>Например, скрипт ниже создает таблицу <code>tst</code>, после чего добавляет в нее
+данные.</p><pre><code>create table tst(x number);
+
+insert into tst values(1);
+insert into tst values(2);
+insert into tst values(3);
+</code></pre><p>Многие IDE позволяют выполнять только одну определенную команду из всех
+присутствующих в скрипте. В каждой это работает по-своему, но как
+правило это та команда, на которой сейчас стоит курсор.</p><h2 id=регистр>Регистр</h2><p>В Oracle ключевые слова(create, delete, select, join и т.д.)
+являются регистронезависимыми. С названиями таблиц и колонками дела обстоят иначе.
+По умолчанию, наименования таблиц и колонок регистронезависимы.
+Но если мы будем заключать их в кавычки, в них будет учитываться регистр.
+Сейчас мы не будем разбирать детали, приведём лишь пример двух абсолютно разных запросов:</p><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sql data-lang=sql><span style=display:flex><span><span style=color:#000;font-weight:700>select</span><span style=color:#bbb> </span><span style=color:#000;font-weight:700>*</span><span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb></span><span style=color:#000;font-weight:700>from</span><span style=color:#bbb> </span><span style=color:#d14>&#34;Users&#34;</span>;<span style=color:#bbb>
+</span></span></span></code></pre></div><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sql data-lang=sql><span style=display:flex><span><span style=color:#000;font-weight:700>select</span><span style=color:#bbb> </span><span style=color:#000;font-weight:700>*</span><span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb></span><span style=color:#000;font-weight:700>from</span><span style=color:#bbb> </span>users;<span style=color:#bbb>
+</span></span></span></code></pre></div><p>Каждый из этих запросов получает данные из абсолютно разных таблиц — <code>Users</code> и <code>users</code>(или <code>USERS</code>).
+Ещё один пример с использованием регистрозависимых колонок:</p><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sql data-lang=sql><span style=display:flex><span><span style=color:#000;font-weight:700>create</span><span style=color:#bbb> </span><span style=color:#000;font-weight:700>table</span><span style=color:#bbb> </span>orders(<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>    </span>order_num<span style=color:#bbb> </span>varchar2(<span style=color:#099>20</span>),<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>    </span><span style=color:#d14>&#34;Order_num&#34;</span><span style=color:#bbb> </span>varchar2(<span style=color:#099>20</span>)<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb></span>);<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb></span><span style=color:#000;font-weight:700>insert</span><span style=color:#bbb> </span><span style=color:#000;font-weight:700>into</span><span style=color:#bbb> </span>orders(order_num,<span style=color:#bbb> </span><span style=color:#d14>&#34;Order_num&#34;</span>)<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb></span><span style=color:#000;font-weight:700>values</span>(<span style=color:#d14>&#39;123&#39;</span>,<span style=color:#bbb> </span><span style=color:#d14>&#39;456&#39;</span>);<span style=color:#bbb>
+</span></span></span></code></pre></div><p>Здесь мы создали таблицу с двумя разными колонками, одна из которых(&ldquo;Order_num&rdquo;) является
+регистрозависимой, после чего вставили в таблицу одну строку.
+Посмотрим на данные в таблице <code>orders</code>:</p><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sql data-lang=sql><span style=display:flex><span><span style=color:#000;font-weight:700>select</span><span style=color:#bbb> </span><span style=color:#000;font-weight:700>*</span><span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb></span><span style=color:#000;font-weight:700>from</span><span style=color:#bbb> </span>orders;<span style=color:#bbb>
+</span></span></span></code></pre></div><table><thead><tr><th>ORDER_NUM</th><th>Order_num</th></tr></thead><tbody><tr><td>123</td><td>456</td></tr></tbody></table><p>В учебнике мы не будем использовать эту возможность, и все объекты у нас будут использовать регистронезависимыми.</p></div><footer class="footer b-dark-low b-top"><div class="footer-container container centered edges"><p class="text-medium text-moderated">© Orasql.ru<br>2019-2023</p></div></div></footer></body></html>

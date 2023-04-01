@@ -1,0 +1,20 @@
+<!doctype html><html><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><link rel=stylesheet href=/css/design.css><link rel=stylesheet href=/css/layout.css><link rel=stylesheet href=/css/base.css><link rel=stylesheet href=/css/navigation.css><script async src="https://www.googletagmanager.com/gtag/js?id=UA-144211477-1"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag("js",new Date),gtag("config","UA-144211477-1")</script><title>Учебник Oracle SQL, PL/SQL | DBMS_OUTPUT.PUT_LINE. Вывод на экран</title></head><body><div class=menu><a href=/ class=menu__item>Orasql.ru</a>
+<a href=/#sql class=menu__item>Учебник Oracle SQL</a>
+<a href=/#plsql class=menu__item>Учебник PL/SQL</a></div><div class=content><h1>DBMS_OUTPUT.PUT_LINE. Вывод на экран</h1><p>При изучении любого языка программирования очень важно иметь возможность
+выводить информацию на экран.</p><p>Несмотря на то, что PL/SQL - язык, интегрированный в БД Oracle, он также
+имеет возможность вывода информации на экран. Для этого используется
+процедура <code>dbms_output.put_line</code>.</p><p>Пример вызова:</p><pre><code>begin
+    dbms_output.put_line('Hello, World');
+    dbms_output.put_line(23);
+    dbms_output.put_line('Hello, ' || 'World');
+    dbms_output.put_line(sysdate);
+end;
+/
+</code></pre><p>Вывод программы:</p><pre><code>Hello, World
+23
+Hello, World
+29-AUG-21
+</code></pre><p>Как видно из примера, <code>dbms_output.put_line</code> позволяет выводить строки,
+числа и даты - основные типы в Oracle.</p><p>Практически все среды разработки поддерживают вывод через dbms_output,
+включая <a href=https://livesql.oracle.com>Live SQL</a>.</p></div><footer class="footer b-dark-low b-top"><div class="footer-container container centered edges"><p class="text-medium text-moderated">© Orasql.ru<br>2019-2023</p></div></div></footer></body></html>

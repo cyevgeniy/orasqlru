@@ -1,0 +1,84 @@
+<!doctype html><html><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><link rel=stylesheet href=/css/design.css><link rel=stylesheet href=/css/layout.css><link rel=stylesheet href=/css/base.css><link rel=stylesheet href=/css/navigation.css><script async src="https://www.googletagmanager.com/gtag/js?id=UA-144211477-1"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag("js",new Date),gtag("config","UA-144211477-1")</script><title>Учебник Oracle SQL, PL/SQL | Работа с множествами. Общая информация</title></head><body><div class=menu><a href=/ class=menu__item>Orasql.ru</a>
+<a href=/#sql class=menu__item>Учебник Oracle SQL</a>
+<a href=/#plsql class=menu__item>Учебник PL/SQL</a></div><div class=content><h1>Работа с множествами. Общая информация</h1><h2 id=следить-за-порядком-колонок>Следить за порядком колонок</h2><p>При использовании операторов UNION, MINUS и INTERSECT нужно внимательно
+следить за порядком колонок в каждом из запросов, ведь несоблюдение
+порядка следования приведет к некорректным результатам.</p><p>Как было рассмотрено, Oracle будет проверять, чтобы тип колонок в каждом
+из запросов совпадал, но проверять, правильно ли расположены колонки
+одного типа, он не будет (потому что не сможет).</p><pre><code>select car_model model, car_id release_year
+from cars
+
+minus
+
+select car_model, release_year
+from car_offers
+</code></pre><p><img src=/img/7_unions/col_order_with_error.png alt></p><p>В запросе выше, в первой его части, вместо колонки <code>release_year</code> по
+ошибке была указана колонка <code>car_id</code>. Так как обе имеют числовой тип,
+ошибки не было, но данные на выходе получились ошибочными.</p><p>Следует внимательно следить за порядком колонок в каждом из запросов при
+использовании операторов для работы с множествами.</p><h2 id=сортировка>Сортировка</h2><p><code>ORDER BY</code> добавляется в конце запроса, и применяется к уже
+получившемуся в результате выполнения оператора множества набору данных.</p><p>Следующий пример получит список авто из имеющихся у нас, но
+отсутствующих в списке предлагаемых моделей, и отсортирует итоговую
+выборку по возрастанию года выпуска:</p><pre><code>select car_model, release_year
+from cars
+
+
+minus
+
+select car_model, release_year a2
+from car_offers
+order by release_year
+
+Использовать сортировку в первом запросе нельзя, получим ошибку
+ORA-00933: SQL command not properly ended:
+
+-- Ошибка!
+select car_model, release_year
+from cars
+order by release_year
+
+minus
+
+select car_model, release_year
+from car_offers
+</code></pre><p>Как и в случае с обычными запросами, сортировать можно по порядковому
+номеру колонки итоговой выборки:</p><pre><code>select car_model, release_year
+from cars
+
+minus
+
+select car_model, release_year a2
+from car_offers
+-- Сортировка по модели авто
+order by 1 desc
+</code></pre><h2 id=приоритет-выполнения>Приоритет выполнения</h2><p>Между собой операторы множества имеют одинаковый приоритет. Если в
+запросе используется несколько таких операторов, то они выполняются
+последовательно.</p><pre><code>select car_model, release_year
+from cars
+
+minus
+
+select car_model, release_year
+from car_offers
+
+union all
+
+select car_model, release_year
+from cars
+</code></pre><p><img src=/img/_unions/sets_priority_1.png alt></p><p>В данном примере сначала был выполнен оператор <code>MINUS</code>, и уже после к
+полученному результату был применен оператор <code>UNION ALL</code>.</p><p>Чтобы изменить порядок выполнения операторов, используются скобки:</p><pre><code>select car_model, release_year
+from cars
+
+minus
+
+-- minus будет применен
+-- к результату выполнения
+-- UNION ALL
+(select car_model, release_year
+from car_offers
+
+UNION ALL
+
+select car_model, release_year
+from cars)
+</code></pre><p>Здесь оператор <code>MINUS</code> будет применяться к набору данных, который
+получится в результате выполнения <code>UNION ALL</code>.</p></div><footer class="footer b-dark-low b-top"><div class="footer-container container centered edges"><p class="text-medium text-moderated">© Orasql.ru<br>2019-2023</p></div></div></footer></body></html>

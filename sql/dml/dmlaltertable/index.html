@@ -1,0 +1,144 @@
+<!doctype html><html><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><link rel=stylesheet href=/css/design.css><link rel=stylesheet href=/css/layout.css><link rel=stylesheet href=/css/base.css><link rel=stylesheet href=/css/navigation.css><script async src="https://www.googletagmanager.com/gtag/js?id=UA-144211477-1"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag("js",new Date),gtag("config","UA-144211477-1")</script><title>Учебник Oracle SQL, PL/SQL | Изменение структуры таблицы. ALTER TABLE</title></head><body><div class=menu><a href=/ class=menu__item>Orasql.ru</a>
+<a href=/#sql class=menu__item>Учебник Oracle SQL</a>
+<a href=/#plsql class=menu__item>Учебник PL/SQL</a></div><div class=content><h1>Изменение структуры таблицы. ALTER TABLE</h1><p>Уже созданные таблицы можно изменять. Для этого используется команда SQL
+<code>ALTER</code>. Данная команда относится к группе DDL.</p><h2 id=подготовка-данных>Подготовка данных</h2><p>Тестировать будем на таблице <code>employees</code>. Изначально она будет состоять
+только из одной колонки <code>id</code>:</p><pre><code>create table employees(
+    id number not null primary key
+);
+
+insert into employees(id)
+values(1);
+
+insert into employees(id)
+values(2);
+
+insert into employees(id)
+values(3);
+
+insert into employees(id)
+values(4);
+</code></pre><h2 id=добавление-колонки-в-таблицу>Добавление колонки в таблицу</h2><p>Добавим в таблицу сотрудников колонку для хранения дня рождения:</p><pre><code>alter table employees
+add (birthday date)
+</code></pre><p>По умолчанию все строки таблицы будут иметь <code>null</code> в новой колонке. Но
+если при ее добавлении указать значение по-умолчанию, то все строки
+будут содержать его в новой колонке.</p><p>Добавим колонку <code>notify_by_email</code>, которая будет по-умолчанию содержать
+в себе &ldquo;1&rdquo;, если сотруднику нужно отправлять уведомления по почте, и
+&ldquo;0&rdquo;, если нет:</p><pre><code>alter table employees
+add (
+    notify_by_email number default 0
+);
+
+comment on column employees.notify_by_email is
+'Уведомлять по почте(1-да, 0-нет)';
+</code></pre><p>Посмотрим, как сейчас выглядят данные в таблице:</p><p><img src=/img/15_ddl/alter_table_1.png alt></p><p>Как видно, каждая строка содержит &ldquo;0&rdquo; в колонке <code>notify_by_email</code>.</p><p>Нельзя добавить колонку <code>NOT NULL</code> в таблицу с данными без значения
+по-умолчанию.</p><pre><code>-- Ошибка! Нельзя добавить колонку
+-- без default-значения
+alter table employees
+add(
+    not_null_col number(1) not null
+)
+</code></pre><p>В результате получим ошибку
+<code>ORA-01758: table must be empty to add mandatory (NOT NULL) column</code>.</p><p>Но если указать значение по-умолчанию, ошибки не будет:</p><pre><code>-- Ошибки не будет, каждая строка будет
+-- содержать 1 в колонке
+alter table employees
+add(
+    not_null_col number(1) default 1 not null    
+)
+</code></pre><p>Колонка добавляется без ошибок:</p><p><img src=/img/15_ddl/add_not_null_column.png alt></p><h3 id=добавление-нескольких-колонок-в-таблицу>Добавление нескольких колонок в таблицу</h3><p>Чтобы добавить несколько колонок в таблицу, нужно просто перечислить их
+через запятую:</p><pre><code>alter table employees
+add ( emp_lastname varchar2(100 char),
+      emp_firstname varchar2(100 char),
+      dept_id number(2) default 10 not null,
+      is_out varchar2(1) default 'Y' not null);
+
+comment on column employees.emp_lastname is
+'Фамилия';
+
+comment on column employees.emp_firstname is
+'Имя';
+
+comment on column employees.dept_id is
+'id подразделения';
+
+comment on column employees.is_out is
+'Больше не работает?';
+</code></pre><h2 id=удаление-колонки-из-таблицы>Удаление колонки из таблицы</h2><p>Удалим только что добавленную колонку <code>emp_lastname</code> из таблицы:</p><pre><code>alter table employees
+drop column emp_lastname
+</code></pre><p>Следует учитывать, что если на удаляемую колонку ссылаются строки из
+другой таблицы(посредством <a href=../foreignkeys/index.html>внешнего ключа</a>),
+то удалить колонку не получится.</p><p>Убедимся в этом, создав таблицу <code>emp_bonuses</code>, которая будет ссылаться
+на колонку <code>id</code> в таблице <code>employees</code>:</p><pre><code>create table emp_bonuses(
+    emp_id number not null,
+    bonus number not null,
+    constraint emp_bonuses_emp_fk
+        foreign key(emp_id) references employees(id)
+)
+</code></pre><p>Теперь попробуем удалить колонку <code>id</code>:</p><pre><code>alter table employees
+drop column id
+</code></pre><p>В результате мы получим ошибку
+<code>ORA-12992: cannot drop parent key column</code>, которая говорит о том, что
+удаляемая колонка является родительской для другой таблицы.</p><h3 id=удаление-нескольких-колонок-в-таблице>Удаление нескольких колонок в таблице</h3><p>Удалим колонки <code>emp_firstname</code> и <code>is_out</code> из таблицы:</p><pre><code>alter table employees
+drop (emp_firstname, is_out)
+</code></pre><p>Удалять все колонки из таблицы нельзя, получим ошибку
+<code>ORA-12983: cannot drop all columns in a table</code>.</p><h3 id=логическое-удаление-колонок>Логическое удаление колонок</h3><p>Удаление колонок в очень больших таблицах может занять достаточно
+большое количество времени. В таких случаях можно для начала пометить
+нужные колонки как неиспользуемые:</p><pre><code>alter table employees
+set unused (emp_firstname, is_out)
+</code></pre><p>После выполнения данной команды Oracle удалит эти колонки логически,
+попросту пометив их как неиспользуемые. При запросе из таблицы они не
+будут видны, и в таблицу можно даже добавлять колонки с такими же
+названиями.</p><p>Чтобы удалить неиспользуемые колонки физически, используется следующий
+запрос:</p><pre><code>alter table employees
+drop unused columns
+</code></pre><p>Конечно, выполнять его желательно во время наименьшей нагрузки на
+сервер.</p><h2 id=переименование-колонки>Переименование колонки</h2><p>Переименуем колонку <code>birthday</code> в <code>bd</code>:</p><pre><code>alter table employees
+rename column birthday to bd
+</code></pre><h2 id=изменение-типа-данных-колонки>Изменение типа данных колонки</h2><p>Изменим тип колонки <code>dept_id</code> с числового на строковый:</p><pre><code>alter table employees
+modify(
+    dept_id varchar2(10)
+)
+</code></pre><p>Здесь нужно обратить внимание на то, что при изменении типа мы не
+добавляли <code>NOT NULL</code>. В <code>MODIFY</code> мы должны указать действия, которые
+действительно что-то изменят. Колонка <code>dept_id</code> и так была <code>not null</code>, и
+при изменении типа это свойство не нужно указывать.</p><p>Если попробовать добавить <code>not null</code>, получим ошибку
+<code>ORA-01442: column to be modified to NOT NULL is already NOT NULL</code>:</p><pre><code>alter table employees
+modify(
+    dept_id varchar2(10) not null -- получим ошибку
+)
+</code></pre><p>Следует учитывать одну важную деталь при изменении типа данных -
+изменяемая колонка должна быть пуста.</p><p>Рассмотрим более подробно процесс изменения типа колонки, если в ней уже
+содержатся данные.</p><p>Спустя какое-то время мы решили, что не хотим использовать числовое поле
+для <code>boolean</code> значений. Вместо этого было решено использовать более
+понятный строковый тип.</p><p>Итак, для начала добавим колонку с нужным нам типом данных. Так как мы
+не можем назвать ее <code>notify_by_email</code>(такая уже есть на данный момент),
+то назовем ее <code>notify_by_email_new</code>:</p><pre><code>alter table employees
+add(
+    notify_by_email_new varchar2(1)
+     default 'N' not null
+)
+</code></pre><p>После этого нужно заполнить эту колонку данными. Алгоритм прост -
+значение &ldquo;1&rdquo; в колонке <code>notify_by_email</code> должно быть перенесено как
+значение &ldquo;Y&rdquo; в колонку <code>notify_by_email_new</code>, а значение &ldquo;0&rdquo; нужно
+перенести в виде &ldquo;N&rdquo;. Так как при добавлении колонки мы указали значение
+по-умолчанию, то в таблице каждая строка содержит значение &ldquo;N&rdquo; в этой
+колонке. Все, что осталось - это изменить значение на &ldquo;Y&rdquo;, где
+<code>notify_by_email</code> равен 1:</p><pre><code>update employees e
+set e.notify_by_email_new = 'Y'
+where e.notify_by_email = 1
+</code></pre><p>Затем удаляем колонку <code>notify_by_email</code>:</p><pre><code>alter table employees
+drop column notify_by_email
+</code></pre><p>Теперь можно переименовать <code>notify_by_email_new</code> в <code>notify_by_email</code>:</p><pre><code>alter table employees
+rename column notify_by_email_new to
+notify_by_email
+</code></pre><p>Смотрим на результат:</p><p><img src=/img/15_ddl/change_column_type.png alt></p><h2 id=изменение-атрибута-not-null-в-колонке>Изменение атрибута NOT NULL в колонке</h2><p>Сделаем так, чтобы в колонку <code>dept_id</code> можно было сохранять <code>null</code>:</p><pre><code>alter table employees
+modify(dept_id null);
+</code></pre><p>А теперь снова сделаем ее <code>NOT NULL</code>:</p><pre><code>alter table employees
+modify(dept_id not null);
+</code></pre><p>Нельзя изменить колонку на NOT NULL, если в ней уже содержатся
+NULL-значения.</p><h2 id=переименование-таблицы>Переименование таблицы</h2><p>Следующий запрос переименует таблицу <code>employees</code> в <code>emps</code>:</p><pre><code>rename employees to emps
+</code></pre><p>Стоит отметить, что переименование таблицы не приведет к ошибке при
+наличии ссылок на нее. В нашем примере таблица успешно переименуется,
+несмотря на дочернюю таблицу <code>emp_bonuses</code>. Внешний ключ при этом никуда
+не девается, в таблицу <code>emp_bonuses</code> по-прежнему нельзя добавить
+значения, нарушающие условия внешнего ключа.</p></div><footer class="footer b-dark-low b-top"><div class="footer-container container centered edges"><p class="text-medium text-moderated">© Orasql.ru<br>2019-2023</p></div></div></footer></body></html>

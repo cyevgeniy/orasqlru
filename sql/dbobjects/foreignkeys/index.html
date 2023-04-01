@@ -1,0 +1,83 @@
+<!doctype html><html><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><link rel=stylesheet href=/css/design.css><link rel=stylesheet href=/css/layout.css><link rel=stylesheet href=/css/base.css><link rel=stylesheet href=/css/navigation.css><script async src="https://www.googletagmanager.com/gtag/js?id=UA-144211477-1"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag("js",new Date),gtag("config","UA-144211477-1")</script><title>Учебник Oracle SQL, PL/SQL | Внешние ключи</title></head><body><div class=menu><a href=/ class=menu__item>Orasql.ru</a>
+<a href=/#sql class=menu__item>Учебник Oracle SQL</a>
+<a href=/#plsql class=menu__item>Учебник PL/SQL</a></div><div class=content><h1>Внешние ключи</h1><p>Рассмотрим пример из части про
+<a href=/sql/dbobjects/primarykeys/>первичные ключи</a>.</p><p>У нас было две таблицы - список сотрудников и единовременные бонусы для
+них. С помощью первичного ключа в таблице сотрудников мы решили проблему
+соотношения между бонусами и сотрудниками.</p><p>Схематично наши таблицы выглядят вот так:</p><p><img src=/img/13_relations/foreign_key_problem_1.png alt></p><p>Благодаря наличию первичного ключа мы однозначно можем сказать, какому
+сотруднику какой бонус начисляется.</p><p>А теперь посмотрим на следующую ситуацию: в таблицу <code>bonuses</code>
+добавляется запись со значением <code>emp_id</code>, которому нет соответствия в
+таблице сотрудников.</p><p><img src=/img/13_relations/fk_problem_2.png alt></p><p>Как такое может быть? Мы начисляем бонусы сотруднику, которого у нас
+нет! Если нас попросят сказать, на какую сумму было выдано
+единовременных бонусов, или сколько их было выдано, то мы не сможем
+ответить, т.к. не будем уверены, что данные в таблице с бонусами вообще
+корректны.</p><p>Так вот, внешние ключи используются как для решения подобной проблемы.</p><p>Внешние ключи используются для того, чтобы указать, что данные в
+колонках одной таблицы могут содержать только определенные значения из
+другой таблицы.</p><p>В отличие от первичного ключа, значение внешнего не обязано быть
+уникальным. Более того, оно даже может содержать <code>NULL</code>. Главное
+требование - это наличие значения внешнего ключа в ссылаемой таблице.</p><h2 id=создание-внешних-ключей>Создание внешних ключей</h2><p>Общий синтаксис следующий:</p><pre><code>create table detail(
+    master_id number,
+    value_1 number,
+    value_2 number,
+    -- Внешний ключ из таблицы detail к таблице master
+    constraint detail_master_id_fk
+        foreign key(master_id)
+        references master(id)
+);
+</code></pre><p>Здесь <code>detail_master_id_fk</code> - название внешнего ключа.</p><p>Также, как и у первичных ключей, длина имени внешнего ключа ограничена
+30 символами.</p><p>У внешних ключей есть еще одна особенность - они могут ссылаться только
+на первичные или уникальные ключи. Если попытаться создать внешний ключ,
+который будет ссылаться на колонку, которая не является первичным или
+уникальным ключом БД выдаст ошибку.</p><p>Попробуем создать наши таблицы из примера:</p><pre><code>create table employees(
+    id number primary key,
+    emp_name varchar2(100 char) not null,
+    department varchar2(50 char) not null,
+    position varchar2(50 char) not null
+);
+
+create table bonuses(
+    emp_id number not null,
+    bonus number not null,
+    constraint bonuses_emp_id_fk
+        foreign key(emp_id)
+        references employees(id)
+);
+</code></pre><p>В данном случае таблица <code>bonuses</code> является дочерней по отношению к
+таблице <code>employees</code>, т.к. содержит внешний ключ, который ссылается из
+<code>bonuses</code> на <code>employees</code>.</p><p>После этого заполним данными эти таблицы:</p><pre><code>-- Сначала добавляем сотрудников
+
+insert into employees(id, emp_name, department, position)
+values(1, 'Иван Петров', 'IT', 'QA');
+
+insert into employees(id, emp_name, department, position)
+values(2, 'Алексей Иванов', 'SALARY', 'CLERK');
+
+insert into employees(id, emp_name, department, position)
+values(3, 'Евгений Сидоров', 'SALARY', 'MANAGER');
+
+insert into employees(id, emp_name, department, position)
+values(4, 'Екатерина Петрова', 'SECUTIRY', 'MANAGER');
+
+-- После - бонусы для них
+
+insert into bonuses(emp_id, bonus)
+values(1, 100);
+
+insert into bonuses(emp_id, bonus)
+values(2, 400);
+
+insert into bonuses(emp_id, bonus)
+values(3, 700);
+</code></pre><p>Порядок добавления данных в таблицы важен: нельзя сначала добавить новые
+данные в таблицу <code>bonuses</code>, а потом в таблицу <code>employees</code>, т.к. попытка
+добавить бонус для сотрудника, которого еще нет в таблице <code>employees</code>
+приведет к ошибке из-за наличия внешнего ключа.</p><pre><code>-- Вот так будет ошибка, т.к. сотрудник с id = 5
+-- еще не добавлен в таблицу employees
+insert into bonuses(emp_id, bonus)
+values(5, 500);
+
+-- А вот так ошибки не будет
+-- Сотрудник с id = 4 уже есть в таблице сотрудников
+insert into bonuses(emp_id, bonus)
+values(4, 500);
+</code></pre></div><footer class="footer b-dark-low b-top"><div class="footer-container container centered edges"><p class="text-medium text-moderated">© Orasql.ru<br>2019-2023</p></div></div></footer></body></html>

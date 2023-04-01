@@ -1,0 +1,119 @@
+<!doctype html><html><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><link rel=stylesheet href=/css/design.css><link rel=stylesheet href=/css/layout.css><link rel=stylesheet href=/css/base.css><link rel=stylesheet href=/css/navigation.css><script async src="https://www.googletagmanager.com/gtag/js?id=UA-144211477-1"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag("js",new Date),gtag("config","UA-144211477-1")</script><title>Учебник Oracle SQL, PL/SQL | Обработка ошибок в PL/SQL</title></head><body><div class=menu><a href=/ class=menu__item>Orasql.ru</a>
+<a href=/#sql class=menu__item>Учебник Oracle SQL</a>
+<a href=/#plsql class=menu__item>Учебник PL/SQL</a></div><div class=content><h1>Обработка ошибок в PL/SQL</h1><h2 id=exception-блок>EXCEPTION блок</h2><p>Обработка ошибок производится в блоке <code>exception</code>:</p><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sql data-lang=sql><span style=display:flex><span><span style=color:#000;font-weight:700>begin</span><span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>	</span><span style=color:#998;font-style:italic>-- Код
+</span></span></span><span style=display:flex><span><span style=color:#998;font-style:italic></span><span style=color:#000;font-weight:700>exception</span><span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>	</span><span style=color:#998;font-style:italic>-- Обработка ошибок
+</span></span></span><span style=display:flex><span><span style=color:#998;font-style:italic></span><span style=color:#bbb>	</span><span style=color:#000;font-weight:700>when</span><span style=color:#bbb> </span>....<span style=color:#bbb> </span><span style=color:#000;font-weight:700>then</span><span style=color:#bbb> </span>.....;<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>	</span><span style=color:#000;font-weight:700>when</span><span style=color:#bbb> </span>....<span style=color:#bbb> </span><span style=color:#000;font-weight:700>then</span><span style=color:#bbb> </span>.....;<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>	</span><span style=color:#000;font-weight:700>when</span><span style=color:#bbb> </span>....<span style=color:#bbb> </span><span style=color:#000;font-weight:700>then</span><span style=color:#bbb> </span>.....;<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb></span><span style=color:#000;font-weight:700>end</span>;<span style=color:#bbb>
+</span></span></span></code></pre></div><p>Ошибки отлавливаются в пределах блока <code>begin-end</code>. Работает это так:</p><ol><li>Сначала выполняется код между <code>begin</code> и <code>exception</code></li><li>Если ошибок не произошло, тогда секция между <code>exception</code> и <code>end</code> ингорируется</li><li>Если в процессе выполнения кода происходит ошибка, выполнение останавливается
+и переходит в блок <code>exception</code>.</li><li>Если в блоке находится обработчик для исключения, вызывается код после <code>then</code></li><li>Если обработчик не найден, исключение выбрасывается за пределы блока <code>begin-end</code></li></ol><p>Пример блока с обработчиком исключений:</p><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sql data-lang=sql><span style=display:flex><span><span style=color:#000;font-weight:700>declare</span><span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>    </span>l_val<span style=color:#bbb> </span><span style=color:#0086b3>number</span>;<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb></span><span style=color:#000;font-weight:700>begin</span><span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>    </span><span style=color:#000;font-weight:700>select</span><span style=color:#bbb> </span><span style=color:#099>1</span><span style=color:#bbb> </span><span style=color:#000;font-weight:700>into</span><span style=color:#bbb> </span>l_var<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>    </span><span style=color:#000;font-weight:700>where</span><span style=color:#bbb> </span><span style=color:#099>2</span><span style=color:#bbb> </span><span style=color:#000;font-weight:700>&gt;</span><span style=color:#bbb> </span><span style=color:#099>3</span>;<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb></span><span style=color:#000;font-weight:700>exception</span><span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>    </span><span style=color:#000;font-weight:700>when</span><span style=color:#bbb> </span>no_data_found<span style=color:#bbb> </span><span style=color:#000;font-weight:700>then</span><span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>        </span>dbms_output.put_line(<span style=color:#d14>&#39;Нет данных&#39;</span>);<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>    </span><span style=color:#000;font-weight:700>when</span><span style=color:#bbb> </span>dup_val_on_index<span style=color:#bbb> </span><span style=color:#000;font-weight:700>then</span><span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>        </span>dbms_output.put_line(<span style=color:#d14>&#39;Такая строка уже есть&#39;</span>);<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb></span><span style=color:#000;font-weight:700>end</span>;<span style=color:#bbb>
+</span></span></span></code></pre></div><h2 id=предопределённые-ошибки>Предопределённые ошибки</h2><p>Ошибки обрабатываются по их имени, поэтому часть наиболее частых ошибок в PL/SQL
+уже предопределена, как например вышеуказанные <code>no_data_found</code> и <code>dup_val_on_index</code>.</p><p>Ниже показан их список и в каких случаях ошибка может возникнуть.</p><table><thead><tr><th>Ошибка</th><th>Когда возникает</th></tr></thead><tbody><tr><td>ACCESS_INTO_NULL</td><td>Попытка присвоить значение атрибуту неинициализированного объекта.</td></tr><tr><td>CASE_NOT_FOUND</td><td>В выражении <code>CASE</code> не нашлось подходящего условия <code>When</code>, и в нём отсутствует условие <code>Else</code>.</td></tr><tr><td>COLLECTION_IS_NULL</td><td>Попытка вызвать любой метод коллеции(за исключением <code>Exists</code>) в неинициализированной вложенной таблице или ассоциативном массиве, или попытка присвоить значения элементам неинициализированной вложенной таблице или ассоциативного массива.</td></tr><tr><td>CURSOR_ALREADY_OPEN</td><td>Попытка открыть уже открытый курсор. Курсор должен быть закрыт до момента его открытия. Цикл FOR автоматически открывает курсор, который использует, поэтому его нельзя открывать внутри тела цикла.</td></tr><tr><td>DUP_VAL_ON_INDEX</td><td>Попытка вставить в таблицу значения, которые нарушают ограничения, созданные уникальным индексом. Иными словами, ошибка возникает, когда в колонки уникального индекса добавляются дублирующие записи.</td></tr><tr><td>INVALID_CURSOR</td><td>Попытка вызова недопустимой операции с курсором, например закрытие не открытого курсора.</td></tr><tr><td>INVALID_NUMBER</td><td>Ошибка приведения строки в число в SQL запросе, потому что строка не является числовым представлением (В PL/SQL коде в таких случаях выбрасывается VALUE_ERROR). Также может возникнуть, если значение параметра <code>LIMIT</code> в выражении <code>Bulk collect</code> не является положительным числом.</td></tr><tr><td>LOGIN_DENIED</td><td>Попытка подключиться к БД с неправильным логином или паролем.</td></tr><tr><td>NO_DATA_FOUND</td><td>Выражение <code>SELECT INTO</code> не возвращает ни одной строки, или программа ссылается на удалённый элемент во вложенной таблице или неинициализированному объекту в ассоциативной таблице. Агрегатные функции в SQL, такие как AVG или SUM, всегда возвращают значение или null. Поэтому, <code>SELECT INTO</code>, которое вызывает только агрегатные функции, никогда не выбросит <code>NO_DATA_FOUND</code>. Выражение <code>FETCH</code> работает так, что ожидает отсутствия строк в определённый момент, поэтому ошибка также не выбрасывается.</td></tr><tr><td>NOT_LOGGED_ON</td><td>Обращение к БД будучи неподключенным к ней</td></tr><tr><td>PROGRAM_ERROR</td><td>Внутренняя проблема в PL/SQL.</td></tr><tr><td>ROWTYPE_MISMATCH</td><td>Курсорные переменные, задействованные в присваивании, имеют разные типы.</td></tr><tr><td>SELF_IS_NULL</td><td>Попытка вызвать метод неинициализированного объекта.</td></tr><tr><td>STORAGE_ERROR</td><td>Переполнение памяти или память повреждена.</td></tr><tr><td>SUBSCRIPT_BEYOND_COUNT</td><td>Попытка обратиться к элементу вложенной таблицы или ассоциативного массива по индексу, который больше, чем количество элементов в коллекции.</td></tr><tr><td>SUBSCRIPT_OUTSIDE_LIMIT</td><td>Попытка обратиться к элементу коллекции по индексу(например, -1) вне допустимого диапазона.</td></tr><tr><td>SYS_INVALID_ROWID</td><td>Ошибка конвертации строки в rowid.</td></tr><tr><td>TIMEOUT_ON_RESOURCE</td><td>Возникает при ожидании доступности ресурса.</td></tr><tr><td>TOO_MANY_ROWS</td><td>Выражение <code>SELECT INTO</code> возвращает более одной строки.</td></tr><tr><td>VALUE_ERROR</td><td>Арифметическая ошибка, ошибка конвертации, или превышение размерности типа. Может возникнуть, к примеру, если в переменную с типом <code>number(1)</code> попытаться присвоить значение <code>239</code>.</td></tr><tr><td>ZERO_DIVIDE</td><td>Попытка деления на ноль.</td></tr></tbody></table><h2 id=объявление-собственных-ошибок>Объявление собственных ошибок</h2><p>Можно объявлять собственные исключения, давая им
+названия, которые полнее раскрывают их суть.</p><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sql data-lang=sql><span style=display:flex><span><span style=color:#000;font-weight:700>declare</span><span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>    </span><span style=color:#998;font-style:italic>-- Объявление собственного исключения,
+</span></span></span><span style=display:flex><span><span style=color:#998;font-style:italic></span><span style=color:#bbb>    </span><span style=color:#998;font-style:italic>-- которое мы выбрасываем, если значение заработной
+</span></span></span><span style=display:flex><span><span style=color:#998;font-style:italic></span><span style=color:#bbb>    </span><span style=color:#998;font-style:italic>-- платы ниже дозволенного минимума.
+</span></span></span><span style=display:flex><span><span style=color:#998;font-style:italic></span><span style=color:#bbb>    </span>exc_too_low_salary<span style=color:#bbb> </span><span style=color:#000;font-weight:700>exception</span>;<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>    </span>l_salary<span style=color:#bbb> </span><span style=color:#0086b3>number</span><span style=color:#bbb> </span>:<span style=color:#000;font-weight:700>=</span><span style=color:#bbb> </span><span style=color:#099>100</span>;<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb></span><span style=color:#000;font-weight:700>begin</span><span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>    </span><span style=color:#000;font-weight:700>if</span><span style=color:#bbb> </span>l_salary<span style=color:#bbb> </span><span style=color:#000;font-weight:700>&lt;</span><span style=color:#bbb> </span><span style=color:#099>200</span><span style=color:#bbb> </span><span style=color:#000;font-weight:700>then</span><span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>        </span><span style=color:#998;font-style:italic>-- Бросаем ошибку.
+</span></span></span><span style=display:flex><span><span style=color:#998;font-style:italic></span><span style=color:#bbb>        </span>raise<span style=color:#bbb> </span>exc_too_low_salary;<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>    </span><span style=color:#000;font-weight:700>end</span><span style=color:#bbb> </span><span style=color:#000;font-weight:700>if</span>;<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb></span><span style=color:#000;font-weight:700>exception</span><span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>    </span><span style=color:#000;font-weight:700>when</span><span style=color:#bbb> </span>exc_too_low_salary<span style=color:#bbb> </span><span style=color:#000;font-weight:700>then</span><span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>        </span>dbms_output.put_line(<span style=color:#d14>&#39;Обработчик исключения&#39;</span>);<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb></span><span style=color:#000;font-weight:700>end</span>;<span style=color:#bbb>
+</span></span></span></code></pre></div><p>Область видимости собственного исключения в данном случае - блок, в котором оно
+объявлено. Вне этого блока обработать исключение не получится.</p><p>Для более удобной работы с собственными исключениями их можно вынести в отдельный пакет:</p><pre tabindex=0><code>create or replace pck_hr_errors is
+
+-- Объявляем исключения в спецификации пакета.
+-- Тела пакет не имеет, только спецификацию.
+
+exc_wrong_name      exception;
+exc_too_low_salary  exception;
+exc_incorrect_pass  exception;
+
+end;
+</code></pre><p>Далее работать с этими исключениями можно подобным образом:</p><pre tabindex=0><code>begin
+    -- Какой-то код
+    ...
+exception
+    when pck_hr_errors.exc_too_low_salary then
+        -- Обработка исключения
+        ...
+end;
+</code></pre><h2 id=обработка-непредопределённых-ошибок>Обработка непредопределённых ошибок</h2><p>Не все ошибки в Oracle являются предопределёнными. Когда возникает необходимость
+их обрабатывать, нужно связать переменную типа <code>exception</code> с кодом ошибки, которую нужно обработать:</p><pre tabindex=0><code>declare
+    -- объявляем ошибку
+    e_incorrect_date exception;
+
+    -- связываем ошибку с кодом
+    pragma exception_init(e_incorrect_date, -1830);
+begin
+    dbms_output.put_line(to_date(&#39;2022-02-01&#39;, &#39;dd.mm.yyyy&#39;));
+exception
+    when e_incorrect_date then
+        dbms_output.put_line (&#39;Неправильный формат даты&#39;);
+end;
+</code></pre><p>Следует помнить, что коды ошибок являются <em>отрицательными</em> числами.</p><h2 id=ошибки-и-вложенные-блоки>Ошибки и вложенные блоки</h2><p>Если ошибка не обрабатывается в пределах блока <code>begin ..end</code>,
+она выбрасывается за его пределы. Далее эта ошибка может быть
+обработана блоком <code>exception</code> внешнего блока. Если и там ошибка
+не обрабатывается, она выбрасывается и за его пределы, и так
+далее.</p><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sql data-lang=sql><span style=display:flex><span><span style=color:#000;font-weight:700>declare</span><span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>    </span>a<span style=color:#bbb> </span><span style=color:#0086b3>number</span>;<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb></span><span style=color:#998;font-style:italic>-- Внешний блок
+</span></span></span><span style=display:flex><span><span style=color:#998;font-style:italic></span><span style=color:#000;font-weight:700>begin</span><span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>    </span><span style=color:#998;font-style:italic>-- Вложенный блок
+</span></span></span><span style=display:flex><span><span style=color:#998;font-style:italic></span><span style=color:#bbb>    </span><span style=color:#000;font-weight:700>begin</span><span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>        </span>a<span style=color:#bbb> </span>:<span style=color:#000;font-weight:700>=</span><span style=color:#bbb> </span><span style=color:#099>1</span><span style=color:#bbb> </span><span style=color:#000;font-weight:700>/</span><span style=color:#bbb> </span><span style=color:#099>0</span>;<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>        </span><span style=color:#998;font-style:italic>-- Важно помнить, что после возникновения ошибки
+</span></span></span><span style=display:flex><span><span style=color:#998;font-style:italic></span><span style=color:#bbb>        </span><span style=color:#998;font-style:italic>-- выполнение кода в пределах блока прекращается.
+</span></span></span><span style=display:flex><span><span style=color:#998;font-style:italic></span><span style=color:#bbb>        </span><span style=color:#998;font-style:italic>-- Следующий код не будет выполнен
+</span></span></span><span style=display:flex><span><span style=color:#998;font-style:italic></span><span style=color:#bbb>        </span>dbms_output.put_line(<span style=color:#d14>&#39;Этот код не будет выполнен&#39;</span>);<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>    </span><span style=color:#000;font-weight:700>end</span>;<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb></span><span style=color:#000;font-weight:700>exception</span><span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>    </span><span style=color:#000;font-weight:700>when</span><span style=color:#bbb> </span>zero_divide:<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>        </span>dbms_otuput.put_line(<span style=color:#d14>&#39;Ошибка обработана внешним блоком&#39;</span>);<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb></span><span style=color:#000;font-weight:700>end</span>;<span style=color:#bbb>
+</span></span></span></code></pre></div><h2 id=raise_application_error>raise_application_error</h2><p>Если ошибка, брошенная Oracle, достигает клиентского приложения,
+то она имеет примерно такой текст: <code>ORA-01722 invalid number</code>.</p><p>Процедура <code>raise_application_error</code> позволяет вызвать исключение
+с заданным номером, связать его с сообщением и отправить его
+вызывающему приложению.</p><pre tabindex=0><code>begin
+    raise_application_error(-20134, &#39;Неправильный номер паспорта&#39;);
+end;
+</code></pre><p>Диапазон возможных кодов ошибок [-20999, 20000]. Сообщение должно
+помещаться в тип <code>varchar2(2000)</code>.</p><p>Можно указать третий boolean параметр, который в случае
+значения <code>true</code> добавит текущую ошибку в список предыдущих
+ошибок, возникших в приложении. По умолчанию значение равно <code>false</code>,
+что значит, про сообщение об ошибке заменяет все предыдущие ошибки
+собой.</p><p>Мы можем объявить собственное исключение, связать его с номером
+в диапазоне [-20999, 20000] и использовать для обработки исключений,
+брошенных с помощью <code>raise_application_error</code>:</p><pre tabindex=0><code>declare
+    e_wrong_passport exception;
+    
+    -- связываем ошибку с кодом
+    pragma exception_init(e_wrong_passport, -20999);
+begin
+    raise_application_error(-20999, &#39;Неправильный номер паспорта&#39;);
+exception
+    when e_wrong_password then
+        dbms_output.put_line (&#39;Неправильный номер паспорта&#39;);
+end;
+</code></pre></div><footer class="footer b-dark-low b-top"><div class="footer-container container centered edges"><p class="text-medium text-moderated">© Orasql.ru<br>2019-2023</p></div></div></footer></body></html>

@@ -1,0 +1,45 @@
+<!doctype html><html><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><link rel=stylesheet href=/css/design.css><link rel=stylesheet href=/css/layout.css><link rel=stylesheet href=/css/base.css><link rel=stylesheet href=/css/navigation.css><script async src="https://www.googletagmanager.com/gtag/js?id=UA-144211477-1"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag("js",new Date),gtag("config","UA-144211477-1")</script><title>Учебник Oracle SQL, PL/SQL | Первая программа на PL/SQL</title></head><body><div class=menu><a href=/ class=menu__item>Orasql.ru</a>
+<a href=/#sql class=menu__item>Учебник Oracle SQL</a>
+<a href=/#plsql class=menu__item>Учебник PL/SQL</a></div><div class=content><h1>Первая программа на PL/SQL</h1><p>Итак, напишем нашу первую программу на PL/SQL. Но перед этим создадим
+простую таблицу <code>users</code>, в которой будем хранить список пользователей
+некой системы:</p><pre><code>create table users(
+    id number primary key,
+    login varchar2(60) not null,
+    sign_date date default sysdate not null,
+    is_active number(1) default 1 not null
+);
+
+insert into users
+values(1, 'UserA', to_date('21.01.2019', 'dd.mm.yyyy'), 1);
+
+insert into users
+values(2, 'UserB', to_date('15.07.2017', 'dd.mm.yyyy'), 1);
+
+insert into users
+values(3, 'UserC', to_date('02.10.2015', 'dd.mm.yyyy'), 1);
+</code></pre><p>Теперь приведем текст программы:</p><pre><code>begin
+    update users
+    set is_active = 0
+    where sign_date &lt; to_date('01.01.2016', 'dd.mm.yyyy'); 
+end;
+/
+</code></pre><p>Данный код делает неактивными всех пользователей, которые были
+зарегистрированы ранее, чем первое января 2016 года.</p><p>Программа очень простая, но зато она наглядно демонстрирует важнейшую
+особенность PL/SQL - <strong>тесную интеграцию с SQL</strong>. Любой SQL запрос может
+быть вызван из PL/SQL, и это абсллютно нормально и естественно. На самом
+деле, большую часть кода PL/SQL, как правило, составляют именно
+SQL-запросы.</p><p>Здесь важно понимать, почему это PL/SQL программа, а не простой
+SQL-запрос. Причиной является тот факт, что запрос заключен в
+<a href=/plsql/basics/plsql_anonymous_blocks/>анонимный блок</a>.</p><p>Внутри блока может находиться сколько угодно запросов. Например,
+следующая программа делает неактивными пользователей,
+зарегистрировавшихся раньше 2016 года, и добавляет нового пользователя:</p><pre><code>begin
+    update users
+    set is_active = 0
+    where sign_date &lt; to_date('01.01.2016', 'dd.mm.yyyy');
+
+    insert into users
+    values(4, 'UserD', SYSDATE);
+end;
+/
+</code></pre></div><footer class="footer b-dark-low b-top"><div class="footer-container container centered edges"><p class="text-medium text-moderated">© Orasql.ru<br>2019-2023</p></div></div></footer></body></html>

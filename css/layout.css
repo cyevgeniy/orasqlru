@@ -1,0 +1,83 @@
+/**
+ * Almost always everything you write should be here,
+ * except cases with "full-width" blocks.
+ * Even inside full-width blocks it's recommented to
+ * wrap content into this class in order to keep
+ * UI consistent
+ */
+.content {
+    max-width: 70ch;
+    margin: 2rem auto;
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+
+.content > h1:first-child,
+.content > h2:first-child,
+.content > h3:first-child,
+.content > h4:first-child {
+    margin-top: 0px;
+}
+
+.content > :last-child {
+    margin-bottom: 0px;
+}
+
+.full-bleed {
+    width: 100vw;
+    position: relative;
+    left: 50%;
+    margin-left: -50vw;
+}
+
+/* If we place some content inside full-bleed block, then
+ * add some paddings on top/bottom.
+ */
+.full-bleed > .content:first-child {
+    padding-top: 2rem;
+}
+
+.full-bleed > .content:last-child {
+    padding-bottom: 2rem;
+}
+
+img.full-bleed {
+    max-width: none;
+}
+
+.writing {
+  margin-bottom: 2rem;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+}
+
+.writing__title {
+  text-align: center;
+}
+
+.writing__list {
+    column-width: 20rem;
+    column-gap: 3rem;
+}
+
+.writing__header-wrapper{
+    display: inline-block;
+}
+
+.writing__header {
+    font-size: 1.125rem;
+  margin-top: 0;
+}
+
+.writing__item {
+  margin-top: 0rem;
+}
+
+@media screen and (min-width: 768px) {
+    .content {
+        padding-left: 0px;
+        padding-right: 0px;
+    }
+}

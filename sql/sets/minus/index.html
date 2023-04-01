@@ -1,0 +1,99 @@
+<!doctype html><html><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><link rel=stylesheet href=/css/design.css><link rel=stylesheet href=/css/layout.css><link rel=stylesheet href=/css/base.css><link rel=stylesheet href=/css/navigation.css><script async src="https://www.googletagmanager.com/gtag/js?id=UA-144211477-1"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag("js",new Date),gtag("config","UA-144211477-1")</script><title>Учебник Oracle SQL, PL/SQL | Разница запросов. MINUS</title></head><body><div class=menu><a href=/ class=menu__item>Orasql.ru</a>
+<a href=/#sql class=menu__item>Учебник Oracle SQL</a>
+<a href=/#plsql class=menu__item>Учебник PL/SQL</a></div><div class=content><h1>Разница запросов. MINUS</h1><p>Подготовим тестовые данные:</p><pre><code>create table cars(
+    car_id number not null,
+    car_model varchar2(100) not null,
+    release_year number
+);
+
+create table car_offers(
+    car_model varchar2(100) not null,
+    release_year number
+);
+
+insert into cars
+values(1, 'Volkswagen passat', 1998);
+
+insert into cars
+values(2, 'Volkswagen passat', 1998);
+
+insert into cars
+values(3, 'Mersedes SL', 2010);
+
+insert into cars
+values(4, 'Lexus S300', 2005);
+
+insert into cars
+values(5, 'Mersedes SL', 2008);
+
+insert into car_offers
+values('Lexus S300', 2010);
+
+insert into car_offers
+values('Tesla', 2017);
+
+insert into car_offers
+values('Volkswagen passat', 1998);
+
+insert into car_offers
+values('Volkswagen passat', 2003);
+</code></pre><p>Посмотрим на данные в таблицах:</p><p>Таблица <code>cars</code></p><p><img src=/img/7_unions/minus_cars.png alt></p><p>Таблица <code>car_offers</code></p><p><img src=/img/7_unions/minus_car_offers.png alt></p><p>Получим список предлагаемых нам моделей автомобилей, которых нет среди
+нашего автопарка. Для этого будем использовать оператор <code>MINUS</code>, который
+возвращает уникальные строки из первого запроса, которых нет во втором
+запросе:</p><pre><code>select car_model
+from car_offers
+
+MINUS
+
+select car_model
+from cars
+</code></pre><p><img src=/img/7_unions/minus_car_model_result.png alt></p><p>Если искать только отсутствующие у нас марки авто, то найдется лишь одна
+модель, которой нет у нас - &ldquo;Tesla&rdquo;.</p><p>Теперь получим предложения автомобилей, у которых либо год, либо модель
+не совпадают с теми авто, что есть у нас:</p><pre><code>select car_model, release_year
+from car_offers
+
+MINUS
+
+select car_model, release_year
+from cars
+</code></pre><p><img src=/img/7_unions/minus_car_model_year_result.png alt></p><p>Типы данных в колонках и их количество в каждом из запросов должны
+совпадать.</p><p>Если мы в первом запросе поменяем местами колонки, то запрос не
+выполнится и мы получим ошибку
+<code>ORA-01790: expression must have same datatype as corresponding expression</code>:</p><pre><code>-- Ошибка, типы данных возвращаемых колонок  в 
+-- обоих запросах должны совпадать
+select release_year, car_model
+from car_offers
+
+MINUS
+
+select car_model, release_year
+from cars
+</code></pre><p>Если запросы возвращают неодинаковое количество колонок, при выполнении
+запроса получим ошибку
+<code>ORA-01789: query block has incorrect number of result columns</code>:</p><pre><code>-- Ошибка, запросы должны возвращать
+-- одинаковое количество колонок
+select release_year
+from car_offers
+
+MINUS
+
+select car_model, release_year
+from cars
+</code></pre><p>MINUS возвращает уникальные строки, которые отсутствуют во втором
+запросе.</p><p>Разберем это на примере. Для начала удалим из таблицы <code>car_offers</code>
+модели Volkswagen passat:</p><pre><code>delete
+from car_offers
+where car_model = 'Volkswagen passat'
+</code></pre><p>Теперь данные в таблице <code>car_offers</code> выглядят вот так:</p><p><img src=/img/7_unions/minus_car_offers_without_passat.png alt></p><p>Теперь получим список моделей авто, которые есть у нас, но отсутствуют в
+списке предложений:</p><pre><code>select car_model, release_year
+from cars
+
+MINUS
+
+select car_model, release_year
+from car_offers
+</code></pre><p><img src=/img/7_unions/minus_unique_passat.png alt></p><p>В результате мы видим всего одну строку с моделью Volkswagen passat 1998
+года, несмотря на то, что в таблице <code>cars</code> таких записей две. Как было
+сказано, это произошло потому, что оператор <code>MINUS</code> удаляет дубликаты и
+возвращает только уникальные строки.</p></div><footer class="footer b-dark-low b-top"><div class="footer-container container centered edges"><p class="text-medium text-moderated">© Orasql.ru<br>2019-2023</p></div></div></footer></body></html>

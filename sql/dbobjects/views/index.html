@@ -1,0 +1,230 @@
+<!doctype html><html><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><link rel=stylesheet href=/css/design.css><link rel=stylesheet href=/css/layout.css><link rel=stylesheet href=/css/base.css><link rel=stylesheet href=/css/navigation.css><script async src="https://www.googletagmanager.com/gtag/js?id=UA-144211477-1"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag("js",new Date),gtag("config","UA-144211477-1")</script><title>Учебник Oracle SQL, PL/SQL | Представления</title></head><body><div class=menu><a href=/ class=menu__item>Orasql.ru</a>
+<a href=/#sql class=menu__item>Учебник Oracle SQL</a>
+<a href=/#plsql class=menu__item>Учебник PL/SQL</a></div><div class=content><h1>Представления</h1><h2 id=что-такое-представления>Что такое представления</h2><p>Представления(Views) - это такой объект в БД, который:</p><ol><li>Выглядит как таблица</li><li>Внутри себя содержит SQL запрос, которым заменяется таблица при
+обращении к ней.</li></ol><p>Во многом представления работают также, как и обычные таблицы. В них
+можно(правда с определенными ограничениями) вставлять, изменять и
+удалять данные.</p><h2 id=создание-представлений>Создание представлений</h2><p>Общий синтаксис создания представления следующий:</p><pre><code>create view viewname as
+select ...
+....
+....;
+</code></pre><p>Т.е. для создания представления достаточно написать запрос, который
+возвращать нужные данные.</p><p>Можно создавать представления с опцией <code>or replace</code>, тогда в том случае,
+если такое представление уже существует, оно будет заменено на новое.</p><pre><code>create or replace view viewname as
+select ...
+....
+...;
+</code></pre><p>Создадим таблицу с сотрудниками, должностями и подразделениями:</p><pre><code>create table employees(
+    id number,
+    emp_name varchar2(100 char),
+    dept_id number,
+    position_id number
+);
+
+create table departments(
+    id number,
+    dept_name varchar2(100)
+);
+
+create table positions(
+    id number,
+    position_name varchar2(100)
+);
+
+insert into departments values(1, 'IT');
+insert into departments values(2, 'SALARY');
+
+insert into positions values(1, 'MANAGER');
+insert into positions values(2, 'CLERK');
+
+insert into employees values(1, 'Иван Петров', 1, 1);
+insert into employees values(2, 'Петр Иванов', 1, 2);
+insert into employees values(3, 'Елизавета Сидорова', 2, 1);
+insert into employees values(4, 'Алексей Иванов', 2, 2);
+</code></pre><p>Создадим представление <code>vemployees</code>, которое будет выводить данные по
+сотрудникам в уже &ldquo;соединенном&rdquo; виде:</p><pre><code>create view vemployees as
+select e.id,
+       e.emp_name,
+       d.dept_name,
+       p.position_name
+from employees e
+join departments d on d.id = e.dept_id
+join positions p on p.id = e.position_id;
+
+comment on table vemployees is 'сотрудники';
+comment on column vemployees.id is 'id сотрудника';
+comment on column vemployees.emp_name is 'имя сотрудника';
+comment on column vemployees.dept_name is 'подразделение';
+comment on column vemployees.position_name is 'должность';
+</code></pre><p>Следует обратить внимание на то, что представлениям и колонкам в них
+можно задавать комментарии как и обычным таблицам.</p><p>Теперь, чтобы получить нужные нам данные, нам не нужно заново писать
+запрос, достаточно сразу выбрать данные из представления:</p><pre><code>select *
+from vemployees
+</code></pre><p><img src=/img/14_views/vemployees.png alt></p><p>При создании представлений можно использовать уже существующие
+представления:</p><pre><code>create view vemployees_it as
+select a.*
+from vemployees a
+where a.dept_name = 'IT';
+</code></pre><p>Следует с осторожностью использовать уже созданные представления при
+создании других представлений. Может случиться так, что написать новый
+запрос будет куда лучше, чем использовать существующие, но не полностью
+подходящие.</p><h3 id=символ--при-создании-представлений>Символ * при создании представлений</h3><p>Когда при создании представления используется символ &ldquo;*&rdquo;, то Oracle
+заменяет звездочку на список столбцов. Это означает, что если в таблицу
+будет добавлена новая колонка, то она не будет автоматически добавлена в
+представление.</p><p>Это очень просто проверить:</p><pre><code>create table tst(
+    n1 number,
+    n2 number
+);
+
+insert into tst values(1, 2);
+
+create view v_tst as
+select *
+from tst;
+</code></pre><p>Посмотрим, какие данные содержатся в представлении:</p><pre><code>select *
+from v_tst
+</code></pre><p><img src=/img/14_views/view_asterics_1.png alt></p><p>Теперь добавим в таблицу <code>tst</code> еще одну колонку( изменение таблиц будет
+рассматриваться позже, сейчас достаточно понимать, что данный запрос
+добавляет новую колонку в таблицу):</p><pre><code>alter table tst
+add (n3 number);
+</code></pre><p>Если сейчас получить все данные из представления, мы увидим, что список
+колонок в ней не изменился:</p><p><img src=/img/14_views/view_asterics_1.png alt></p><p>Чтобы добавить колонку &ldquo;n3&rdquo; в представление, можно изменить его, добавив
+в список колонок нужную, либо заново создать(с использованием
+<code>create or replace</code>):</p><pre><code>create or replace view v_tst as
+select *
+from tst
+</code></pre><h2 id=изменение-данных-представления>Изменение данных представления</h2><p>Таблицы, которые используются в запросе представления, называются
+<em>базовыми таблицами</em>.</p><p>Представления, которые созданы на основании одной базовой таблицы, можно
+изменять также, как и обычную таблицу.</p><p>Например, создадим представление <code>vdepartments</code> и добавим в него
+несколько записей.</p><pre><code>-- создаем представление
+create view vdepartments as
+select id, dept_name
+from departments;
+
+-- добавляем данные через представление, а не таблицу
+insert into vdepartments(id, dept_name)
+values(10, 'SALES');
+</code></pre><p>Конечно, фактически данные добавляются не в представление, а в базовую
+таблицу(в данном случае <code>departments</code>):</p><pre><code>select *
+from departments
+</code></pre><p><img src=/img/14_views/departments_all.png alt></p><p>Строки можно и удалять, а также и изменять:</p><pre><code>delete from vdepartments
+where id = 10;
+
+update vdepartments
+set dept_name = 'SECURITY'
+where id = 1;
+</code></pre><p>Посмотрим на результаты:</p><pre><code>select *
+from vdepartments
+</code></pre><p><img src=/img/14_views/vdepartments.png alt></p><h3 id=представления-с-проверкой-with-check-option>Представления с проверкой (WITH CHECK OPTION)</h3><p>Можно создавать представления, которые будут ограничивать изменение
+данных в базовых таблицах. Для этого используется опция
+<code>WITH CHECK OPTION</code> при создании представления.</p><p>Создадим представление, которое содержит в себе только менеджеров:</p><pre><code>create view vemp_managers as
+select *
+from employees
+where position_id = 1;
+</code></pre><p>Данное представление содержит только менеджеров, но это не означает, что
+в него нельзя добавить сотрудников других профессий:</p><pre><code>-- Добавим сотрудника c position_id = 2
+insert into vemp_managers(id, emp_name, dept_id, position_id)
+values(10, 'Иван Иванов', 1, 2);
+</code></pre><p>Данные в представлении остались те же, что и были:</p><pre><code>select *
+from vemp_managers
+</code></pre><p><img src=/img/14_views/vemp_managers.png alt></p><p>А вот в таблицу <code>employees</code> был добавлен новый сотрудник Иван Иванов:</p><pre><code>select *
+from employees
+where id = 10
+</code></pre><p><img src=/img/14_views/employees_id_10.png alt></p><p>Для того, чтобы через представление можно было изменять только те
+данные, которые в нем содержатся(а точнее, которые можно получить через
+представление), при его создании следует указать опцию
+<code>WITH CHECK OPTION</code>.</p><p>Создадим заново представление <code>vemp_managers</code>, только с добавлением
+<code>with check option</code>, и попробуем снова добавить в него запись:</p><pre><code>create or replace view vemp_managers as
+select *
+from employees
+where position_id = 1
+with check option;
+
+-- Попробуем добавить запись с position_id = 2
+insert into vemp_managers(id, emp_name, dept_id, position_id)
+values(11, 'Иван Иванов Второй', 1, 2);
+</code></pre><p>При попытке это сделать, мы получим ошибку
+<code>view WITH CHECK OPTION where-clause violation</code>.</p><p>Но зато добавить сотрудника с <code>position_id = 1</code> можно без проблем:</p><pre><code>-- Запись успешно добавится в таблицу employees
+insert into vemp_managers(id, emp_name, dept_id, position_id)
+values(11, 'Иван Иванов Второй', 1, 1);
+</code></pre><h3 id=изменение-представлений-из-нескольких-таблиц>Изменение представлений из нескольких таблиц</h3><p>В Oracle можно изменять данные через представления, которые получают
+данные из нескольких таблиц.</p><p>Но есть определенные ограничения:</p><ol><li>Изменять можно данные только одной базовой таблицы</li><li>Изменяемая таблица должна быть т.н. &ldquo;key preserved table&rdquo; (таблица с
+сохранением ключа).</li></ol><p>Второй пункт возможно самый важный для понимания того, можно ли изменять
+данные в представлении из нескольких таблиц или нет.</p><p>Так вот, таблица называется key preserved, если каждой ее строке
+соответствует <em>максимум одна строка</em> в представлении.</p><p>Следует помнить, что свойство сохранения ключа в представлениях не
+зависит от данных, а скорее от структуры таблиц и их отношений между
+собой. Фактически в представлении данные могут выглядеть так, что для
+одной строки базовой таблицы есть лишь одна строка представления, но это
+не означает, что этот вид не изменится при изменении данных в таблицах
+представления.</p><p>Для примера создадим представление <code>vemp_depts</code>, которое будет содержать
+информацию о сотрудниках и подразделениях, в которых они работают:</p><pre><code>create or replace view vemp_depts as
+select e.id,
+       e.emp_name,
+       e.dept_id,
+       e.position_id,
+       d.id department_id,
+       d.dept_name
+from employees e
+join departments d on e.dept_id = d.id
+</code></pre><p>Посмотрим, какие данные там находятся:</p><pre><code>select *
+from vemp_depts
+</code></pre><p><img src=/img/14_views/vemp_depts_1.png alt></p><p>Как мы видим, каждая строка из базовой таблицы <code>employees</code> встречается в
+представлении всего один раз. Попробуем добавить нового сотрудника через
+это представление:</p><pre><code>insert into vemp_depts(id, emp_name, dept_id, position_id)
+values(20, 'Иван Василенко', 1, 1);
+</code></pre><p>В результате получаем ошибку
+<code>cannot modify a column which maps to a non key-preserved table</code>,
+которая говорит о том, что таблица не обладает нужными свойствами для
+обновления через представление.</p><p>Зная, что проблему нужно искать не в самих данных, а в схеме БД,
+посмотрим, как мы создавали наши таблицы и как выглядит наш запрос в
+представлении.</p><pre><code>select e.id,
+       e.emp_name,
+       e.dept_id,
+       e.position_id,
+       d.id department_id,
+d.dept_name
+from employees e
+join departments d on e.dept_id = d.id
+</code></pre><p>Здесь мы берем каждую строку из таблицы <code>employees</code> и соединяем с
+таблицей <code>departments</code> по полю <code>dept_id</code>. В каком случае может произойти
+так, что в представлении для одной строки из таблицы <code>employees</code>
+окажутся 2 строки после соединения с таблицей <code>departments</code>? Правильно,
+в том случае, если в таблице <code>departments</code> будут 2 строки с одинаковым
+значением в колонке <code>id</code>. Сейчас таких данных в таблице нет, но это не
+означает, что они не могут появиться. Посмотрим, как мы создавали
+таблицу <code>departments</code>:</p><pre><code>create table departments(
+    id number,
+    dept_name varchar2(100)
+);
+</code></pre><p>Как видно, нет никаких ограничений на колонку <code>id</code>. Но мы можем сделать
+ее уникальной, добавив <a href=../primarykeys/index.html>первичный</a> или
+<a href=../uniquekeys/index.html>уникальный ключ</a>.</p><pre><code>alter table departments
+add (
+    constraint departments_pk primary key(id)
+);
+</code></pre><p>Теперь снова попробуем добавить нового сотрудника:</p><pre><code>-- Запись будет добавлена без ошибок
+insert into vemp_depts(id, emp_name, dept_id, position_id)
+values(20, 'Иван Василенко', 1, 1);
+</code></pre><p>Добавить данные в таблицу <code>departments</code> через это представление не
+получится:</p><pre><code>--  cannot modify a column which maps to a non key-preserved table
+insert into vemp_depts(department_id, dept_name)
+values(7, 'HEAD DEPARTMENT');
+</code></pre><p>Причина здесь та же: нельзя гарантировать, что в таблице <code>employees</code>
+каждый сотрудник имеет уникальное значение <code>dept_id</code>.</p><h3 id=ограничения-в-изменяемых-представлениях>Ограничения в изменяемых представлениях</h3><p>Изменения в представлениях возможны не всегда. Есть определенные
+условия, при которых они запрещены:</p><ol><li>Наличие в представлении агрегатных функций, конструкции <code>group by</code>,
+оператора <code>distinct</code>, операторов для работы с множествами(<code>union</code>,
+<code>union all</code>, <code>minus</code>).</li><li>Если данные не будут удовлетворять условию, прописанному в опции
+<code>WITH CHECK OPTION</code>.</li><li>Если колонка в базовой таблице <code>NOT NULL</code>, не имеет значения
+по-умолчанию, и отсутствует в представлении.</li><li>Если колонки в представлении представляют собой выражения (Например
+что-то вроде <code>nvl(a.value, -1)</code>).</li></ol><h3 id=запрет-изменения-представления>Запрет изменения представления</h3><p>Чтобы создать представление, которое нельзя будет изменять, нужно
+создать его с опцией <code>with read only</code>.</p><p>Пересоздадим представление <code>vdepartments</code> и попробуем добавить туда
+данные:</p><pre><code>create or replace view vdepartments as
+select id, dept_name
+from departments
+with read only;
+
+-- Попробуем добавить данные
+insert into vdepartments(id, dept_name)
+values(11, 'SECURITY');
+</code></pre><p>В результате получим ошибку
+<code>cannot perform a DML operation on a read-only view</code>.</p></div><footer class="footer b-dark-low b-top"><div class="footer-container container centered edges"><p class="text-medium text-moderated">© Orasql.ru<br>2019-2023</p></div></div></footer></body></html>

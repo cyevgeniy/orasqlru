@@ -1,0 +1,81 @@
+<!doctype html><html><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><link rel=stylesheet href=/css/design.css><link rel=stylesheet href=/css/layout.css><link rel=stylesheet href=/css/base.css><link rel=stylesheet href=/css/navigation.css><script async src="https://www.googletagmanager.com/gtag/js?id=UA-144211477-1"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag("js",new Date),gtag("config","UA-144211477-1")</script><title>Учебник Oracle SQL, PL/SQL | Условное ветвление. If...else...elsif</title></head><body><div class=menu><a href=/ class=menu__item>Orasql.ru</a>
+<a href=/#sql class=menu__item>Учебник Oracle SQL</a>
+<a href=/#plsql class=menu__item>Учебник PL/SQL</a></div><div class=content><h1>Условное ветвление. If...else...elsif</h1><p>Условное ветвление используется тогда, когда нужно выполнить разные
+действия в зависимости от условий. Для этого в PL/SQL используется
+конструкция <code>if</code>.</p><h2 id=if>If</h2><pre><code>declare
+    l_name varchar2(100) := 'Admin';
+begin
+    if l_name = 'Admin' then
+        dbms_output.put_line('User is Admin');
+    end if;
+end;
+/
+</code></pre><p>В примере выше описан простейший вариант использования <code>if</code>. Если имя
+пользователя равно строке &ldquo;Admin&rdquo;, мы выводим соответствующее сообщение.</p><p>В конструкции <code>If</code> может быть несколько условий:</p><pre><code>declare
+    l_name varchar2(100) := 'Admin';
+begin
+    if l_name = 'Admin' or l_name = 'TempAdmin' then
+        dbms_output.put_line('User is Admin');
+    end if;
+end;
+/
+</code></pre><p>Результат:</p><pre><code>User is Admin
+</code></pre><p>В случае с логическими переменными, проверять на равенство true или
+false не обязательно:</p><pre><code>declare
+    is_admin boolean := true;
+begin
+    if is_admin then
+        dbms_output.put_line('Admin');
+    end if;
+end;
+/
+</code></pre><p>Общий принцип работы конструкции if таков: Если условие между
+идентификаторами if и then принимает истинное значение, выполняется код,
+находящийся между идентификаторами then и end if;</p><p>При проверке условий <code>Pl/sql</code> использует так называемое &ldquo;ленивое вычисление&rdquo; -
+когда части условия вычисляются по порядку, и если можно сделать вывод о значении
+всего условия, дальнейшее вычисление не производится.
+Например, в следующем условии будет вычислен
+только первый предикат(<code>2 > 3</code>):</p><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sql data-lang=sql><span style=display:flex><span><span style=color:#000;font-weight:700>begin</span><span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>    </span><span style=color:#000;font-weight:700>if</span><span style=color:#bbb> </span>(<span style=color:#099>2</span><span style=color:#bbb> </span><span style=color:#000;font-weight:700>&gt;</span><span style=color:#bbb> </span><span style=color:#099>3</span>)<span style=color:#bbb> </span><span style=color:#000;font-weight:700>and</span><span style=color:#bbb> </span>(<span style=color:#099>3</span><span style=color:#bbb> </span><span style=color:#000;font-weight:700>&lt;</span><span style=color:#bbb> </span><span style=color:#099>4</span>)<span style=color:#bbb> </span><span style=color:#000;font-weight:700>and</span><span style=color:#bbb> </span>(<span style=color:#099>5</span><span style=color:#bbb> </span><span style=color:#000;font-weight:700>&gt;</span><span style=color:#bbb> </span><span style=color:#099>4</span>)<span style=color:#bbb> </span><span style=color:#000;font-weight:700>then</span><span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>        </span>dbms_output.put_line(<span style=color:#d14>&#39;True&#39;</span>);<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>    </span><span style=color:#000;font-weight:700>else</span><span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>        </span>dbms_output.put_line(<span style=color:#d14>&#39;False&#39;</span>);<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>    </span><span style=color:#000;font-weight:700>end</span><span style=color:#bbb> </span><span style=color:#000;font-weight:700>if</span>;<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb></span><span style=color:#000;font-weight:700>end</span>;<span style=color:#bbb>
+</span></span></span></code></pre></div><p>Выражение будет истинным только тогда, когда каждая его часть будет истинным.
+Первое выражение у нас ложное, а значит, результат
+проверки всего условия вернёт False.</p><h2 id=ifelse>If&mldr;else</h2><pre><code>declare
+    l_name varchar2(100) := 'Max';
+begin
+    if l_name = 'Admin' then
+        dbms_output.put_line('User is Admin');
+    else
+        dbms_output.put_line('User is not Admin');
+    end if;
+end;
+/
+</code></pre><p>Результат:</p><pre><code>User is not Admin
+</code></pre><p>Использование конструкции else позволяет выполнять некий код в том
+случае, если условие принимает ложное значение. В примере выше, значение
+переменной l_name не равно строке &ldquo;Admin&rdquo;, поэтому выполняется код,
+который находится между else и end if;</p><h2 id=ifelsif>if&mldr;elsif</h2><pre><code>declare
+    l_name varchar2(20) := 'Max';
+begin
+    if l_name = 'Admin' then
+        dbms_output.put_line('Пользователь админ');
+    elsif l_name = 'Alex' then
+        dbms_output.put_line('Пользователь Alex');
+    elsif l_name = 'Kat' then
+        dbms_output.put_line('Пользователь Kat');
+    else
+        dbms_output.put_line('Неизвестный пользователь');
+    end if;
+end;
+/
+</code></pre><p>Вывод на экран:</p><pre><code>Неизвестный пользователь
+</code></pre><p>Использование elsif позволяет выполнить еще одну проверку условия в том
+случае, если предыдущее условие было ложным. В самом конце добавлен
+<code>else</code> - код в этом блоке будет выполнен только в том случае, когда ни
+одно из предыдущих условий в <code>if</code> не было истинным, но он может и
+отсутствовать.</p></div><footer class="footer b-dark-low b-top"><div class="footer-container container centered edges"><p class="text-medium text-moderated">© Orasql.ru<br>2019-2023</p></div></div></footer></body></html>

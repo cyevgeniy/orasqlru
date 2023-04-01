@@ -1,0 +1,13 @@
+<!doctype html><html><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><link rel=stylesheet href=/css/design.css><link rel=stylesheet href=/css/layout.css><link rel=stylesheet href=/css/base.css><link rel=stylesheet href=/css/navigation.css><script async src="https://www.googletagmanager.com/gtag/js?id=UA-144211477-1"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag("js",new Date),gtag("config","UA-144211477-1")</script><title>Учебник Oracle SQL, PL/SQL | Когда использовать PL/SQL</title></head><body><div class=menu><a href=/ class=menu__item>Orasql.ru</a>
+<a href=/#sql class=menu__item>Учебник Oracle SQL</a>
+<a href=/#plsql class=menu__item>Учебник PL/SQL</a></div><div class=content><h1>Когда использовать PL/SQL</h1><p>PL/SQL нужно использовать, когда:</p><ul><li>Нужно скрыть функционал за общим интерфейсом(инкапсуляция)</li><li>Возможностей SQL недостаточно</li><li>Реализация на PL/SQL будет более сопровождаемой</li></ul><p>Коротко по каждому из пунктов.</p><h2 id=инкапсуляция>Инкапсуляция</h2><p>Мы можем создать функцию, либо хранимую процедуру, после чего различные
+клиенты смогут воспользоваться ими, не зная деталей реализации
+функционала.</p><h2 id=недостаточно-возможностей-sql>Недостаточно возможностей SQL</h2><p>Здесь лучше подойтет пример. Предположим, нам нужно реализовать логику:</p><ol><li>Если значение некоего параметра, назовем его `quantity`, больше
+100, то:</li><li>Удалить некоторые строки из таблицы A.</li><li>Иначе:</li><li>Изменить некоторые строки в таблице B</li></ol><p>Пункты 2 и 3 легко реализуются на чистом SQL. Связки 1-2 и 3-4 также
+можно реализовать на SQL, но условное выполнение 2 либо 4 возможно
+только при добавлении возможностей ветвления PL/SQL.</p><h2 id=сопровождаемость>Сопровождаемость</h2><p>В один монстрообразный SQL-запрос можно засунуть много сложной логики, и
+в целом так и нужно поступать, но лишь до тех пор, пока ты уверен, что
+он:</p><ul><li>Понятен</li><li>Будет понятен через полгода</li><li>Тестируем</li></ul><p>Если есть сомнения, лучше разделить функционал на более простые
+части(используя хранимые процедуры, например) и реализовать каждую из
+них отдельно.</p></div><footer class="footer b-dark-low b-top"><div class="footer-container container centered edges"><p class="text-medium text-moderated">© Orasql.ru<br>2019-2023</p></div></div></footer></body></html>

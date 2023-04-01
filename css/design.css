@@ -1,0 +1,255 @@
+.box {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    padding: 1.1rem;
+    max-width: 100%;
+}
+
+/* Use box's padding for headers inside block if they're first */
+.box>h1:first-child,
+.box>h2:first-child,
+.box h3:first-child,
+.box h4:first-child {
+    margin-top: 0px;
+}
+
+/* Use this class to make font in the box bigger */
+.box--bigger {
+    font-size: var(--box-font-size);
+    line-height: 160%;
+}
+
+.box a {
+    color: var(--box-link-color);
+}
+
+
+/* Buttons */
+button {
+    border-top: none;
+    border-left: none;
+}
+
+button, .button {
+    padding-top: 0.2rem;
+    padding-bottom: 0.2rem;
+    padding-left: 0.7rem;
+    padding-right: 0.7rem;
+    background-color: #ff8142 !important;
+    border-bottom: 2px solid black;
+    border-right: 2px solid black;
+    font-size: var(--base-font-size);
+    color: black !important;
+    text-align: center;
+}
+
+.button:focus, button:active {
+    border-bottom: 0px solid black;
+    border-right: none;
+}
+
+
+/* Footer */
+footer, .footer {
+    border-top: 1px solid;
+    border-color: var(--border-color);
+    padding-bottom: 2rem;
+    padding-top: 2rem;
+    margin-top: 4rem;
+    max-width: 100%;
+    background-color: var(--footer-bg-color);
+    text-align: center;
+    color: #798893;
+}
+
+/* Table of content */
+.toc {
+    padding: 0.5rem;
+    border: 1px solid;
+    border-color: var(--border-color);
+    border-radius: 0.5rem;
+}
+
+.toc__list {
+    list-style-type: none;
+    padding-left: 1rem;
+}
+
+.toc__header {
+    margin-top: 0px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.post-list {
+    border-top: 1px solid;
+    border-left: 1px solid;
+    border-right: 1px solid;
+    border-color: var(--border-color);
+}
+
+.post-list__item {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    padding-top: 0.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid;
+    border-color: var(--border-color);
+}
+.post-list__item > :first-child {
+    margin-top: 0px;
+}
+
+.item-heading-link {
+    color: var(--header-color-gray) !important;
+}
+
+.item-content {
+}
+
+.item-media {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    align-items: stretch;
+}
+
+.item-media > div {
+    width: 100%;
+}
+
+.item-media > div img {
+    height: 100%;
+    width: 100%;
+}
+
+
+.item-readmore {
+    margin-top: 1rem;
+}
+
+.readmore-link {
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    padding-left: 0.2rem;
+    display: block;
+}
+
+.readmore-link:hover {
+    background-color: var(--footer-bg-color);
+}
+
+
+@media screen and (min-width: 768px) {
+    .item-media > div {
+        /* Divide space equally between two images */
+        max-width: calc(calc(100% - 1rem) / 2);
+        height: 300px;
+    }
+
+    .post-list__item {
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+}
+
+.post-list__title a{
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.post-list__title{
+  margin-bottom: 0px;
+}
+
+.post-list__summary{
+  margin-block-start: 0px;
+}
+
+.bg-normal {
+    background-color: var(--box-normal-color);
+}
+
+.bg-alert {
+    background-color: var(--box-alert-color);
+}
+
+.bg-info {
+    background-color: var(--box-info-color);
+}
+
+@media (min-width: 70ch) {
+    .full-width {
+      width: 100vw;
+      position: relative;
+      left: 50%;
+      right: 50%;
+      margin-left: -50vw;
+      margin-right: -50vw;
+    }
+
+    /* Remove top/bottom margins from the first and last child
+     * elements of a full-width container
+     */
+    .full-width > *:first-child {
+        margin-top: 0px;
+    }
+
+    .full-width > *:last-child {
+        margin-bottom: 0px;
+    }
+
+    /* Increase padding for the first and last box blocks
+     * inside full-width block
+     */
+    .full-width > .box:first-child {
+        padding-top: 2rem;
+    }
+    .full-width > .box:last-child {
+        padding-bottom: 2rem;
+    }
+
+    /* If .content goes right after full-width block, add some space */
+    .full-width + .content {
+        margin-top: 1.1rem;
+    }
+}
+
+.disclaimer {
+    text-align: center;
+}
+.post-title {
+    text-align: center;
+    max-width: 120ch;
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+
+/* Pagination buttons */
+.pagination {
+    margin-top: 1rem;
+}
+
+.pagination-content {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.pagination__button {
+    flex-grow: 1;
+    font-weight: 600;
+}
+
+@media screen and (min-width: 768px) {
+    .post-title {
+        padding-left: 0px;
+        padding-right: 0px;
+    }
+
+    .pagination__button {
+        flex-grow: 0;
+        width: 25%;
+    }
+}

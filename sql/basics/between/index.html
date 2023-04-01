@@ -1,0 +1,25 @@
+<!doctype html><html><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><link rel=stylesheet href=/css/design.css><link rel=stylesheet href=/css/layout.css><link rel=stylesheet href=/css/base.css><link rel=stylesheet href=/css/navigation.css><script async src="https://www.googletagmanager.com/gtag/js?id=UA-144211477-1"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag("js",new Date),gtag("config","UA-144211477-1")</script><title>Учебник Oracle SQL, PL/SQL | Вхождение в диапазон. BETWEEN. NOT BETWEEN</title></head><body><div class=menu><a href=/ class=menu__item>Orasql.ru</a>
+<a href=/#sql class=menu__item>Учебник Oracle SQL</a>
+<a href=/#plsql class=menu__item>Учебник PL/SQL</a></div><div class=content><h1>Вхождение в диапазон. BETWEEN. NOT BETWEEN</h1><p><code>BETWEEN</code> используется для того, чтобы проверить значение на вхождение в
+диапазон. Проверять вхождение в диапазон значений можно строки, числа и
+даты.</p><p>Пример №1: Получить список блюд, рейтинг которых колеблется от 270 до
+320 включительно:</p><pre><code>select d.*
+from dishes d
+where rating between 270 and 320
+</code></pre><p><img src=/img/3_select/rating_between_270_320.png alt></p><p>Следует помнить, что граничные значения диапазона всегда включаются при
+проверке, т.е. этот запрос идентичен следующему:</p><pre><code>select d.*
+from dishes d
+where d.rating ≥ 270
+and d.rating ≤ 320
+</code></pre><p>Пример №2: Получить список блюд, рейтинг которых колеблется от 270 до
+320, и стоимость которых от 1 до 6:</p><pre><code>select d.*
+from dishes d
+where d.rating between 270 and 320
+and d.price between 1 and 6
+</code></pre><p><img src=/img/3_select/rating_btw_270_320_price_btw_1_6.png alt></p><p>Пример №3: Получить список блюд с рейтингом, значения которого не входят
+в диапазон чисел от 270 до 320:</p><pre><code>select d.*
+from dishes d
+where d.rating not between 270 and 320
+</code></pre><p><img src=/img/3_select/rating_not_btw_270_320.png alt></p><p>Здесь для того, чтобы исключить значения из диапазона, перед `between`
+было добавлено ключевое слово <code>NOT</code>.</p></div><footer class="footer b-dark-low b-top"><div class="footer-container container centered edges"><p class="text-medium text-moderated">© Orasql.ru<br>2019-2023</p></div></div></footer></body></html>

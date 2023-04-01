@@ -1,0 +1,26 @@
+<!doctype html><html><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><link rel=stylesheet href=/css/design.css><link rel=stylesheet href=/css/layout.css><link rel=stylesheet href=/css/base.css><link rel=stylesheet href=/css/navigation.css><script async src="https://www.googletagmanager.com/gtag/js?id=UA-144211477-1"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag("js",new Date),gtag("config","UA-144211477-1")</script><title>Учебник Oracle SQL, PL/SQL | Проверка значения на NULL</title></head><body><div class=menu><a href=/ class=menu__item>Orasql.ru</a>
+<a href=/#sql class=menu__item>Учебник Oracle SQL</a>
+<a href=/#plsql class=menu__item>Учебник PL/SQL</a></div><div class=content><h1>Проверка значения на NULL</h1><p>Если обратить внимание на результаты запросов, выше, то можно заметить,
+что строка, содержащая <code>NULL</code> в колонке <code>rating</code> не была возвращена ни
+одним из них.</p><p>Как уже говорилось ранее, <code>NULL</code> - это отсутствие значения.
+Соответственно, он и не может быть больше, меньше, либо даже равняться
+какому-либо значению, даже себе.</p><p>Например, следующий запрос не вернет ни одной строки, хотя мы вроде как
+и указываем в запросе необходимый критерий - равенство <code>NULL</code>:</p><pre><code>select d.*
+from dishes d
+where d.rating = NULL
+</code></pre><p><img src=/img/3_select/no_data_found.png alt></p><p>Теперь попробуем получить все блюда, у которых рейтинг указан, т.е. те
+строки из таблицы, где значение rating не равно <code>NULL</code>:</p><pre><code>select d.*
+from dishes d
+where d.rating &lt;&gt; NULL
+</code></pre><p>Получим аналогичный результат - ни одной строки не будет получено:</p><p><img src=/img/3_select/no_data_found.png alt></p><p>Встает вопрос - как определить, что колонка содержит NULL?</p><p>Для этого используются операторы <code>IS NULL</code> и <code>IS NOT NULL</code>. <code>IS NULL</code>
+проверяет, является ли значение равным NULL, в то время как
+<code>IS NOT NULL</code> проверяет, является ли значение любым, но не NULL.</p><p>Работу данных операторов лучше рассмотреть на примерах.</p><p>Получим блюда, которые еще не получили никакой оценки, т.е. те блюда,
+которые в колонке <code>rating</code> содержат NULL:</p><pre><code>select d.*
+from dishes d
+where d.rating IS NULL
+</code></pre><p><img src=/img/3_select/rating_is_null.png alt></p><p>А теперь получим все блюда, которые уже получили оценку:</p><pre><code>select d.*
+from dishes d
+where d.rating IS NOT NULL
+</code></pre><p>Как видно, <code>IS NOT NULL</code> возвращает все строки, кроме тех, которые
+содержат <code>NULL</code>:</p><p><img src=/img/3_select/rating_is_not_null.png alt></p><p>В Oracle пустая строка эквивалентна <code>NULL</code>.</p></div><footer class="footer b-dark-low b-top"><div class="footer-container container centered edges"><p class="text-medium text-moderated">© Orasql.ru<br>2019-2023</p></div></div></footer></body></html>
