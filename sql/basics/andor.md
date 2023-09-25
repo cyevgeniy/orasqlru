@@ -1,7 +1,5 @@
 ---
 Title: "Проверка нескольких условий. AND, OR"
-weight: 7
-toc: false
 ---
 
 При выборке данных мы можем указывать несколько условий одновременно.
@@ -11,12 +9,14 @@ toc: false
 Пример №1: получим список блюд с рейтингом, меньшим чем 320, но со
 стоимостью большей, чем 2:
 
-    select *
-    from dishes
-    where rating < 320
-    and price > 2
+```sql
+select *
+from dishes
+where rating < 320
+and price > 2
+```
 
-![](/img/3_select/rating_l320_price_g2.png)
+![](/static/img/3_select/rating_l320_price_g2.png)
 
 Пример №2: получим список блюд, рейтинг которых варьируется от 280 до
 320 включительно, и цена которых меньше 30:
