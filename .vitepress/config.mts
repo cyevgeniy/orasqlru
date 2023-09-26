@@ -89,7 +89,22 @@ export default defineConfig({
             { text: 'Псевдостолбцы в Oracle', link: '/sql/dbobjects/pseudocolumns/' },
           ],
         },
+        {
+          text: "Транзакции",
+          items: [
+            { text: 'Транзакции в Oracle', link: '/sql/transactions/transactions/' },
+          ],
+        },
       ],
+      '/plsql/': [
+        {
+          text: "Введение",
+          items: [
+           { text: "Что такое PL/SQL", link: '/plsql/intro/plsql_intro/' },
+           { text: "Когда использовать PL/SQL", link: '/plsql/intro/plsql_whentouse/' },
+          ],
+        }
+      ]
     },
 
     socialLinks: [
