@@ -96,13 +96,42 @@ export default defineConfig({
           ],
         },
       ],
-      '/plsql/': [
+      '/plsql': [
         {
           text: "Введение",
           items: [
            { text: "Что такое PL/SQL", link: '/plsql/intro/plsql_intro/' },
            { text: "Когда использовать PL/SQL", link: '/plsql/intro/plsql_whentouse/' },
           ],
+        },
+        {
+          text: "Основы PL/SQL",
+          items: [
+           { text: "Анонимные блоки", link: '/plsql/basics/plsql_anonymous_block/' },
+           { text: "Вложенные и именованные блоки", link: '/plsql/basics/plsql_blocks/' },
+           { text: "Первая программа на PL/SQL", link: '/plsql/basics/plsql_first_program/' },
+           { text: "DBMS_OUTPUT.PUT_LINE. Вывод на экран", link: '/plsql/basics/plsql_dbms_put_line/' },
+           { text: "Переменные, константы. Простые типы данных", link: '/plsql/basics/plsql_simpletypes/' },
+           { text: "Условное ветвление. If...else...elsif", link: '/plsql/basics/plsql_ifelse/' },
+           { text: "Схема БД. Её объекты", link: '/plsql/basics/plsql_schema/' },
+           { text: "Функции в PL/SQL", link: '/plsql/basics/plsql_functions/' },
+           { text: "Процедуры в PL/SQL", link: '/plsql/basics/plsql_procedures/' },
+           { text: "Взаимодействие PL/SQL и SQL. Переключение контекста", link: '/plsql/basics/context/' },
+           { text: "Пакеты", link: '/plsql/basics/packages/' },
+           { text: "Циклы в PL/SQL", link: '/plsql/basics/loops/' },
+          ],
+        },
+        {
+          text: "Обработка ошибок",
+          items: [
+           { text: "Обработка ошибок в PL/SQL", link: '/plsql/exc/basics/' },
+          ]
+        },
+        {
+          text: "Взаимодействие с данными",
+          items: [
+           { text: "Взаимодействие SQL и PL/SQL", link: '/plsql/sql/selectinto/' },
+          ]
         }
       ]
     },
