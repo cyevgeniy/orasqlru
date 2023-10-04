@@ -19,9 +19,9 @@ export default defineConfig({
             items: [
             { text: 'Введение в SQL', link: '/sql/intro/sqlintro/' },
             { text: 'DDL, DML', link: '/sql/intro/ddldml/' },
-            { text: 'Выполнение SQL. Облачные сервисы', link: '/sql/intro/sqlcloud' },
-            { text: 'Инструменты для работы с БД Oracle', link: '/sql/intro/instruments' },
-            { text: 'Ссылки на полезные ресурсы', link: '/sql/intro/links' },
+            { text: 'Выполнение SQL. Облачные сервисы', link: '/sql/intro/sqlcloud/' },
+            { text: 'Инструменты для работы с БД Oracle', link: '/sql/intro/instruments/' },
+            { text: 'Ссылки на полезные ресурсы', link: '/sql/intro/links/' },
             ]
         },
         {
