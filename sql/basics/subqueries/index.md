@@ -1,7 +1,5 @@
 ---
 Title: "Подзапросы в Oracle"
-weight: 13
-toc: true
 ---
 
 Подзапросы представляют собой обычные SQL-запросы, которые являются
@@ -13,6 +11,7 @@ toc: true
 
 ## Подготовка тестовых данных
 
+```sql
     create table books(
         book_id number primary key,
         book_name varchar2(200) not null,
@@ -57,11 +56,13 @@ toc: true
 
     insert into book_orders
     values(3, 2, to_date('05.11.2005', 'dd.mm.yyyy'));
+```
 
 ## Подзапросы в where- части запроса
 
 Получим информацию о продажах книги "Властелин колец":
 
+```sql
     select bo.*
     from book_orders bo
     where bo.book_id = (
@@ -69,6 +70,7 @@ toc: true
         from books
         where book_name = 'Властелин колец'
     );
+```
 
 ![](/img/8_subqueries/wherepart_1.png)
 
@@ -77,21 +79,26 @@ toc: true
 
 Если выполнить подзапрос отдельно:
 
+```sql
     select book_id
     from books
     where book_name = 'Властелин колец'
+```
 
 То мы получим одну строку, которая будет содержать значение `book_id`,
 равое 1. Поэтому самый первый запрос эквивалентен следующему:
 
+```sql
     select bo.*
     from book_orders bo
     where bo.book_id = 1
+```
 
 Следует обратить внимание на то, что в данном случае подзапрос должен
 возвращать только одну строку, состоящую из одной колонки. Следующие
 запросы работать не будут:
 
+```sql
     select bo.*
     from book_orders bo
     where bo.book_id = (
@@ -100,13 +107,16 @@ toc: true
             from books
             where book_name = 'Властелин колец'
     )
+```
 
 Данный запрос выдаст ошибку `ORA-00913: too many values`, т.к. подзапрос
 возвращает одну строку с двумя колонками.
 
+```sql
     select bo.*
     from book_orders bo
     where bo.book_id = (select book_id from books)
+```
 
 А здесь будет ошибка
 `ORA-01427: single-row subquery returns more than one row`, что
@@ -121,9 +131,11 @@ toc: true
 прямо в части `SELECT` в качестве колонок. Результат выполнения
 подзапроса будет добавляться к каждой строке, как обычная колонка:
 
+```sql
     select b.*,
            (select count(*) from book_orders) ord_cnt
     from books b
+```
 
 ![](/img/8_subqueries/selectpart_1.png)
 
@@ -134,9 +146,11 @@ toc: true
 несколько строк. Зато запрос может ничего не возвращать, тогда значение
 в колонке будет `NULL`:
 
+```sql
     select b.*,
            (select book_id from book_orders where 2 > 10) book_id_subq
     from books b
+```
 
 ![](/img/8_subqueries/selectpart_2.png)
 
@@ -150,12 +164,14 @@ toc: true
 запроса; каким-либо образом удалить или изменить данные в подрапросе не
 получится).
 
+```sql
     select b_orders.*
     from (
     select b.book_id, b.book_name, bo.quantity, bo.order_date
     from books b
     join book_orders bo on bo.book_id = b.book_id) b_orders
     where b_orders.quantity > 1
+```
 
 ![](/img/8_subqueries/frompart_1.png)
 
@@ -163,13 +179,15 @@ toc: true
 поместили его во `FROM` часть, как будто это обычная таблица, и дальше
 работаем с псевдонимом данного подзапроса.
 
-В подзапросе использовались [соединения]({{< relref "joins" >}} "соединения").
+В подзапросе использовались [соединения](/sql/basics/joins/).
 
 Сам подзапрос можно выполнить отдельно:
 
+```sql
     select b.book_id, b.book_name, bo.quantity, bo.order_date
     from books b
     join book_orders bo on bo.book_id = b.book_id
+```
 
 ![](/img/8_subqueries/frompart_2.png)
 
@@ -181,7 +199,7 @@ toc: true
 
 Подзапросов во `FROM` части может быть несколько, т.е. мы можем
 соединять их, как обычные таблицы(опять, про соединения таблиц можно
-почитать [вот здесь]({{< relref "joins" >}}).
+почитать [вот здесь](/sql/basics/joins/).
 
 В отличие от подзапросов, которые используются в select-части, данные
 подзапросы могут возвращать более одной строки (более того, как правило,
@@ -192,11 +210,13 @@ toc: true
 Коррелированный подзапрос - это такой подзапрос, который использует для
 своей работы данные из внешнего по отношению к нему запроса. Например:
 
+```sql
     select b.*,
            (select count(*)
             from book_orders
             where book_id = b.book_id) ord_cnt
     from books b
+```
 
 ![](/img/8_subqueries/correlated_select.png)
 
@@ -216,12 +236,14 @@ toc: true
 качестве источника для значений в этих операторах используются
 подзапросы:
 
+```sql
     select b.*
     from books b
     where b.book_id in (
         select book_id
         from book_orders bo
         where bo.quantity < 2)
+```
 
 ![](/img/8_subqueries/inpart_1.png)
 
@@ -235,17 +257,20 @@ Cписок книг для оператора `IN` формируется в р
 Следующий запрос выдаст ошибку `ORA-00913: too many values`, т.к.
 подзапрос получает список строк с двумя колонками:
 
+```sql
     select b.*
     from books b
     where b.book_id in (
         select book_id, quantity
         from book_orders bo
         where bo.quantity < 2)
+```
 
 При этом не следует забывать об особенности использования `NOT IN`: Если
 в списке значений для проверки есть хотя бы одно `NULL`-значение, то
 результат выражения будет ложным, и запрос не вернет никаких данных:
 
+```sql
     select b.*
     from books b
     where b.book_id  not in (
@@ -257,10 +282,11 @@ Cписок книг для оператора `IN` формируется в р
 
         select null
         from dual)
+```
 
 ![](/img/3_select/no_data_found.png)
 
-Здесь при помощи [объединения]({{< relref "unions" >}})
+Здесь при помощи [объединения](/sql/sets/unions/)
 запросов в выборку
 подзапроса была добавлена строка с одним `NULL`-значением, и как
 следствие, запрос не вернул никаких данных.
