@@ -1,33 +1,33 @@
 ---
 Title: "Функции для работы со строками"
-weight: 1
-toc: true
 ---
 
 Создадим тестовую таблицу.
 
-    create table articles(
-        title varchar2(50) not null,
-        author varchar2(50) not null,
-        msg varchar2(300) not null,
-        publish_date date not null
-    );
+```sql
+create table articles(
+    title varchar2(50) not null,
+    author varchar2(50) not null,
+    msg varchar2(300) not null,
+    publish_date date not null
+);
 
-    comment on table articles is 'Твиты';
-    comment on column articles.title is 'Заголовок';
-    comment on column articles.author is 'Автор';
-    comment on column articles.msg is 'Сообщение';
+comment on table articles is 'Твиты';
+comment on column articles.title is 'Заголовок';
+comment on column articles.author is 'Автор';
+comment on column articles.msg is 'Сообщение';
 
-    insert into articles values ('Новый фотоаппарат!', 'johndoe',
-        'Сегодня купил себе новый фотоаппарат. Надеюсь, у меня будут получаться отличные фотографии!', sysdate);
-    insert into articles values ('Насобирал денег', 'johndoe',
-        'Целый год я шел к этой цели, и вот наконец-то у меня все получилось, и заветная сумма собрана!', sysdate - 1);
-    insert into articles values ('Задался целью', 'johndoe',
-        'Итак, я задался целью купить себе фотоаппарат. Для начала нужно насобирать денег на него.', sysdate - 2);
-    insert into articles values ('Сходил в ресторан!', 'user003',
-        'Пришел из ресторана. Еда была просто восхитительна!', sysdate - 3);
-    insert into articles values ('Съездили в отпуск!', 'artem69',
-        'Наконец-то выбрались с женой и детьми в отпуск, было замечательно!', sysdate - 4);
+insert into articles values ('Новый фотоаппарат!', 'johndoe',
+    'Сегодня купил себе новый фотоаппарат. Надеюсь, у меня будут получаться отличные фотографии!', sysdate);
+insert into articles values ('Насобирал денег', 'johndoe',
+    'Целый год я шел к этой цели, и вот наконец-то у меня все получилось, и заветная сумма собрана!', sysdate - 1);
+insert into articles values ('Задался целью', 'johndoe',
+    'Итак, я задался целью купить себе фотоаппарат. Для начала нужно насобирать денег на него.', sysdate - 2);
+insert into articles values ('Сходил в ресторан!', 'user003',
+    'Пришел из ресторана. Еда была просто восхитительна!', sysdate - 3);
+insert into articles values ('Съездили в отпуск!', 'artem69',
+    'Наконец-то выбрались с женой и детьми в отпуск, было замечательно!', sysdate - 4);
+```
 
 Таблица `articles` представляет собой место хранения сообщений
 пользователей, что-то вроде twitter.
@@ -50,9 +50,11 @@ toc: true
 
 Для склейки строк в Oracle используется оператор `||`.
 
-    select 'Автор:' || art.author frmt_author,
-           'Заголовок:"' || art.title  || '"' frmt_title
-    from articles art
+```sql
+select 'Автор:' || art.author frmt_author,
+       'Заголовок:"' || art.title  || '"' frmt_title
+from articles art
+```
 
 ![](/img/4_strings/str_concat.png)
 
@@ -66,9 +68,11 @@ toc: true
 Следующий запрос возвращает позицию, начиная с которой в заголовках
 записей пользователей встречается символ восклицательного знака:
 
-    select a.title,
-           instr(a.title, '!') pos
-    from articles a
+```sql
+select a.title,
+       instr(a.title, '!') pos
+from articles a
+```
 
 ![](/img/4_strings/instr_!.png)
 
@@ -78,9 +82,11 @@ toc: true
 В функции `INSTR` можно задавать позицию, начиная с которой следует
 производить поиск вхождения:
 
-    select a.title,
-           instr(a.title, 'о', 3) pos
-    from articles a
+```sql
+select a.title,
+       instr(a.title, 'о', 3) pos
+from articles a
+```
 
 ![](/img/4_strings/instr_o.png)
 
@@ -95,25 +101,29 @@ toc: true
 символов и будет производить поиск начиная от этой позиции и заканчивая
 началом строки:
 
-    select a.title,
-           instr(a.title, 'а', -4) pos
-    from articles a
+```sql
+select a.title,
+       instr(a.title, 'а', -4) pos
+from articles a
+```
 
 ![](/img/4_strings/instr_4a.png)
 
 Также можно указать, какое по счету совпадение нужно искать(4-ый
 параметр в функции `INSTR`):
 
-    select a.title,
-           instr(a.title, 'о', 1, 2) pos
-    from articles a
+```sql
+select a.title,
+       instr(a.title, 'о', 1, 2) pos
+from articles a
+```
 
 ![](/img/4_strings/instr_o1_2.png)
 
 ## Подобие строк. Like
 
 Для рассмотрения этой темы будем использовать данные из части про
-[сортировку]({{< relref "orderby" >}} "сортировка").
+[сортировку](/sql/basics/orderby/).
 
 Предположим, нам понадобилось посмотреть, какие чаи есть у нас в меню. В
 данном примере единственный способ, которым мы можем определить, что
@@ -125,10 +135,12 @@ toc: true
 
 Перед рассмотрением примера добавим в таблицу меню немного чайных блюд:
 
-    insert into dishes(name, price, rating) values ('Зеленый чай', 1, 100);
-    insert into dishes(name, price, rating) values ('Чай%', 2, 100);
-    insert into dishes(name, price, rating) values ('Чай+', 1, 200);
-    insert into dishes(name, price, rating) values ('Чай!', 1, 666);
+```sql
+insert into dishes(name, price, rating) values ('Зеленый чай', 1, 100);
+insert into dishes(name, price, rating) values ('Чай%', 2, 100);
+insert into dishes(name, price, rating) values ('Чай+', 1, 200);
+insert into dishes(name, price, rating) values ('Чай!', 1, 666);
+```
 
 Гениальные маркетологи решили, что будут добавлять по одному символу в
 конце слова чай для обозначения его крепости - "чай%" - совсем
@@ -138,9 +150,11 @@ toc: true
 
 Итак, первый пример использования `LIKE`:
 
-    select d.*
-    from dishes d
-    where d.name like 'Чай%'
+```sql
+select d.*
+from dishes d
+where d.name like 'Чай%'
+```
 
 ![](/img/3_select/like_tea_percent.png)
 
@@ -155,9 +169,11 @@ toc: true
 
 Если не указывать символ "%", то запрос не вернет никаких данных:
 
-    select d.*
-    from dishes d
-    where d.name like 'Чай'
+```sql
+select d.*
+from dishes d
+where d.name like 'Чай'
+```
 
 ![](/img/3_select/no_data_found.png)
 
@@ -172,9 +188,11 @@ toc: true
 Получим все чаи, названия которых придумали маркетологи(а это любой 1
 символ после слова "чай"):
 
-    select d.*
-    from dishes d
-    where d.name like ('Чай_')
+```
+select d.*
+from dishes d
+where d.name like ('Чай_')
+```
 
 ![](/img/3_select/like_tea_.png)
 
@@ -182,17 +200,21 @@ toc: true
 запрос не вернет никаких данных, т.к. нет блюд, начинающихся со строки
 "чай", есть только блюда, начинающиеся на "Чай"(первая буква заглавная):
 
-    select d.*
-    from dishes d
-    where d.name like ('чай%')
+```sql
+select d.*
+from dishes d
+where d.name like ('чай%')
+```
 
 ![](/img/3_select/no_data_found.png)
 
 Получим только зеленый чай:
 
-    select d.*
-    from dishes d
-    where d.name like ('%чай')
+```sql
+select d.*
+from dishes d
+where d.name like ('%чай')
+```
 
 ![](/img/3_select/like_percent_tea.png)
 
@@ -203,9 +225,11 @@ toc: true
 А для того, чтобы получить список всех блюд, в наименовании которых
 содержится слово "чай", можно написать следующий запрос:
 
-    select d.*
-    from dishes d
-    where upper(d.name) like upper('%чай%')
+```sql
+select d.*
+from dishes d
+where upper(d.name) like upper('%чай%')
+```
 
 ![](/img/3_select/like_percent_tea_percent.png)
 
@@ -214,10 +238,12 @@ toc: true
 Перед рассмотрением выражения опять добавим немного данных в таблицу
 `dishes`:
 
-    insert into dishes values ('Кофе(0.4% кофеина)', 30, 20);
-    insert into dishes values ('Кофе(0.3% кофеина)', 30, 20);
-    insert into dishes values ('Кофе(0.1% кофеина)', 30, 20);
-    insert into dishes values ('Кофе(без кофеина)', 30, 20);
+```sql
+insert into dishes values ('Кофе(0.4% кофеина)', 30, 20);
+insert into dishes values ('Кофе(0.3% кофеина)', 30, 20);
+insert into dishes values ('Кофе(0.1% кофеина)', 30, 20);
+insert into dishes values ('Кофе(без кофеина)', 30, 20);
+```
 
 Перед нами стоит задача: получить список кофейных блюд, содержащих
 кофеин.
@@ -231,9 +257,11 @@ toc: true
 
 На основании этих заключений можно написать следующий запрос:
 
-    select d.*
-    from dishes d
-    where d.name like ('Кофе%кофеина')
+```sql
+select d.*
+from dishes d
+where d.name like ('Кофе%кофеина')
+```
 
 ![](/img/3_select/no_data_found.png)
 
@@ -243,9 +271,11 @@ toc: true
 Для того, чтобы учитывать непосредственно символ "%" в строке, условие
 `LIKE` немного видоизменяется:
 
-    select d.*
-    from dishes d
-    where d.name like ('Кофе%\% кофеина%') escape '\'
+```sql
+select d.*
+from dishes d
+where d.name like ('Кофе%\% кофеина%') escape '\'
+```
 
 ![](/img/3_select/cofee_with_cofein.png)
 
@@ -259,29 +289,33 @@ toc: true
 Функция `INITCAP` делает первую букву каждого слова заглавной, оставляя
 остальную часть слова в нижнем регистре.
 
-    select initcap(art.author)
-    from articles art
+```
+select initcap(art.author)
+from articles art
+```
 
 ![](/img/4_strings/author_initcap.png)
 
-    select initcap(art.msg) msg_initcap
-    from articles art
+```sql
+select initcap(art.msg) msg_initcap
+from articles art
+```
 
 ![](/img/4_strings/msg_initcap.png)
 
-<div class="alert alert-info">
-
+::: info
 Если строка состоит из нескольких слов, то в каждом из этих слов первая
 буква будет заглавной, а остальные - прописными.
-
-</div>
+:::
 
 ## Замена подстроки. REPLACE
 
 Для замены подстроки в строке используется функция `REPLACE`. Данная
 функция принимает 3 параметра, из них последний - не обязательный:
 
-    replace(исходная_строка, что_меняем, на_что_меняем)
+```sql
+replace(исходная_строка, что_меняем, на_что_меняем)
+```
 
 В случае, если не указать, на какую строку производить замену, то
 совпадения будут просто уделены из исходной строки.
@@ -289,10 +323,12 @@ toc: true
 Например, получим все "твиты" пользователя johndoe, но в заголовке поста
 заменим слово "фотоаппарат" заменим на слово "мыльница":
 
-    select replace(a.title, 'фотоаппарат', 'мыльница') new_title,
-           a.msg
-    from articles a
-    where a.author = 'johndoe'
+```sql
+select replace(a.title, 'фотоаппарат', 'мыльница') new_title,
+       a.msg
+from articles a
+where a.author = 'johndoe'
+```
 
 ![](/img/4_strings/replace_photo.png)
 
@@ -304,13 +340,13 @@ toc: true
 -   `ltrim` - удалить пробелы вначале строки (слева)
 -   `rtrim` - удалить пробелы в конце строки (справа)
 
-<!-- -->
-
-    select trim('    John Doe      ') from dual;
-    select rtrim('    John Doe     ') from dual;
-    select ltrim('    John Doe    ') from dual;
-    -- То же самое, что и trim
-    select ltrim(rtrim('     John Doe    ')) from dual;
+```sql
+select trim('    John Doe      ') from dual;
+select rtrim('    John Doe     ') from dual;
+select ltrim('    John Doe    ') from dual;
+-- То же самое, что и trim
+select ltrim(rtrim('     John Doe    ')) from dual;
+```
 
 ## LPAD, RPAD
 
@@ -320,12 +356,14 @@ toc: true
 `LPAD` (left padding) используется для дополнения строки символами
 слева, а `RPAD` (right padding) - для дополнения справа.
 
-    select lpad('1', 5, '0') n1,
-           lpad('10', 5, '0') n2,
-           lpad('some_str', 10) n2_1,
-           rpad('38', 5, '0') n3,
-           rpad('3', 5, '0') n4
-    from dual
+```sql
+select lpad('1', 5, '0') n1,
+       lpad('10', 5, '0') n2,
+       lpad('some_str', 10) n2_1,
+       rpad('38', 5, '0') n3,
+       rpad('3', 5, '0') n4
+from dual
+```
 
 ![](/img/4_strings/lpad_rpad.png)
 

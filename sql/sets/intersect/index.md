@@ -1,11 +1,9 @@
 ---
-Title: "Пересечение запросов"
-weight: 3
-toc: false
+title: "Пересечение запросов"
 ---
 
 В качестве тестовых данных будем использовать таблицы из примера про
-[разность запросов]({{< relref "minus" >}}).
+[разность запросов](/sql/sets/minus).
 
 Для получения пересечения данных между двумя запросами используется
 оператор `INTERSECT`. Он возвращает уникальные строки, которые
@@ -20,13 +18,15 @@ toc: false
 Получим список моделей автомобилей, которые есть и в автопарке, и в
 списке предлагаемых для покупки моделей:
 
-    select car_model, release_year
-    from cars
+```sql
+select car_model, release_year
+from cars
 
-    INTERSECT
+INTERSECT
 
-    select car_model, release_year
-    from car_offers
+select car_model, release_year
+from car_offers
+```
 
 ![](/img/7_unions/intersect_1.png)
 
