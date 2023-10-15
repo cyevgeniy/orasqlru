@@ -1,48 +1,48 @@
 ---
-Title: "Разница запросов. MINUS"
-weight: 2
-toc: false
+title: "Разница запросов. MINUS"
 ---
 
 Подготовим тестовые данные:
 
-    create table cars(
-        car_id number not null,
-        car_model varchar2(100) not null,
-        release_year number
-    );
+```sql
+create table cars(
+    car_id number not null,
+    car_model varchar2(100) not null,
+    release_year number
+);
 
-    create table car_offers(
-        car_model varchar2(100) not null,
-        release_year number
-    );
+create table car_offers(
+    car_model varchar2(100) not null,
+    release_year number
+);
 
-    insert into cars
-    values(1, 'Volkswagen passat', 1998);
+insert into cars
+values(1, 'Volkswagen passat', 1998);
 
-    insert into cars
-    values(2, 'Volkswagen passat', 1998);
+insert into cars
+values(2, 'Volkswagen passat', 1998);
 
-    insert into cars
-    values(3, 'Mersedes SL', 2010);
+insert into cars
+values(3, 'Mersedes SL', 2010);
 
-    insert into cars
-    values(4, 'Lexus S300', 2005);
+insert into cars
+values(4, 'Lexus S300', 2005);
 
-    insert into cars
-    values(5, 'Mersedes SL', 2008);
+insert into cars
+values(5, 'Mersedes SL', 2008);
 
-    insert into car_offers
-    values('Lexus S300', 2010);
+insert into car_offers
+values('Lexus S300', 2010);
 
-    insert into car_offers
-    values('Tesla', 2017);
+insert into car_offers
+values('Tesla', 2017);
 
-    insert into car_offers
-    values('Volkswagen passat', 1998);
+insert into car_offers
+values('Volkswagen passat', 1998);
 
-    insert into car_offers
-    values('Volkswagen passat', 2003);
+insert into car_offers
+values('Volkswagen passat', 2003);
+```
 
 Посмотрим на данные в таблицах:
 
@@ -59,13 +59,15 @@ toc: false
 возвращает уникальные строки из первого запроса, которых нет во втором
 запросе:
 
-    select car_model
-    from car_offers
+```sql
+select car_model
+from car_offers
 
-    MINUS
+MINUS
 
-    select car_model
-    from cars
+select car_model
+from cars
+```
 
 ![](/img/7_unions/minus_car_model_result.png)
 
@@ -75,13 +77,15 @@ toc: false
 Теперь получим предложения автомобилей, у которых либо год, либо модель
 не совпадают с теми авто, что есть у нас:
 
-    select car_model, release_year
-    from car_offers
+```sql
+select car_model, release_year
+from car_offers
 
-    MINUS
+MINUS
 
-    select car_model, release_year
-    from cars
+select car_model, release_year
+from cars
+```
 
 ![](/img/7_unions/minus_car_model_year_result.png)
 
@@ -92,43 +96,47 @@ toc: false
 выполнится и мы получим ошибку
 `ORA-01790: expression must have same datatype as corresponding expression`:
 
-    -- Ошибка, типы данных возвращаемых колонок  в 
-    -- обоих запросах должны совпадать
-    select release_year, car_model
-    from car_offers
+```sql
+-- Ошибка, типы данных возвращаемых колонок  в 
+-- обоих запросах должны совпадать
+select release_year, car_model
+from car_offers
 
-    MINUS
+MINUS
 
-    select car_model, release_year
-    from cars
+select car_model, release_year
+from cars
+```
 
 Если запросы возвращают неодинаковое количество колонок, при выполнении
 запроса получим ошибку
 `ORA-01789: query block has incorrect number of result columns`:
 
-    -- Ошибка, запросы должны возвращать
-    -- одинаковое количество колонок
-    select release_year
-    from car_offers
+```sql
+-- Ошибка, запросы должны возвращать
+-- одинаковое количество колонок
+select release_year
+from car_offers
 
-    MINUS
+MINUS
 
-    select car_model, release_year
-    from cars
+select car_model, release_year
+from cars
+```
 
-<div class="alert alert-info">
-
+::: info
 MINUS возвращает уникальные строки, которые отсутствуют во втором
 запросе.
-
-</div>
+:::
 
 Разберем это на примере. Для начала удалим из таблицы `car_offers`
 модели Volkswagen passat:
 
-    delete
-    from car_offers
-    where car_model = 'Volkswagen passat'
+```sql
+delete
+from car_offers
+where car_model = 'Volkswagen passat'
+```
 
 Теперь данные в таблице `car_offers` выглядят вот так:
 
@@ -137,13 +145,15 @@ MINUS возвращает уникальные строки, которые о�
 Теперь получим список моделей авто, которые есть у нас, но отсутствуют в
 списке предложений:
 
-    select car_model, release_year
-    from cars
+```sql
+select car_model, release_year
+from cars
 
-    MINUS
+MINUS
 
-    select car_model, release_year
-    from car_offers
+select car_model, release_year
+from car_offers
+```
 
 ![](/img/7_unions/minus_unique_passat.png)
 

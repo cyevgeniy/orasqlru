@@ -1,8 +1,8 @@
 ---
 Title: "Первичные ключи"
-weight: 1
-toc: true
 ---
+
+# Первичные ключи
 
 Рассмотрим следующую ситуацию: пусть у нас есть 2 таблицы. Первая
 содержит список сотрудников, вторая - размер бонусов к зарплате для
@@ -23,12 +23,10 @@ toc: true
 иметь возможность различать их между собой. Именно для этого и
 используются первичные ключи.
 
-<div class="alert alert-info">
-
+::: info
 Первичный ключ - это такой атрибут, который позволяет однозначно
 идентифицировать отдельно взятую строку в таблице.
-
-</div>
+:::
 
 Исходя из этого можно выделить еще некоторые свойства первичного ключа:
 
@@ -41,11 +39,13 @@ toc: true
 Добавить первичный ключ в таблицу можно несколькими способами. Первый -
 добавление при создании таблицы:
 
-    create table employees(
-        id number primary key, -- Колонка id будет являться первичным ключом
-        emp_name varchar2(100 char) not null,
-        birth_date date not null
-    );
+```sql
+create table employees(
+    id number primary key, -- Колонка id будет являться первичным ключом
+    emp_name varchar2(100 char) not null,
+    birth_date date not null
+);
+```
 
 Данный способ - самый простой. Мы просто добавляем к нужной колонке
 `primary key`, и Oracle наделит ее всеми необходимыми свойствами.
@@ -54,11 +54,13 @@ toc: true
 попробуем добавить 2 строки в таблицу с одинаковым значением колонки
 `id`:
 
-    insert into employees(id, emp_name, birth_date)
-    values(1, 'Андрей Иванов', to_date('1984.12.04', 'yyyy.mm.dd'));
+```sql
+insert into employees(id, emp_name, birth_date)
+values(1, 'Андрей Иванов', to_date('1984.12.04', 'yyyy.mm.dd'));
 
-    insert into employees(id, emp_name, birth_date)
-    values(1, 'Петр Иванов', to_date('1990.01.30', 'yyyy.mm.dd'));
+insert into employees(id, emp_name, birth_date)
+values(1, 'Петр Иванов', to_date('1990.01.30', 'yyyy.mm.dd'));
+```
 
 Первая строка вставится без ошибок, но при попытке добавить еще одну с
 уже существующим `id` получим ошибку
@@ -74,20 +76,24 @@ toc: true
 К счастью, мы можем сами назначать имя для первичного ключа при создании
 таблицы:
 
-    create table employees(
-        id number,
-        emp_name varchar2(100 char) not null,
-        birth_date date not null,
-        constraint employees_PK primary key(id) -- создаем первичный ключ и назначаем ему имя
-    )
+```sql
+create table employees(
+    id number,
+    emp_name varchar2(100 char) not null,
+    birth_date date not null,
+    constraint employees_PK primary key(id) -- создаем первичный ключ и назначаем ему имя
+)
+```
 
 Теперь попробуем вставить дублирующие значения в колонку `id`:
 
-    insert into employees(id, emp_name, birth_date)
-    values(1, 'Андрей Иванов', to_date('1984.12.04', 'yyyy.mm.dd'));
+```sql
+insert into employees(id, emp_name, birth_date)
+values(1, 'Андрей Иванов', to_date('1984.12.04', 'yyyy.mm.dd'));
 
-    insert into employees(id, emp_name, birth_date)
-    values(1, 'Петр Иванов', to_date('1990.01.30', 'yyyy.mm.dd'));
+insert into employees(id, emp_name, birth_date)
+values(1, 'Петр Иванов', to_date('1990.01.30', 'yyyy.mm.dd'));
+```
 
 На этот раз сообщение об ошибке будет немного другим:
 `ORA-00001: unique constraint (SQL_EAIYWBGLYOEYCEZDANCUIWUWH.EMPLOYEES_PK) violated`.
@@ -116,21 +122,25 @@ toc: true
 подойдет - на один месяц можно будет давать бонус только одному
 сотруднику, в противном случае уникальность ключа будет нарушена.
 
-    create table month_bonuses(
-        emp_id number not null,
-        month_bonus date not null,
-        bonus_value number not null,
-        constraint month_bonuses_pk primary key(emp_id, month_bonus)
-    )
+```sql
+create table month_bonuses(
+    emp_id number not null,
+    month_bonus date not null,
+    bonus_value number not null,
+    constraint month_bonuses_pk primary key(emp_id, month_bonus)
+)
+```
 
 Указать `primary key` напротив нескольких колонок нельзя, т.к. Oracle
 будет пробовать каждую из этих колонок сдалеть первичным ключом, а он
 может быть только один. В итоге мы получим ошибку
 `ORA-02260: table can have only one primary key`:
 
-    -- Получим ошибку при создании таблицы!
-    create table month_bonuses(
-        emp_id number not null primary key,
-        month_bonus date not null primary key,
-        bonus_value number not null
-    )
+```sql
+-- Получим ошибку при создании таблицы!
+create table month_bonuses(
+    emp_id number not null primary key,
+    month_bonus date not null primary key,
+    bonus_value number not null
+)
+```

@@ -1,30 +1,32 @@
 ---
 Title: "Виртуальные колонки"
-weight: 6
-toc: true
 ---
+
+# Виртуальные колонки
+
+Виртуальные колонки - это колонки, которые вычисляются на основе других
+колонок таблицы.
 
 ## Создание виртуальных колонок
 
-
+::: info
 Виртуальные колонки были добавлены в 11 версии Oracle.
+:::
 
+```sql
+create table cars(
+    id number primary key,
+    model varchar2(100) not null,
+    engine_volume number,
+    max_speed_km number not null,
+    max_speed_ml generated always as
+         (max_speed_km / 1.609));
 
-Виртуальные колонки - это колонки, которые вычисляются на основе других
-колонок таблицы. Например:
-
-    create table cars(
-        id number primary key,
-        model varchar2(100) not null,
-        engine_volume number,
-        max_speed_km number not null,
-        max_speed_ml generated always as
-             (max_speed_km / 1.609));
-
-    comment on column cars.max_speed_km is
-        'Максимальная скорость, км/ч';
-    comment on column cars.max_speed_ml is
-        'Максимальная скорость, миль/ч';
+comment on column cars.max_speed_km is
+    'Максимальная скорость, км/ч';
+comment on column cars.max_speed_ml is
+    'Максимальная скорость, миль/ч';
+```
 
 Здесь максимальная скорость в милях вычисляется на основании данных о
 максимальной скорости автомобиля в километрах.
@@ -41,8 +43,10 @@ toc: true
 Когда мы добавляем данные в таблицу, виртуальные колонки не должны нигде
 указываться, т.к. они будут вычислены автоматически:
 
-    insert into cars(id, model, engine_volume, max_speed_km)
-    values(1, 'Tesla', NULL, 250);
+```sql
+insert into cars(id, model, engine_volume, max_speed_km)
+values(1, 'Tesla', NULL, 250);
+```
 
 Теперь посмотрим на данные в таблице:
 
@@ -55,19 +59,23 @@ toc: true
 
 ## Добавление виртуальной колонки к уже существующей таблице
 
-    alter table cars
-    add(
-        max_speed_m generated always as
-            (max_speed_km * 1000)
-    );
+```sql
+alter table cars
+add(
+    max_speed_m generated always as
+        (max_speed_km * 1000)
+);
+```
 
 Теперь в таблице хранится и скорость автомобиля в метрах в час:
 
-    select id,
-           max_speed_km,
-           round(max_speed_ml, 2) msm,
-           max_speed_m
-    from cars
+```sql
+select id,
+       max_speed_km,
+       round(max_speed_ml, 2) msm,
+       max_speed_m
+from cars
+```
 
     | ID | MAX_SPEED_KM |    MSM | MAX_SPEED_M |
     |  1 |          250 | 155.38 |      250000 |
@@ -75,7 +83,7 @@ toc: true
 ## Когда использовать виртуальные колонки
 
 Виртуальные колонки позволяют не использовать
-[представления]({{< relref "views" >}}) в тех случаях, когда колонки,
+[представления](/sql/dbobjects/views/) в тех случаях, когда колонки,
 которые часто требуются наравне с "чистыми" данными таблицы, можно
 вычислить на основании этих самых чистых данных.
 

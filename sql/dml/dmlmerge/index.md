@@ -1,8 +1,8 @@
 ---
 Title: "Слияние данных. MERGE"
-weight: 4
-toc: true
 ---
+
+# Слияние данных. `MERGE`
 
 Команда `MERGE` позволяет выбрать строки из одного источника и
 использовать их для обновления, вставки или удаления строк в таблице.
@@ -14,44 +14,45 @@ toc: true
 
 Будем использовать следующие таблицы:
 
-    create table employees(
-        id number not null,
-        emp_name varchar2(200 char) not null,
-        department varchar2(100 char) not null,
-        position varchar2(100 char) not null
-    );
+```sql
+create table employees(
+    id number not null,
+    emp_name varchar2(200 char) not null,
+    department varchar2(100 char) not null,
+    position varchar2(100 char) not null
+);
 
-    create table ted_speakers(
-        emp_id number not null,
-        room varchar2(30 char),
-        conf_date date not null
-    );
+create table ted_speakers(
+    emp_id number not null,
+    room varchar2(30 char),
+    conf_date date not null
+);
 
-    insert into employees
-    values(1, 'Иван Иванов', 'SALARY', 'MANAGER');
+insert into employees
+values(1, 'Иван Иванов', 'SALARY', 'MANAGER');
 
-    insert into employees
-    values(2, 'Елена Петрова', 'SALARY', 'CLERK');
+insert into employees
+values(2, 'Елена Петрова', 'SALARY', 'CLERK');
 
 
-    insert into employees
-    values(3, 'Алексей Сидоров', 'IT', 'DEVELOPER');
+insert into employees
+values(3, 'Алексей Сидоров', 'IT', 'DEVELOPER');
 
-    insert into employees
-    values(4, 'Михаил Иванов', 'IT', 'DEVELOPER');
+insert into employees
+values(4, 'Михаил Иванов', 'IT', 'DEVELOPER');
 
-    insert into employees
-    values(5, 'Владимир Петров', 'IT', 'QA');
+insert into employees
+values(5, 'Владимир Петров', 'IT', 'QA');
 
-    insert into ted_speakers
-    values(1, '201b', to_date('2020.01.01', 'yyyy.mm.dd'));
+insert into ted_speakers
+values(1, '201b', to_date('2020.01.01', 'yyyy.mm.dd'));
 
-    insert into ted_speakers
-    values(3, '101', to_date('2020.01.01', 'yyyy.mm.dd'));
+insert into ted_speakers
+values(3, '101', to_date('2020.01.01', 'yyyy.mm.dd'));
 
-    insert into ted_speakers
-    values(5, '201b', to_date('2020.01.01', 'yyyy.mm.dd'));
-    )
+insert into ted_speakers
+values(5, '201b', to_date('2020.01.01', 'yyyy.mm.dd'));
+```
 
 Эти таблицы - списки сотрудников компании и список сотрудников,
 выступающих на конференции TED.
@@ -59,10 +60,10 @@ toc: true
 ## Использование MERGE
 
 Задача: Как стало известно, все сотрудники из небольшого подразделения
-IT будут выступать на конференции, только в аудитории "809".
+IT будут выступать на конференции только в аудитории "809".
 
-В таблицу `ted_speakers` уже указаны некоторые сотрудники безопасности,
-только у них указаны другие. То есть, чтобы решить задачу, нам нужно
+В таблице `ted_speakers` уже указаны некоторые сотрудники безопасности,
+только у них указаны другие аудитории. То есть, чтобы решить задачу, нам нужно
 сделать несколько действий:
 
 1.  1\. Обновить номера аудиторий у уже существующих записей в таблице
@@ -72,51 +73,57 @@ IT будут выступать на конференции, только в а
 Данную задачу можно очень просто решить, используя 2 уже известных
 оператора `INSERT` и `UPDATE`:
 
-    -- Сначала обновим аудиторию у тех сотрудников, которые уже записаны
-    -- в список выступающих, и которые работают в отделе безопасности
-    update ted_speakers ts
-    set ts.room = '809'
-    where ts.emp_id in (select emp_id
-        from employees
-        where department = 'IT'
-    );
-
-    /* Затем добавим в список выступающих
-       недостающих сотрудников из IT подразделения
-    */
-    insert into ted_speakers(emp_id, room, conf_date)
-    select id, '809', to_date('2020.01.03', 'yyyy.mm.dd')
+```sql
+-- Сначала обновим аудиторию у тех сотрудников, которые уже записаны
+-- в список выступающих, и которые работают в отделе безопасности
+update ted_speakers ts
+set ts.room = '809'
+where ts.emp_id in (select emp_id
     from employees
-    -- нужны сотрудники из IT подразделения
     where department = 'IT'
-    /*
-       которых еще нет в таблице выступающих
-       Для наших небольших таблиц подойдет
-       полная выборка сотрудников из ted_speakers
-    */
-    and id not in (
-         select emp_id
-         from ted_speakers);
+);
+
+/* Затем добавим в список выступающих
+   недостающих сотрудников из IT подразделения
+*/
+insert into ted_speakers(emp_id, room, conf_date)
+select id, '809', to_date('2020.01.03', 'yyyy.mm.dd')
+from employees
+-- нужны сотрудники из IT подразделения
+where department = 'IT'
+/*
+   которых еще нет в таблице выступающих
+   Для наших небольших таблиц подойдет
+   полная выборка сотрудников из ted_speakers
+*/
+and id not in (
+     select emp_id
+     from ted_speakers);
+```
 
 А вот как эту же задачу можно решить с помощью оператора `MERGE`:
 
-    merge into ted_speakers ts -- (1)
-    using (
-        select id
-        from employees
-        where department = 'IT') eit -- (2)
-    on (eit.id = ts.emp_id) -- (3)
-    when matched then -- (4) Если есть такой сотрудник
-        update set ts.room = '809' -- обновляем аудиторию
-    when not matched then -- (5) Если нет такого сотрудника
-        insert (emp_id, room, conf_date)
-          values(eit.id, '809', to_date('2020.04.03', 'yyyy.mm.dd')) -- добавляем его
+```sql
+merge into ted_speakers ts -- (1)
+using (
+    select id
+    from employees
+    where department = 'IT') eit -- (2)
+on (eit.id = ts.emp_id) -- (3)
+when matched then -- (4) Если есть такой сотрудник
+    update set ts.room = '809' -- обновляем аудиторию
+when not matched then -- (5) Если нет такого сотрудника
+    insert (emp_id, room, conf_date)
+      values(eit.id, '809', to_date('2020.04.03', 'yyyy.mm.dd')) -- добавляем его
+```
 
 Смотрим на результат:
 
-    select ts.emp_id, ts.room, emp.emp_name, emp.department
-    from ted_speakers ts
-    join employees emp on emp.id = ts.emp_id
+```sql
+select ts.emp_id, ts.room, emp.emp_name, emp.department
+from ted_speakers ts
+join employees emp on emp.id = ts.emp_id
+```
 
 ![](/img/12_dml/merge_1.png)
 
@@ -161,23 +168,25 @@ IT подразделения, кроме сотрудника с id = 5; для
 
 Напишем следующий запрос:
 
-    merge into ted_speakers ts
-    using (
-        select id
-        from employees
-        where department = 'IT') eit
-    on (ts.emp_id = eit.id)
-    when matched then
-        -- изменим дату выступления для сотрудника с id = 5
-        update set ts.conf_date = add_months(ts.conf_date, 1)
-        where ts.emp_id = 5
-        -- всех остальных сотрудников из it отдела удалим из ted_speakers
-        delete
-        where ts.emp_id <> 5
+```sql
+merge into ted_speakers ts
+using (
+    select id
+    from employees
+    where department = 'IT') eit
+on (ts.emp_id = eit.id)
+when matched then
+    -- изменим дату выступления для сотрудника с id = 5
+    update set ts.conf_date = add_months(ts.conf_date, 1)
+    where ts.emp_id = 5
+    -- всех остальных сотрудников из it отдела удалим из ted_speakers
+    delete
+    where ts.emp_id <> 5
 
-    select ts.emp_id, ts.conf_date, emp.emp_name, emp.department
-    from ted_speakers ts
-    join employees emp on emp.id = ts.emp_id
+select ts.emp_id, ts.conf_date, emp.emp_name, emp.department
+from ted_speakers ts
+join employees emp on emp.id = ts.emp_id
+```
 
 ![](/img/12_dml/merge_delete_err.png)
 
@@ -190,22 +199,26 @@ IT подразделения, кроме сотрудника с id = 5; для
 мы написали условие `where ts.emp_id <> 5`, то она ничего не удалит.
 Следующий код поможет понять, почему:
 
-    delete from ted_speakers
-    where emp_id = 5 and emp_id <> 5 -- это условие всегда ложно!
+```sql
+delete from ted_speakers
+where emp_id = 5 and emp_id <> 5 -- это условие всегда ложно!
+```
 
 Зная, что `delete` выполняется только для обновленных строк, перепишем
 запрос:
 
-    merge into ted_speakers ts
-    using (
-        select id
-        from employees
-        where department = 'IT') eit
-    on (ts.emp_id = eit.id)
-    when matched then
-        update set ts.conf_date = add_months(ts.conf_date, 1)
-        delete
-        where ts.emp_id <> 5
+```sql
+merge into ted_speakers ts
+using (
+    select id
+    from employees
+    where department = 'IT') eit
+on (ts.emp_id = eit.id)
+when matched then
+    update set ts.conf_date = add_months(ts.conf_date, 1)
+    delete
+    where ts.emp_id <> 5
+```
 
 ![](/img/12_dml/merge_delete_noerr.png)
 

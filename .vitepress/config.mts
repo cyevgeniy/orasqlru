@@ -49,7 +49,6 @@ export default defineConfig({
           items: [
             { text: 'Объединение. UNION', link: '/sql/sets/unions/' },
             { text: 'Разница запросов. MINUS', link: '/sql/sets/minus/' },
-            { text: 'Разница запросов. MINUS', link: '/sql/sets/minus/' },
             { text: 'Пересечение запросов', link: '/sql/sets/intersect/' },
             { text: 'Общая информация', link: '/sql/sets/sets/' },
           ],
@@ -137,7 +136,14 @@ export default defineConfig({
     },
 
     socialLinks: [
-      { icon: 'github', link: 'https://github.com/vuejs/vitepress' }
-    ]
+      { icon: 'github', link: 'https://github.com/cyevgeniy/orasqlru' }
+    ],
+    docFooter: {
+      prev: 'Назад',
+      next: 'Далее'
+    },
+    outline: {
+      label: 'На этой странице'
+    }
   }
 })

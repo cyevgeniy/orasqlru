@@ -1,8 +1,9 @@
 ---
 Title: "Изменение структуры таблицы. ALTER TABLE"
-weight: 5
-toc: true
 ---
+
+# Изменение структуры таблицы. `ALTER TABLE`
+
 
 Уже созданные таблицы можно изменять. Для этого используется команда SQL
 `ALTER`. Данная команда относится к группе DDL.
@@ -12,28 +13,32 @@ toc: true
 Тестировать будем на таблице `employees`. Изначально она будет состоять
 только из одной колонки `id`:
 
-    create table employees(
-        id number not null primary key
-    );
+```sql
+create table employees(
+    id number not null primary key
+);
 
-    insert into employees(id)
-    values(1);
+insert into employees(id)
+values(1);
 
-    insert into employees(id)
-    values(2);
+insert into employees(id)
+values(2);
 
-    insert into employees(id)
-    values(3);
+insert into employees(id)
+values(3);
 
-    insert into employees(id)
-    values(4);
+insert into employees(id)
+values(4);
+```
 
 ## Добавление колонки в таблицу
 
 Добавим в таблицу сотрудников колонку для хранения дня рождения:
 
-    alter table employees
-    add (birthday date)
+```sql
+alter table employees
+add (birthday date)
+```
 
 По умолчанию все строки таблицы будут иметь `null` в новой колонке. Но
 если при ее добавлении указать значение по-умолчанию, то все строки
@@ -43,13 +48,15 @@ toc: true
 в себе "1", если сотруднику нужно отправлять уведомления по почте, и
 "0", если нет:
 
-    alter table employees
-    add (
-        notify_by_email number default 0
-    );
+```sql
+alter table employees
+add (
+    notify_by_email number default 0
+);
 
-    comment on column employees.notify_by_email is
-    'Уведомлять по почте(1-да, 0-нет)';
+comment on column employees.notify_by_email is
+'Уведомлять по почте(1-да, 0-нет)';
+```
 
 Посмотрим, как сейчас выглядят данные в таблице:
 
@@ -60,24 +67,28 @@ toc: true
 Нельзя добавить колонку `NOT NULL` в таблицу с данными без значения
 по-умолчанию.
 
-    -- Ошибка! Нельзя добавить колонку
-    -- без default-значения
-    alter table employees
-    add(
-        not_null_col number(1) not null
-    )
+```sql
+-- Ошибка! Нельзя добавить колонку
+-- без default-значения
+alter table employees
+add(
+    not_null_col number(1) not null
+)
+```
 
 В результате получим ошибку
 `ORA-01758: table must be empty to add mandatory (NOT NULL) column`.
 
 Но если указать значение по-умолчанию, ошибки не будет:
 
-    -- Ошибки не будет, каждая строка будет
-    -- содержать 1 в колонке
-    alter table employees
-    add(
-        not_null_col number(1) default 1 not null    
-    )
+```sql
+-- Ошибки не будет, каждая строка будет
+-- содержать 1 в колонке
+alter table employees
+add(
+    not_null_col number(1) default 1 not null    
+)
+```
 
 Колонка добавляется без ошибок:
 
@@ -88,30 +99,34 @@ toc: true
 Чтобы добавить несколько колонок в таблицу, нужно просто перечислить их
 через запятую:
 
-    alter table employees
-    add ( emp_lastname varchar2(100 char),
-          emp_firstname varchar2(100 char),
-          dept_id number(2) default 10 not null,
-          is_out varchar2(1) default 'Y' not null);
+```sql
+alter table employees
+add ( emp_lastname varchar2(100 char),
+      emp_firstname varchar2(100 char),
+      dept_id number(2) default 10 not null,
+      is_out varchar2(1) default 'Y' not null);
 
-    comment on column employees.emp_lastname is
-    'Фамилия';
+comment on column employees.emp_lastname is
+'Фамилия';
 
-    comment on column employees.emp_firstname is
-    'Имя';
+comment on column employees.emp_firstname is
+'Имя';
 
-    comment on column employees.dept_id is
-    'id подразделения';
+comment on column employees.dept_id is
+'id подразделения';
 
-    comment on column employees.is_out is
-    'Больше не работает?';
+comment on column employees.is_out is
+'Больше не работает?';
+```
 
 ## Удаление колонки из таблицы
 
 Удалим только что добавленную колонку `emp_lastname` из таблицы:
 
-    alter table employees
-    drop column emp_lastname
+```sql
+alter table employees
+drop column emp_lastname
+```
 
 Следует учитывать, что если на удаляемую колонку ссылаются строки из
 другой таблицы(посредством [внешнего ключа](../foreignkeys/index.html)),
@@ -120,17 +135,21 @@ toc: true
 Убедимся в этом, создав таблицу `emp_bonuses`, которая будет ссылаться
 на колонку `id` в таблице `employees`:
 
-    create table emp_bonuses(
-        emp_id number not null,
-        bonus number not null,
-        constraint emp_bonuses_emp_fk
-            foreign key(emp_id) references employees(id)
-    )
+```sql
+create table emp_bonuses(
+    emp_id number not null,
+    bonus number not null,
+    constraint emp_bonuses_emp_fk
+        foreign key(emp_id) references employees(id)
+)
+```
 
 Теперь попробуем удалить колонку `id`:
 
+```sql
     alter table employees
     drop column id
+```
 
 В результате мы получим ошибку
 `ORA-12992: cannot drop parent key column`, которая говорит о том, что
@@ -140,8 +159,10 @@ toc: true
 
 Удалим колонки `emp_firstname` и `is_out` из таблицы:
 
-    alter table employees
-    drop (emp_firstname, is_out)
+```sql
+alter table employees
+drop (emp_firstname, is_out)
+```
 
 Удалять все колонки из таблицы нельзя, получим ошибку
 `ORA-12983: cannot drop all columns in a table`.
@@ -152,8 +173,10 @@ toc: true
 большое количество времени. В таких случаях можно для начала пометить
 нужные колонки как неиспользуемые:
 
-    alter table employees
-    set unused (emp_firstname, is_out)
+```sql
+alter table employees
+set unused (emp_firstname, is_out)
+```
 
 После выполнения данной команды Oracle удалит эти колонки логически,
 попросту пометив их как неиспользуемые. При запросе из таблицы они не
@@ -163,8 +186,10 @@ toc: true
 Чтобы удалить неиспользуемые колонки физически, используется следующий
 запрос:
 
-    alter table employees
-    drop unused columns
+```sql
+alter table employees
+drop unused columns
+```
 
 Конечно, выполнять его желательно во время наименьшей нагрузки на
 сервер.
@@ -173,17 +198,21 @@ toc: true
 
 Переименуем колонку `birthday` в `bd`:
 
-    alter table employees
-    rename column birthday to bd
+```sql
+alter table employees
+rename column birthday to bd
+```
 
 ## Изменение типа данных колонки
 
 Изменим тип колонки `dept_id` с числового на строковый:
 
-    alter table employees
-    modify(
-        dept_id varchar2(10)
-    )
+```sql
+alter table employees
+modify(
+    dept_id varchar2(10)
+)
+```
 
 Здесь нужно обратить внимание на то, что при изменении типа мы не
 добавляли `NOT NULL`. В `MODIFY` мы должны указать действия, которые
@@ -193,10 +222,12 @@ toc: true
 Если попробовать добавить `not null`, получим ошибку
 `ORA-01442: column to be modified to NOT NULL is already NOT NULL`:
 
-    alter table employees
-    modify(
-        dept_id varchar2(10) not null -- получим ошибку
-    )
+```sql
+alter table employees
+modify(
+    dept_id varchar2(10) not null -- получим ошибку
+)
+```
 
 Следует учитывать одну важную деталь при изменении типа данных -
 изменяемая колонка должна быть пуста.
@@ -212,11 +243,13 @@ toc: true
 не можем назвать ее `notify_by_email`(такая уже есть на данный момент),
 то назовем ее `notify_by_email_new`:
 
-    alter table employees
-    add(
-        notify_by_email_new varchar2(1)
-         default 'N' not null
-    )
+```sql
+alter table employees
+add(
+    notify_by_email_new varchar2(1)
+     default 'N' not null
+)
+```
 
 После этого нужно заполнить эту колонку данными. Алгоритм прост -
 значение "1" в колонке `notify_by_email` должно быть перенесено как
@@ -226,20 +259,26 @@ toc: true
 колонке. Все, что осталось - это изменить значение на "Y", где
 `notify_by_email` равен 1:
 
-    update employees e
-    set e.notify_by_email_new = 'Y'
-    where e.notify_by_email = 1
+```sql
+update employees e
+set e.notify_by_email_new = 'Y'
+where e.notify_by_email = 1
+```
 
 Затем удаляем колонку `notify_by_email`:
 
-    alter table employees
-    drop column notify_by_email
+```sql
+alter table employees
+drop column notify_by_email
+```
 
 Теперь можно переименовать `notify_by_email_new` в `notify_by_email`:
 
-    alter table employees
-    rename column notify_by_email_new to
-    notify_by_email
+```sql
+alter table employees
+rename column notify_by_email_new to
+notify_by_email
+```
 
 Смотрим на результат:
 
@@ -249,13 +288,17 @@ toc: true
 
 Сделаем так, чтобы в колонку `dept_id` можно было сохранять `null`:
 
-    alter table employees
-    modify(dept_id null);
+```sql
+alter table employees
+modify(dept_id null);
+```
 
 А теперь снова сделаем ее `NOT NULL`:
 
-    alter table employees
-    modify(dept_id not null);
+```sql
+alter table employees
+modify(dept_id not null);
+```
 
 Нельзя изменить колонку на NOT NULL, если в ней уже содержатся
 NULL-значения.
@@ -264,7 +307,9 @@ NULL-значения.
 
 Следующий запрос переименует таблицу `employees` в `emps`:
 
-    rename employees to emps
+```sql
+rename employees to emps
+```
 
 Стоит отметить, что переименование таблицы не приведет к ошибке при
 наличии ссылок на нее. В нашем примере таблица успешно переименуется,

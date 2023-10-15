@@ -1,11 +1,11 @@
 ---
 Title: "Внешние ключи"
-weight: 2
-toc: true
 ---
 
+# Внешние ключи
+
 Рассмотрим пример из части про
-[первичные ключи]({{< relref "primarykeys" >}}).
+[первичные ключи](/sql/dbobjects/primarykeys/).
 
 У нас было две таблицы - список сотрудников и единовременные бонусы для
 них. С помощью первичного ключа в таблице сотрудников мы решили проблему
@@ -44,15 +44,17 @@ toc: true
 
 Общий синтаксис следующий:
 
-    create table detail(
-        master_id number,
-        value_1 number,
-        value_2 number,
-        -- Внешний ключ из таблицы detail к таблице master
-        constraint detail_master_id_fk
-            foreign key(master_id)
-            references master(id)
-    );
+```sql
+create table detail(
+    master_id number,
+    value_1 number,
+    value_2 number,
+    -- Внешний ключ из таблицы detail к таблице master
+    constraint detail_master_id_fk
+        foreign key(master_id)
+        references master(id)
+);
+```
 
 Здесь `detail_master_id_fk` - название внешнего ключа.
 
@@ -66,20 +68,22 @@ toc: true
 
 Попробуем создать наши таблицы из примера:
 
-    create table employees(
-        id number primary key,
-        emp_name varchar2(100 char) not null,
-        department varchar2(50 char) not null,
-        position varchar2(50 char) not null
-    );
+```sql
+create table employees(
+    id number primary key,
+    emp_name varchar2(100 char) not null,
+    department varchar2(50 char) not null,
+    position varchar2(50 char) not null
+);
 
-    create table bonuses(
-        emp_id number not null,
-        bonus number not null,
-        constraint bonuses_emp_id_fk
-            foreign key(emp_id)
-            references employees(id)
-    );
+create table bonuses(
+    emp_id number not null,
+    bonus number not null,
+    constraint bonuses_emp_id_fk
+        foreign key(emp_id)
+        references employees(id)
+);
+```
 
 В данном случае таблица `bonuses` является дочерней по отношению к
 таблице `employees`, т.к. содержит внешний ключ, который ссылается из
@@ -87,42 +91,46 @@ toc: true
 
 После этого заполним данными эти таблицы:
 
-    -- Сначала добавляем сотрудников
+```sql
+-- Сначала добавляем сотрудников
 
-    insert into employees(id, emp_name, department, position)
-    values(1, 'Иван Петров', 'IT', 'QA');
+insert into employees(id, emp_name, department, position)
+values(1, 'Иван Петров', 'IT', 'QA');
 
-    insert into employees(id, emp_name, department, position)
-    values(2, 'Алексей Иванов', 'SALARY', 'CLERK');
+insert into employees(id, emp_name, department, position)
+values(2, 'Алексей Иванов', 'SALARY', 'CLERK');
 
-    insert into employees(id, emp_name, department, position)
-    values(3, 'Евгений Сидоров', 'SALARY', 'MANAGER');
+insert into employees(id, emp_name, department, position)
+values(3, 'Евгений Сидоров', 'SALARY', 'MANAGER');
 
-    insert into employees(id, emp_name, department, position)
-    values(4, 'Екатерина Петрова', 'SECUTIRY', 'MANAGER');
+insert into employees(id, emp_name, department, position)
+values(4, 'Екатерина Петрова', 'SECUTIRY', 'MANAGER');
 
-    -- После - бонусы для них
+-- После - бонусы для них
 
-    insert into bonuses(emp_id, bonus)
-    values(1, 100);
+insert into bonuses(emp_id, bonus)
+values(1, 100);
 
-    insert into bonuses(emp_id, bonus)
-    values(2, 400);
+insert into bonuses(emp_id, bonus)
+values(2, 400);
 
-    insert into bonuses(emp_id, bonus)
-    values(3, 700);
+insert into bonuses(emp_id, bonus)
+values(3, 700);
+```
 
 Порядок добавления данных в таблицы важен: нельзя сначала добавить новые
 данные в таблицу `bonuses`, а потом в таблицу `employees`, т.к. попытка
 добавить бонус для сотрудника, которого еще нет в таблице `employees`
 приведет к ошибке из-за наличия внешнего ключа.
 
-    -- Вот так будет ошибка, т.к. сотрудник с id = 5
-    -- еще не добавлен в таблицу employees
-    insert into bonuses(emp_id, bonus)
-    values(5, 500);
+```sql
+-- Вот так будет ошибка, т.к. сотрудник с id = 5
+-- еще не добавлен в таблицу employees
+insert into bonuses(emp_id, bonus)
+values(5, 500);
 
-    -- А вот так ошибки не будет
-    -- Сотрудник с id = 4 уже есть в таблице сотрудников
-    insert into bonuses(emp_id, bonus)
-    values(4, 500);
+-- А вот так ошибки не будет
+-- Сотрудник с id = 4 уже есть в таблице сотрудников
+insert into bonuses(emp_id, bonus)
+values(4, 500);
+```

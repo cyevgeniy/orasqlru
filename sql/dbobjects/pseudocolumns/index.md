@@ -4,6 +4,8 @@ weight: 7
 toc: true
 ---
 
+# Псевдостолбцы в Oracle
+
 К псевдостолбцам можно относиться как к обычным колонкам в таблице, за
 тем лишь исключением, что данные, которые они представляют, в таблице не
 хранятся.
@@ -17,7 +19,7 @@ toc: true
 [докумениации](https://docs.oracle.com/cd/B19306_01/server.102/b14200/pseudocolumns.htm).
 
 Мы будем использовать таблицу `dishes`, которая создается в части про
-[операторы сравнения]({{< relref "comparison" >}}).
+[операторы сравнения](/sql/basics/comparison/).
 
 ## ROWNUM
 
@@ -28,21 +30,25 @@ toc: true
 Один из классических примеров использования `ROWNUM` - ограничение
 количества получаемых строк из таблицы:
 
-    select d.*
-    from dishes d
-    where rownum < 3
+```sql
+select d.*
+from dishes d
+where rownum < 3
+```
 
 ![](/img/11_pseudocolumns/rownum_less_3.png)
 
 Если в запросе используется сортировка, то она может изменить порядок
 строк. Т.е. строка из таблицы могла получаться первой, и ей мог быть
-присвоен rownum = 1, но после того, как все строки были получены, они
+присвоен `rownum` = 1, но после того, как все строки были получены, они
 были отсортированы в другом порядке:
 
-    select d.*, rownum
-    from dishes d
-    where rownum < 6
-    order by price asc
+```sql
+select d.*, rownum
+from dishes d
+where rownum < 6
+order by price asc
+```
 
 ![](/img/11_pseudocolumns/rownum_order_by.png)
 
@@ -50,14 +56,16 @@ toc: true
 таким образом, чтобы у самого дешевого блюда был номер 1, у более
 дорогого - 2 и т.п.?
 
-Для этого можно использовать [подзапросы]({{< relref "subqueries" >}}):
+Для этого можно использовать [подзапросы](/sql/basics/subqueries/):
 
-    select dishes_ordered.*, rownum
-    from (
-      select d.*
-      from dishes d
-      order by price asc
-    ) dishes_ordered
+```sql
+select dishes_ordered.*, rownum
+from (
+  select d.*
+  from dishes d
+  order by price asc
+) dishes_ordered
+```
 
 ![](/img/11_pseudocolumns/rownum_ordered.png)
 
@@ -69,9 +77,11 @@ toc: true
 Следует отметить, что использование оператора ">" с `ROWNUM` не имеет
 смысла. Рассмотрим это на примере:
 
-    select d.*
-    from dishes d
-    where rownum > 3
+```sql
+select d.*
+from dishes d
+where rownum > 3
+```
 
 Этот запрос ничего не выведет, несмотря на то, что строк в таблице
 больше трех. Все потому, что `rownum` хранит в себе номер строки, под
@@ -86,16 +96,18 @@ toc: true
 
 Получим топ-3 блюда по рейтингу с помощью `rownum`:
 
-    select rt.name,
-           rt.price,
-           rt.rating,
-           ROWNUM
-    from (
-      select d.*
-      from dishes d
-      order by d.rating desc nulls last
-    ) rt
-    where ROWNUM <= 3
+```sql
+select rt.name,
+       rt.price,
+       rt.rating,
+       ROWNUM
+from (
+  select d.*
+  from dishes d
+  order by d.rating desc nulls last
+) rt
+where ROWNUM <= 3
+```
 
 ![](/img/11_pseudocolumns/rownum_topn.png)
 
@@ -117,8 +129,10 @@ toc: true
 
 Для примера просто получим все строки из таблицы `dishes` с их `rowid`:
 
-    select rowid, d.name
-    from dishes d
+```sql
+select rowid, d.name
+from dishes d
+```
 
 ![](/img/11_pseudocolumns/rowid.png)
 
@@ -126,4 +140,4 @@ toc: true
 
 Данный псевдостолбец доступен только в рекурсивных запросах. Подробнее
 про него можно почитать в части про
-[рекурсивные запросы]({{< relref "recursive" >}}).
+[рекурсивные запросы](/sql/basics/recursive/).

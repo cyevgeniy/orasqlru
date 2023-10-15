@@ -1,8 +1,8 @@
 ---
 Title: "Оператор INSERT"
-weight: 1
-toc: true
 ---
+
+## Оператор `INSERT`
 
 Как уже говорилось ранее, `INSERT` предназначен для вставки данных в
 таблицу. Существует несколько вариантов его использования.
@@ -12,8 +12,10 @@ toc: true
 В таком варианте после указания таблицы в скобках перечисляются колонки,
 в которые будут записываться указываемые данные.
 
-    insert into employees(id, name, age)
-    values(1, 'John', 35)
+```sql
+insert into employees(id, name, age)
+values(1, 'John', 35)
+```
 
 Данный способ является предпочтительным, т.к. он более информативен -
 сразу видно, что за данные вставляются в таблицу.
@@ -21,16 +23,20 @@ toc: true
 Также, при использовании такого способа, можно изменять порядок
 перечисления данных для строки:
 
-    insert into employees(age, name, id)
-    values(30, 'Dave', 2)
+```sql
+insert into employees(age, name, id)
+values(30, 'Dave', 2)
+```
 
 ## Вставка без указания колонок
 
 При таком варианте список столбцов таблицы не перечисляется, а сразу
 указываются значения, которые вставляются в таблицу:
 
-    insert into employees
-    values(1, 'John', 35)
+```sql
+insert into employees
+values(1, 'John', 35)
+```
 
 Такой способ подразумевает, что мы будем перечислять значения для всех
 колонок в таблице, причем в том порядке, в котором они следуют в
@@ -48,21 +54,27 @@ toc: true
 
 В случае, когда мы указываем колонки, мы можем сделать так:
 
-    insert into employees(id, name)
-    values(1, 'John')
+```sql
+insert into employees(id, name)
+values(1, 'John')
+```
 
 Если использовать вариант без указания колонок, то мы будем вынуждены
 прописывать значения для всех колонок:
 
-    insert into employees(id, name, age)
-    values(1, 'John', null)
+```sql
+insert into employees(id, name, age)
+values(1, 'John', null)
+```
 
 Попытка указать всего 2 значения при вставке приведет к ошибке
 `ORA-00947: not enough values`:
 
-    -- выдаст ошибку ORA-00947: not enough values
-    insert into employees
-    values(1, 'John')
+```sql
+-- выдаст ошибку ORA-00947: not enough values
+insert into employees
+values(1, 'John')
+```
 
 То же самое будет и в случае, если мы добавим в таблицу необязательную
 колонку - написанный ранее запрос с перечислением колонок будет
@@ -76,23 +88,27 @@ toc: true
 
 В общем виде подобный запрос выглядит так:
 
-    insert into table_1(column_1, column_2, column_3...)
-    select col_1,
-           col_2,
-           col_3,
-           ....
-    from table_2
+```sql
+insert into table_1(column_1, column_2, column_3...)
+select col_1,
+       col_2,
+       col_3,
+       ....
+from table_2
+```
 
 Более конкретный пример может выглядеть так: предположим, что нас
 попросили записать в таблицу `emp_report` список сотрудников, которые
 старше 40 лет. Из этой таблицы потом экспортируют данные в отчет для
 руководства.
 
-    insert into emp_report(emp_id, name)
-    select emp.id,
-           emp.name
-    from employees emp
-    where emp.age > 40
+```sql
+insert into emp_report(emp_id, name)
+select emp.id,
+       emp.name
+from employees emp
+where emp.age > 40
+```
 
 В случае, если запрос `select` не вернул никаких данных, то в таблицу
 также не будет вставлено ни одной строки.
@@ -100,11 +116,13 @@ toc: true
 В следующем примере данные не будут добавлены в таблицу(предполагается,
 что в таблице `employees` нет сотрудников с отрицательным возрастом):
 
-    insert into emp_report(emp_id, name)
-    select emp.id,
-           emp.name
-    from employees emp
-    where emp.age < 0
+```sql
+insert into emp_report(emp_id, name)
+select emp.id,
+       emp.name
+from employees emp
+where emp.age < 0
+```
 
 Запрос, получающий данные, может быть достаточно сложным - в нем могут
 использоваться соединения таблиц, различные условия, подзапросы и т.п.
@@ -113,11 +131,13 @@ toc: true
 сотрудника. Список детей по сотрудникам хранится в таблице `emp_childs`.
 Тогда запрос вставки данных мог выглядеть следующим образом:
 
-    insert into emp_report(emp_id, name, childs_count)
-    select emp.id,
-           emp.name,
-           count(chlds.id) childs_count
-    from employees emp
-    join emp_childs chlds on chlds.emp_id = emp.id
-    where emp.age > 40
-    group by emp.id, emp.name
+```sql
+insert into emp_report(emp_id, name, childs_count)
+select emp.id,
+       emp.name,
+       count(chlds.id) childs_count
+from employees emp
+join emp_childs chlds on chlds.emp_id = emp.id
+where emp.age > 40
+group by emp.id, emp.name
+```
