@@ -6,6 +6,7 @@ export default defineConfig({
   description: "Учебник по SQL и PL/SQL",
   cleanUrls: true,
   themeConfig: {
+    logo: '/logo.svg',
     // https://vitepress.dev/reference/default-theme-config
     nav: [
       { text: 'SQL', link: '/sql/' },
@@ -106,7 +107,7 @@ export default defineConfig({
         {
           text: "Основы PL/SQL",
           items: [
-           { text: "Анонимные блоки", link: '/plsql/basics/plsql_anonymous_block/' },
+           { text: "Анонимные блоки", link: '/plsql/basics/plsql_anonymous_blocks/' },
            { text: "Вложенные и именованные блоки", link: '/plsql/basics/plsql_blocks/' },
            { text: "Первая программа на PL/SQL", link: '/plsql/basics/plsql_first_program/' },
            { text: "DBMS_OUTPUT.PUT_LINE. Вывод на экран", link: '/plsql/basics/plsql_dbms_put_line/' },

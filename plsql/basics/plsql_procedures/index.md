@@ -1,30 +1,34 @@
 ---
-Title: "Процедуры в PL/SQL"
-weight: 9
-toc: true
+title: "Процедуры в PL/SQL"
 ---
+
+# Процедуры в PL/SQL
 
 ## Пример создания простой процедуры
 
-    create or replace procedure validate_age(
-        page number
-    )
-    is
-    begin
-        if page < 18 then
-            dbms_output.put_line('Вам должно быть 18 или больше');
-        else
-            dbms_output.put_line('Всё хорошо');
-        end if;
-    end;
+```plsql
+create or replace procedure validate_age(
+    page number
+)
+is
+begin
+    if page < 18 then
+        dbms_output.put_line('Вам должно быть 18 или больше');
+    else
+        dbms_output.put_line('Всё хорошо');
+    end if;
+end;
+```
 
 Вызовем процедуру c несколькими параметрами:
 
-    begin
-        validate_age(17);
-        validate_age(40);
-    end;
-    /
+```plsql
+begin
+    validate_age(17);
+    validate_age(40);
+end;
+/
+```
 
 Вывод:
 
@@ -37,7 +41,7 @@ toc: true
 
 ## Общепринятые различия между функциями и процедурами
 
-См. [Различия между функциями и процедурами]({{< relref "plsql_schema" >}}).
+См. [Различия между функциями и процедурами](/plsql/basics/plsql_schema/).
 
 ## IN, OUT, IN OUT параметры
 
@@ -56,33 +60,37 @@ toc: true
 измененными. Часто их используют в процедурах для того, чтобы вернуть
 некоторое значение(или даже несколько значений).
 
-    create or replace procedure get_const_values(
-        min_date out date,
-        max_date out date,
-        default_date out date
-    )
-    is
-    begin
-        min_date := to_date('1800-01-01', 'yyyy-mm-dd');
-        max_date := to_date('4021-01-01', 'yyyy-mm-dd');
-        default_date := sysdate;
-    end;
-    /
+```plsql
+create or replace procedure get_const_values(
+    min_date out date,
+    max_date out date,
+    default_date out date
+)
+is
+begin
+    min_date := to_date('1800-01-01', 'yyyy-mm-dd');
+    max_date := to_date('4021-01-01', 'yyyy-mm-dd');
+    default_date := sysdate;
+end;
+/
+```
 
 После этого выполним следующий код:
 
-    declare
-        l_min_date date;
-        l_max_date date;
-        l_default_date date;
-    begin
-        get_const_values(l_min_date, l_max_date, l_default_date);
+```plsql
+declare
+    l_min_date date;
+    l_max_date date;
+    l_default_date date;
+begin
+    get_const_values(l_min_date, l_max_date, l_default_date);
 
-        dbms_output.put_line(l_min_date);
-        dbms_output.put_line(l_max_date);
-        dbms_output.put_line(l_default_date);
-    end;
-    /
+    dbms_output.put_line(l_min_date);
+    dbms_output.put_line(l_max_date);
+    dbms_output.put_line(l_default_date);
+end;
+/
+```
 
 Вывод:
 
@@ -92,59 +100,63 @@ toc: true
 
 OUT параметры не могут иметь значений по умолчанию:
 
-    create or replace procedure get_const_values(
-        min_date out date := to_date('1800-01-01', 'yyyy-mm-dd'),
-        max_date out date := to_date('4021-01-01', 'yyyy-mm-dd')
-    )
-    is
-    begin
-        null;
-    end;
-    /
+```plsql
+create or replace procedure get_const_values(
+    min_date out date := to_date('1800-01-01', 'yyyy-mm-dd'),
+    max_date out date := to_date('4021-01-01', 'yyyy-mm-dd')
+)
+is
+begin
+    null;
+end;
+/
+```
 
 В результате функция будет создана с ошибкой
 `OUT and IN OUT formal parameters may not have default expressions`.
 
-<div class="alert alert-info">
-
+:::info
 Как определять ошибки при создании хранимых процедур, будет рассказано в
 отдельной части.
-
-</div>
+:::
 
 `IN OUT` параметры доступны для чтения внутри хранимой процедуры, но в
 то же время они доступны и для изменения.
 
-    create or replace procedure get_const_values(
-        min_date in out date,
-        max_date in out date 
-    )
-    is
-    begin
-        -- Читаем значения переменных
-        dbms_output.put_line(min_date);
-        dbms_output.put_line(min_date);
+```plsql
+create or replace procedure get_const_values(
+    min_date in out date,
+    max_date in out date 
+)
+is
+begin
+    -- Читаем значения переменных
+    dbms_output.put_line(min_date);
+    dbms_output.put_line(min_date);
 
-        -- Изменяем значения переменных
-        min_date := to_date('3000-02-02', 'yyyy-mm-dd');
-        max_date := to_date('3001-02-02', 'yyyy-mm-dd');
+    -- Изменяем значения переменных
+    min_date := to_date('3000-02-02', 'yyyy-mm-dd');
+    max_date := to_date('3001-02-02', 'yyyy-mm-dd');
 
-    end;
-    /
+end;
+/
+```
 
 Запустим эту процедуру и выведем на экран значение переменных после её
 выполнения:
 
-    declare
-        l_min date := to_date('1900.01.01', 'yyyy-mm-dd');
-        l_max date := to_date('1900.01.01', 'yyyy-mm-dd');
-    begin
-        get_const_values(l_min, l_max);
+```plsql
+declare
+    l_min date := to_date('1900.01.01', 'yyyy-mm-dd');
+    l_max date := to_date('1900.01.01', 'yyyy-mm-dd');
+begin
+    get_const_values(l_min, l_max);
 
-        dbms_output.put_line(l_min);
-        dbms_output.put_line(l_max);
-    end;
-    /
+    dbms_output.put_line(l_min);
+    dbms_output.put_line(l_max);
+end;
+/
+```
 
 Вывод:
 
@@ -160,22 +172,26 @@ OUT параметры не могут иметь значений по умол
 должны быть переданы в виде переменных, задать их значения литералом
 нельзя:
 
-    create or replace procedure myproc(
-        page out number
-    )
-    is
-    begin
-        dbms_output.put_line(page);
-    end;
-    /
+```plsql
+create or replace procedure myproc(
+    page out number
+)
+is
+begin
+    dbms_output.put_line(page);
+end;
+/
+```
 
 И теперь попробуем вызвать процедуру, используя литерал, а не
 переменную:
 
-    begin
-        myproc(12);
-    end;
-    /
+```plsql
+begin
+    myproc(12);
+end;
+/
+```
 
 В результате получим ошибку
 `expression '12' cannot be used as an assignment target`.
@@ -184,4 +200,6 @@ OUT параметры не могут иметь значений по умол
 
 Чтобы удалить процедуру из схемы, используется команда `drop procedure`:
 
-    drop procedure myproc;
+```sql
+drop procedure myproc;
+```

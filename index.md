@@ -5,21 +5,13 @@ layout: home
 hero:
   name: "Orasql.ru"
   text: "Учебник Oracle SQL и PL/SQL"
-  tagline: My great project tagline
+  tagline: Простой и понятный
   actions:
     - theme: brand
-      text: Markdown Examples
-      link: /markdown-examples
-    - theme: alt
-      text: API Examples
-      link: /api-examples
-
-features:
-  - title: Feature A
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
-  - title: Feature B
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
-  - title: Feature C
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
+      text: Читать
+      link: /sql/intro/sqlintro/
+  image:
+    src: /logo_large.png
+    alt: Orasql.ru
 ---
 

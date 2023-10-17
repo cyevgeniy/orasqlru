@@ -1,10 +1,10 @@
 ---
-Title: "Вложенные и именованные блоки"
-weight: 2
-toc: true
+title: "Вложенные и именованные блоки"
 ---
 
-В [прошлый раз]({{< relref "plsql_anonymous_blocks" >}}) был рассмотрен
+# Вложенные и именованные блоки
+
+В [прошлый раз](/plsql/basics/plsql_anonymous_blocks/) был рассмотрен
 самый простой вариант блоков в PL/SQL - анонимные блоки.
 
 В этой части мы рассмотрим возможность вкладывать блоки внутрь других
@@ -12,19 +12,21 @@ toc: true
 
 ## Вложенные блоки
 
+```plsql
+declare
+    l_a number := 10;
+begin
+    -- Начало вложенного блока
     declare
-        l_a number := 10;
+        l_b number;
     begin
-        -- Начало вложенного блока
-        declare
-            l_b number;
-        begin
-            l_b := 20;
-            dbms_output.put_line(l_a);
-            dbms_output.put_line(l_b);
-        end;
+        l_b := 20;
+        dbms_output.put_line(l_a);
+        dbms_output.put_line(l_b);
     end;
-    /
+end;
+/
+```
 
 Вложенные блоки могут обращаться ко всем объектам, которые были
 объявлены во внешних блоках. Именно поэтому в примере выше мы свободно
@@ -34,53 +36,55 @@ toc: true
 Обратное неверно - мы не можем обращаться из внешнего блока к объектам,
 которые были объявлены во внутреннем блоке:
 
+```plsql
+declare
+    l_a number := 10;
+begin
     declare
-        l_a number := 10;
+        l_b number;
     begin
-        declare
-            l_b number;
-        begin
-            l_b := 20;
-            dbms_output.put_line(l_b);
-            dbms_output.put_line(l_a);
-        end;
-
-        -- Мы не можем обращаться к переменной l_b
-        if l_b = 10 then
-            dbms_output.put_line('l_b равно 10')
-        else
-            dbms_output.put_line('l_b не равно 10');
-        end if;
+        l_b := 20;
+        dbms_output.put_line(l_b);
+        dbms_output.put_line(l_a);
     end;
-    /
+
+    -- Мы не можем обращаться к переменной l_b
+    if l_b = 10 then
+        dbms_output.put_line('l_b равно 10')
+    else
+        dbms_output.put_line('l_b не равно 10');
+    end if;
+end;
+/
+```
 
 ## Метки блоков
 
 Мы можем именовать блоки метками, чтобы можно было отличить несколько
 объектов с одним и тем же именем во внешних блоках:
 
-    <&ltmain>>
+```plsql
+<<main>>
+declare
+    l_a number := 10;
+begin
+    <<child>>
     declare
-        l_a number := 10;
+        l_a number := 20;
     begin
-        <&ltchild>>
-        declare
-            l_a number := 20;
-        begin
-            dbms_output.put_line(main.l_a);
-            dbms_output.put_line(child.l_a);
-        end;
+        dbms_output.put_line(main.l_a);
+        dbms_output.put_line(child.l_a);
     end;
-    /
+end;
+/
+```
 
 В примере выше во внешнем и внутреннем блоках объявлены переменные
 `l_a`, и используя метки блоков `<<main>>` и `<<child>>`, мы можем
 указывать, какую же именно переменную использовать - из внешнего, либо
 из внутреннего блока.
 
-<div class="alert alert-error">
-
+:::warning
 По возможности, подобных случаев следует избегать, так как они усложняют
 чтение программы.
-
-</div>
+:::
