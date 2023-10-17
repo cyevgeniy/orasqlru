@@ -95,7 +95,7 @@ toc: true
     select car_model, release_year
     from cars
 
-![](/img/_unions/sets_priority_1.png)
+![](/img/7_unions/sets_priority_1.png)
 
 В данном примере сначала был выполнен оператор `MINUS`, и уже после к
 полученному результату был применен оператор `UNION ALL`.

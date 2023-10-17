@@ -16,7 +16,7 @@ where rating < 320
 and price > 2
 ```
 
-![](/static/img/3_select/rating_l320_price_g2.png)
+![](/img/3_select/rating_l320_price_g2.png)
 
 Пример №2: получим список блюд, рейтинг которых варьируется от 280 до
 320 включительно, и цена которых меньше 30:
