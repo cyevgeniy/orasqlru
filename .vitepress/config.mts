@@ -6,7 +6,7 @@ export default defineConfig({
   description: "Учебник по SQL и PL/SQL",
   cleanUrls: true,
   themeConfig: {
-    logo: '/logo.svg',
+    logo: '/img/logo.svg',
     // https://vitepress.dev/reference/default-theme-config
     nav: [
       { text: 'SQL', link: '/sql/' },

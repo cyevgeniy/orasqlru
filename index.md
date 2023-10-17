@@ -11,7 +11,7 @@ hero:
       text: Читать
       link: /sql/intro/sqlintro/
   image:
-    src: /logo_large.png
+    src: /img/logo_large.png
     alt: Orasql.ru
 ---
 
