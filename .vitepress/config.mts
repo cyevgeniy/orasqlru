@@ -5,6 +5,9 @@ export default defineConfig({
   title: "Orasql.ru",
   description: "Учебник по SQL и PL/SQL",
   cleanUrls: true,
+  sitemap: {
+    hostname: 'http://orasql.ru'
+  },
   themeConfig: {
     logo: '/img/logo.svg',
     // https://vitepress.dev/reference/default-theme-config
