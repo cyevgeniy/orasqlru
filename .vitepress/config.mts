@@ -9,7 +9,7 @@ export default defineConfig({
     logo: '/img/logo.svg',
     // https://vitepress.dev/reference/default-theme-config
     nav: [
-      { text: 'SQL', link: '/sql/' },
+      { text: 'SQL', link: '/sql/intro/sqlintro/' },
       { text: 'PL/SQL', link: '/plsql/' }
     ],
 
