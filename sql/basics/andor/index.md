@@ -21,11 +21,13 @@ and price > 2
 Пример №2: получим список блюд, рейтинг которых варьируется от 280 до
 320 включительно, и цена которых меньше 30:
 
-    select d.*
-    from dishes d
-    where rating ≥ 280
-    and rating ≤ 320
-    and price < 30
+```sql
+select d.*
+from dishes d
+where rating ≥ 280
+and rating ≤ 320
+and price < 30
+```
 
 ![](/img/3_select/rating_ge280le320_pricel30.png)
 
@@ -33,12 +35,14 @@ and price > 2
 что если хотя бы одно из условий будет ложным, то результат всего
 выражения также будет ложным:
 
-    select d.*
-    from dishes d
-    where rating ≥ 280
-    and rating ≤ 320
-    and price < 30
-    and 1 = 0
+```sql
+select d.*
+from dishes d
+where rating ≥ 280
+and rating ≤ 320
+and price < 30
+and 1 = 0
+```
 
 ![](/img/3_select/no_data_found.png)
 
@@ -52,10 +56,12 @@ and price > 2
 
 Пример №3: Получить список блюд, рейтинг которых либо 320, либо 280:
 
-    select d.*
-    from dishes d
-    where rating =280
-    or rating = 320
+```sql
+select d.*
+from dishes d
+where rating =280
+or rating = 320
+```
 
 ![](/img/3_select/rating_320or280.png)
 
@@ -64,10 +70,12 @@ and price > 2
 
 Например, следующий запрос вернет все строки из таблицы dishes:
 
-    select d.*
-    from dishes d
-    where rating = -1
-    or 1 < 2
+```sql
+select d.*
+from dishes d
+where rating = -1
+or 1 < 2
+```
 
 ![](/img/3_select/all_data.png)
 
@@ -81,10 +89,12 @@ and price > 2
 Пример №4: Получить список блюд, рейтинг которых равен 320 и стоимость
 больше 30, либо рейтинг которых меньше, чем 270:
 
-    select d.*
-    from dishes d
-    where (d.rating = 320 and d.price > 30)
-    or d.rating < 270
+```sql
+select d.*
+from dishes d
+where (d.rating = 320 and d.price > 30)
+or d.rating < 270
+```
 
 ![](/img/3_select/andor_1.png)
 
@@ -104,10 +114,12 @@ and price > 2
 Для того, чтобы лучше понять, какую роль здесь выполняют скобки,
 выполним тот же запрос, но только расставим в нем скобки по-другому:
 
-    select d.*
-    from dishes d
-    where d.rating = 320 and
-    (d.price > 30 or d.rating < 270)
+```sql
+select d.*
+from dishes d
+where d.rating = 320 and
+(d.price > 30 or d.rating < 270)
+```
 
 ![](/img/3_select/andor_2.png)
 
