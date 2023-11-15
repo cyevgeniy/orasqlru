@@ -4,6 +4,8 @@ weight: 1
 toc: true
 ---
 
+# Таблицы
+
 Данные в реляционных базах данных хранятся в таблицах. Таблицы - это
 ключевой объект, с которыми придется работать в SQL.
 
@@ -24,8 +26,11 @@ toc: true
 
 ## Создание таблицы
 
-    create table hello(
-        text_to_hello varchar2(100)
+```sql
+create table hello(
+    text_to_hello varchar2(100)
+);
+```
 
 После выполнения данной sql-команды в базе данных будет создана таблица
 под названием `hello`. Эта таблица будет содержать всего одну колонку
@@ -52,9 +57,12 @@ toc: true
 Например, создадим таблицу `cars`, в которой будем хранить марку
 автомобиля и страну-производитель:
 
-    create table cars(
-        model varchar2(50 char),
-        country varchar2(70 char)
+```sql
+create table cars(
+    model varchar2(50 char),
+    country varchar2(70 char)
+)
+```
 
 Эта таблица может содержать, например, такие данные:
 
@@ -75,11 +83,13 @@ toc: true
 При создании таблицы можно указать, какое значение будет принимать
 колонка по умолчанию:
 
-    create table cars(
-        model varchar2(50 char),
-        country varchar2(50 char),
-        wheel_count number(2) default 4
-    )
+```sql
+create table cars(
+    model varchar2(50 char),
+    country varchar2(50 char),
+    wheel_count number(2) default 4
+)
+```
 
 В этом примере создается таблица cars, в которой помимо модели и
 страны-производителя хранится еще и количество колес, которое имеет
@@ -110,11 +120,13 @@ toc: true
 Для того, чтобы запретить Null-значения в колонке при создании таблицы,
 к описанию колонки добавляется `not null`:
 
-    create table cars(
-        model varchar2(50 char) not null,
-        country varchar2(50 char),
-        wheel_count number(2) default 4
-    )
+```sql
+create table cars(
+    model varchar2(50 char) not null,
+    country varchar2(50 char),
+    wheel_count number(2) default 4
+)
+```
 
 Теперь БД **гарантирует**, что колонка `model` не будет пустой, по
 крайней мере до тех пор, пока флаг `not null` включен для этой колонки.
@@ -122,11 +134,13 @@ toc: true
 Также можно указать, что колонка `wheel_count` тоже не должна содержать
 `Null`:
 
-    create table cars(
-        model varchar2(50 char) not null,
-        country varchar2(50 char),
-        wheel_count number(2) default 4 not null
-    );
+```sql
+create table cars(
+    model varchar2(50 char) not null,
+    country varchar2(50 char),
+    wheel_count number(2) default 4 not null
+);
+```
 
 ## Комментарии к таблице, колонкам
 
@@ -135,11 +149,13 @@ toc: true
 
 Например, укажем комментарии для таблицы `cars` и ее колонок:
 
-    comment on table cars is 'Список автомобилей';
+```sql
+comment on table cars is 'Список автомобилей';
 
-    comment on column cars.model is 'Модель авто, согласно тех. паспорту';
-    comment on column cars.country is 'Страна-производитель';
-    comment on column cars.wheel_count is 'Количество колес';
+comment on column cars.model is 'Модель авто, согласно тех. паспорту';
+comment on column cars.country is 'Страна-производитель';
+comment on column cars.wheel_count is 'Количество колес';
+```
 
 Для того, чтобы удалить комментарий, нужно просто задать в качестве его
 значения пустую строку:
