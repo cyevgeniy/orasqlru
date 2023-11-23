@@ -1,8 +1,8 @@
 ---
 Title: "Пример SELECT запроса"
-weight: 3
-toc: false
 ---
+
+# Пример SELECT запроса
 
 Рассмотрим простой SQL запрос:
 
@@ -10,7 +10,7 @@ toc: false
     select emp.name,
            emp.last_name,
            emp.age,
-           dept.name 
+           dept.name
     from employees emp
     join departments dept on dept.id = emp.department_id -- соединение
     where (emp.id = 10 and emp.age > 25) -- условие выборки
