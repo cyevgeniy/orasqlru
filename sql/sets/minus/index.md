@@ -2,6 +2,8 @@
 title: "Разница запросов. MINUS"
 ---
 
+# Разница запросов. `MINUS`
+
 Подготовим тестовые данные:
 
 ```sql
@@ -97,7 +99,7 @@ from cars
 `ORA-01790: expression must have same datatype as corresponding expression`:
 
 ```sql
--- Ошибка, типы данных возвращаемых колонок  в 
+-- Ошибка, типы данных возвращаемых колонок  в
 -- обоих запросах должны совпадать
 select release_year, car_model
 from car_offers

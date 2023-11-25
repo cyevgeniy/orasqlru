@@ -1,8 +1,8 @@
 ---
 Title: "Работа с множествами. Общая информация"
-weight: 4
-toc: true
 ---
+
+# Работа с множествами. Общая информация
 
 ## Следить за порядком колонок
 
@@ -14,13 +14,15 @@ toc: true
 из запросов совпадал, но проверять, правильно ли расположены колонки
 одного типа, он не будет (потому что не сможет).
 
-    select car_model model, car_id release_year
-    from cars
+```sql
+select car_model model, car_id release_year
+from cars
 
-    minus
+minus
 
-    select car_model, release_year
-    from car_offers
+select car_model, release_year
+from car_offers
+```
 
 ![](/img/7_unions/col_order_with_error.png)
 
@@ -40,41 +42,46 @@ toc: true
 отсутствующих в списке предлагаемых моделей, и отсортирует итоговую
 выборку по возрастанию года выпуска:
 
-    select car_model, release_year
-    from cars
+```sql
+select car_model, release_year
+from cars
 
+minus
 
-    minus
+select car_model, release_year a2
+from car_offers
+order by release_year
+```
 
-    select car_model, release_year a2
-    from car_offers
-    order by release_year
+Использовать сортировку в первом запросе нельзя, получим ошибку
+`ORA-00933: SQL command not properly ended`:
 
-    Использовать сортировку в первом запросе нельзя, получим ошибку
-    ORA-00933: SQL command not properly ended:
+```sql
+-- Ошибка!
+select car_model, release_year
+from cars
+order by release_year
 
-    -- Ошибка!
-    select car_model, release_year
-    from cars
-    order by release_year
+minus
 
-    minus
-
-    select car_model, release_year
-    from car_offers
+select car_model, release_year
+from car_offers
+```
 
 Как и в случае с обычными запросами, сортировать можно по порядковому
 номеру колонки итоговой выборки:
 
-    select car_model, release_year
-    from cars
+```sql
+select car_model, release_year
+from cars
 
-    minus
+minus
 
-    select car_model, release_year a2
-    from car_offers
-    -- Сортировка по модели авто
-    order by 1 desc
+select car_model, release_year a2
+from car_offers
+-- Сортировка по модели авто
+order by 1 desc
+```
 
 ## Приоритет выполнения
 
@@ -82,18 +89,20 @@ toc: true
 запросе используется несколько таких операторов, то они выполняются
 последовательно.
 
-    select car_model, release_year
-    from cars
+```sql
+select car_model, release_year
+from cars
 
-    minus
+minus
 
-    select car_model, release_year
-    from car_offers
+select car_model, release_year
+from car_offers
 
-    union all
+union all
 
-    select car_model, release_year
-    from cars
+select car_model, release_year
+from cars
+```
 
 ![](/img/7_unions/sets_priority_1.png)
 
@@ -102,21 +111,23 @@ toc: true
 
 Чтобы изменить порядок выполнения операторов, используются скобки:
 
-    select car_model, release_year
-    from cars
+```sql
+select car_model, release_year
+from cars
 
-    minus
+minus
 
-    -- minus будет применен
-    -- к результату выполнения
-    -- UNION ALL
-    (select car_model, release_year
-    from car_offers
+-- minus будет применен
+-- к результату выполнения
+-- UNION ALL
+(select car_model, release_year
+from car_offers
 
-    UNION ALL
+UNION ALL
 
-    select car_model, release_year
-    from cars)
+select car_model, release_year
+from cars)
+```
 
 Здесь оператор `MINUS` будет применяться к набору данных, который
 получится в результате выполнения `UNION ALL`.

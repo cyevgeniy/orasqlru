@@ -2,6 +2,8 @@
 title: "Subquery factoring. WITH "
 ---
 
+# Subquery factoring. `WITH`
+
 Часть `WITH` SQL запроса используется для реализации
 так называемого _Subquery factoring_. Эта возможность позволяет задать
 подзапрос, который будет доступен в любом месте SQL запроса.
@@ -100,7 +102,7 @@ from books bo
 left join books pb on pb.id = bo.previous_id
 left join (
     select sum(quantity) s, book_id
-    from book_orders 
+    from book_orders
     group by book_id) bc on bc.book_id = bo.id
 left join (
     select sum(quantity) s, book_id

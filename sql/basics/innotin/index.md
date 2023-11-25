@@ -4,6 +4,8 @@ weight: 9
 toc: true
 ---
 
+# IN, NOT IN
+
 ## Вхождение в набор данных. IN
 
 Условие `IN` позволяет ответить на следующий вопрос: "Входит ( IN ) ли
@@ -21,7 +23,7 @@ toc: true
 
     select d.*
     from dishes d
-    where d.name IN 
+    where d.name IN
         ('Макароны с сыром', 'Овощной салат', 'Борщ')
 
 ![](/img/3_select/dishes_name_in.png)

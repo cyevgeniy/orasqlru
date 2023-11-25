@@ -4,6 +4,8 @@ weight: 11
 toc: true
 ---
 
+# Соединения таблиц
+
 Работать с одной таблицей в БД приходится редко. Как правило, данные
 распределены по нескольким таблицам, которые связаны между собой.
 
@@ -35,22 +37,22 @@ toc: true
         references app_roles(role_id)
     );
 
-    insert into app_users 
+    insert into app_users
     values('johndoe', sysdate, 'johndoe@johndoemail.com');
 
-    insert into app_users 
+    insert into app_users
     values('alex', sysdate, 'alexman@mail.com');
 
-    insert into app_users 
+    insert into app_users
     values('kate', sysdate, 'kate@somemaill.com');
 
-    insert into app_users 
+    insert into app_users
     values('mike', sysdate, 'mike@mikemailll.com');
 
-    insert into app_users 
+    insert into app_users
     values('dmitry', sysdate, 'dmitry@somemaill.com');
 
-    insert into app_users 
+    insert into app_users
     values('mr_dude', sysdate, 'mr_dude@email.dude');
 
     insert into app_roles values(1, 'admin');
@@ -104,7 +106,7 @@ toc: true
 
 Рассмотрим соединение строк для пользователя с ником `johndoe`:
 Сначала соединяются таблицы `app_users` и `user_roles`.
-В результат соединения попадают строки, у которых совпадает логин пользователя. 
+В результат соединения попадают строки, у которых совпадает логин пользователя.
 
 
 ![](/img/5_joins/joins-1.svg)
