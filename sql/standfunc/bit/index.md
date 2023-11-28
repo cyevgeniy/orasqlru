@@ -4,36 +4,40 @@ weight: 4
 toc: true
 ---
 
+# Битовые операции
+
 Битовые операции при работе с БД применяются редко. Тем не менее, работа
 с отдельными битами поддерживается в БД Oracle, и в некоторых случаях
 может быть использована в весьма элегантном виде.
 
 ## Тестовые данные
 
-    create table docs(
-        id number not null primary key,
-        doc_num varchar2(100 char) not null,
-        bit_access number default 0 not null
-    );
+```sql
+create table docs(
+    id number not null primary key,
+    doc_num varchar2(100 char) not null,
+    bit_access number default 0 not null
+);
 
-    comment on table docs is 'Документы';
+comment on table docs is 'Документы';
 
-    comment on column docs.bit_access is 'Уровни доступа(1 бит - чтение, 2 - редактирование, 3 - удаление)';
+comment on column docs.bit_access is 'Уровни доступа(1 бит - чтение, 2 - редактирование, 3 - удаление)';
 
-    insert into docs
-    values(1, '1-1', 0);
+insert into docs
+values(1, '1-1', 0);
 
-    insert into docs
-    values(2, '2-1', 1);
+insert into docs
+values(2, '2-1', 1);
 
-    insert into docs
-    values(3, '2-2', 4);
+insert into docs
+values(3, '2-2', 4);
 
-    insert into docs
-    values(4, '3-1', 3);
+insert into docs
+values(4, '3-1', 3);
 
-    insert into docs
-    values(5, '4-1', 7);
+insert into docs
+values(5, '4-1', 7);
+```
 
 Колонка `bit_access` хранит в себе число, каждый бит которого отвечает
 за наличие(1) или отсутствие(0) доступа на произведение операций с
@@ -63,9 +67,10 @@ toc: true
 которые установлены в 1 как в `a`, так и в `b`. Вот как это будет
 выглядеть, если `a= 011`, а `b=110`:
 
-    |A |0 |1 |1
-    |B |1 |1 |0
-    |C |0 |1 |0
+|A |0 |1 |1
+|--|--|--|--|
+|B |1 |1 |0
+|C |0 |1 |0
 
 Таким образом, чтобы убедиться, что интересующий нас набор бит
 (предположим, этот набор бит хранится в числе `b`) установлен в числе
@@ -77,27 +82,29 @@ toc: true
 В таблице числа мы храним в десятичной системе, и чтобы было проще
 ориентироваться, распишем, что означают текущие данные в таблице:
 
-    |======================================================================
-    |bit_access | двоичное представление | Доступ
-    |0          | 000                    | Ничего нельзя делать
-    |1          | 001                    | Чтение
-    |3          | 011                    | Чтение и редактирование
-    |7          | 111                    | Чтение, редактирование, удаление
-    |======================================================================
+|bit_access | двоичное представление | Доступ |
+|---------- |------------------------|--------|
+|0          | 000                    | Ничего нельзя делать
+|1          | 001                    | Чтение
+|3          | 011                    | Чтение и редактирование
+|7          | 111                    | Чтение, редактирование, удаление
 
 ## BIN_TO_NUM
 
 Эта функция принимает список нулей и единиц, превращая их в десятичное
 число:
 
-    select bin_to_num(0,0,0) a,
-           bin_to_num(0,0,1) b,
-           bin_to_num(0,1,1) c,
-           bin_to_num(1,1,1) d
-    from dual
+```sql
+select bin_to_num(0,0,0) a,
+       bin_to_num(0,0,1) b,
+       bin_to_num(0,1,1) c,
+       bin_to_num(1,1,1) d
+from dual
+```
 
-    | A | B | C | D |
-    | 0 | 1 | 3 | 7 |
+| A | B | C | D |
+|---|---|---|---|
+| 0 | 1 | 3 | 7 |
 
 ## BITAND. Побитовое "И"
 
@@ -105,31 +112,39 @@ toc: true
 
 Выведем список всех документов, которые доступны для чтения:
 
-    select *
-    from docs
-    where bitand(bit_access, 1) = 1
+```sql
+select *
+from docs
+where bitand(bit_access, 1) = 1
+```
 
-    | ID | DOC_NUM |BIT_ACCESS
-    | 2  |   2-1   |   1
-    | 4  |   3-1   |   3
-    | 5  |   4-1   |   7
+| ID | DOC_NUM |BIT_ACCESS |
+|----|---------|-----------|
+| 2  |   2-1   |   1       |
+| 4  |   3-1   |   3       |
+| 5  |   4-1   |   7       |
 
 Список всех документов, которые доступны для чтения и редактирования:
 
-    select *
-    from docs
-    where bitand(bit_access, 3) = 3
+```sql
+select *
+from docs
+where bitand(bit_access, 3) = 3
+```
 
-    | ID | DOC_NUM | BIT_ACCESS |
-    |  4 |     3-1 |          3 |
-    |  5 |     4-1 |          7 |
+| ID | DOC_NUM | BIT_ACCESS |
+|----|---------|------------|
+|  4 |     3-1 |          3 |
+|  5 |     4-1 |          7 |
 
 Чтобы было более наглядно и читаемо, последний запрос можно переписать с
 использованием фукнции `bin_to_num`:
 
-    select *
-    from docs
-    where bitand(bit_access, bin_to_num(0,1,1)) = bin_to_num(0,0,1)
+```sql
+select *
+from docs
+where bitand(bit_access, bin_to_num(0,1,1)) = bin_to_num(0,0,1)
+```
 
 Для улучшения читаемости кода лучше использовать `bin_to_num` для записи
 битовых масок.
@@ -137,29 +152,32 @@ toc: true
 Выведем список всех документов, и добавим к выборке три колонки, каждая
 из которых будет отвечать за наличие доступа к определенному действию:
 
-    select id,
-           doc_num,
-           bit_access,
-           case
-               when bitand(bit_access,
-                   bin_to_num(0,0,1)) = bin_to_num(0,0,1) then 'Да'
+```sql
+select id,
+       doc_num,
+       bit_access,
+       case
+           when bitand(bit_access,
+               bin_to_num(0,0,1)) = bin_to_num(0,0,1) then 'Да'
+       else 'Нет'
+       end read_access,
+       case
+           when bitand(bit_access,
+               bin_to_num(0,1,0)) = bin_to_num(0,1,0) then 'Да'
            else 'Нет'
-           end read_access,
-           case
-               when bitand(bit_access,
-                   bin_to_num(0,1,0)) = bin_to_num(0,1,0) then 'Да'
-               else 'Нет'
-           end edit_access,
-           case
-               when bitand(bit_access,
-                   bin_to_num(1,0,0)) = bin_to_num(1,0,0) then 'Да'
-               else 'Нет'
-           end delete_access
-    from docs
+       end edit_access,
+       case
+           when bitand(bit_access,
+               bin_to_num(1,0,0)) = bin_to_num(1,0,0) then 'Да'
+           else 'Нет'
+       end delete_access
+from docs
+```
 
-    | ID | DOC_NUM | BIT_ACCESS | READ_ACCESS | EDIT_ACCESS | DELETE_ACCESS |
-    |  1 |     1-1 |          0 | Нет         | Нет         | Нет           |
-    |  2 |     2-1 |          1 | Да          | Нет         | Нет           |
-    |  3 |     2-2 |          4 | Нет         | Нет         | Да            |
-    |  4 |     3-1 |          3 | Да          | Да          | Нет           |
-    |  5 |     4-1 |          7 | Да          | Да          | Да            |
+| ID | DOC_NUM | BIT_ACCESS | READ_ACCESS | EDIT_ACCESS | DELETE_ACCESS |
+|----|---------|------------|-------------|-------------|---------------|
+|  1 |     1-1 |          0 | Нет         | Нет         | Нет           |
+|  2 |     2-1 |          1 | Да          | Нет         | Нет           |
+|  3 |     2-2 |          4 | Нет         | Нет         | Да            |
+|  4 |     3-1 |          3 | Да          | Да          | Нет           |
+|  5 |     4-1 |          7 | Да          | Да          | Да            |

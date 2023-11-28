@@ -13,60 +13,62 @@ toc: true
 
 Для демонстрации соединений понадобится несколько таблиц.
 
-    create table app_users(
-        login varchar2(50 char) primary key,
-        registration_date date default sysdate not null,
-        email varchar2(200 char) not null
-    );
+```sql
+create table app_users(
+    login varchar2(50 char) primary key,
+    registration_date date default sysdate not null,
+    email varchar2(200 char) not null
+);
 
-    comment on table app_users is 'Пользователи';
+comment on table app_users is 'Пользователи';
 
-    create table app_roles(
-        role_id number(10) primary key,
-        role_name varchar2(50) not null
-    );
+create table app_roles(
+    role_id number(10) primary key,
+    role_name varchar2(50) not null
+);
 
-    comment on table app_roles is 'Роли в системе';
+comment on table app_roles is 'Роли в системе';
 
-    create table user_roles(
-        login varchar2(50 char) not null,
-        role_id number(10) not null,
-        constraint user_roles_login_fk foreign key(login)
-        references app_users(login),
-        constraint user_roles_role_id_fk foreign key(role_id)
-        references app_roles(role_id)
-    );
+create table user_roles(
+    login varchar2(50 char) not null,
+    role_id number(10) not null,
+    constraint user_roles_login_fk foreign key(login)
+    references app_users(login),
+    constraint user_roles_role_id_fk foreign key(role_id)
+    references app_roles(role_id)
+);
 
-    insert into app_users
-    values('johndoe', sysdate, 'johndoe@johndoemail.com');
+insert into app_users
+values('johndoe', sysdate, 'johndoe@johndoemail.com');
 
-    insert into app_users
-    values('alex', sysdate, 'alexman@mail.com');
+insert into app_users
+values('alex', sysdate, 'alexman@mail.com');
 
-    insert into app_users
-    values('kate', sysdate, 'kate@somemaill.com');
+insert into app_users
+values('kate', sysdate, 'kate@somemaill.com');
 
-    insert into app_users
-    values('mike', sysdate, 'mike@mikemailll.com');
+insert into app_users
+values('mike', sysdate, 'mike@mikemailll.com');
 
-    insert into app_users
-    values('dmitry', sysdate, 'dmitry@somemaill.com');
+insert into app_users
+values('dmitry', sysdate, 'dmitry@somemaill.com');
 
-    insert into app_users
-    values('mr_dude', sysdate, 'mr_dude@email.dude');
+insert into app_users
+values('mr_dude', sysdate, 'mr_dude@email.dude');
 
-    insert into app_roles values(1, 'admin');
-    insert into app_roles values(2, 'boss');
-    insert into app_roles values(3, 'employee');
-    insert into app_roles values(4, 'support');
+insert into app_roles values(1, 'admin');
+insert into app_roles values(2, 'boss');
+insert into app_roles values(3, 'employee');
+insert into app_roles values(4, 'support');
 
-    insert into user_roles values('johndoe', 1);
-    insert into user_roles values('johndoe', 2);
-    insert into user_roles values('johndoe', 3);
-    insert into user_roles values('alex', 3);
-    insert into user_roles values('kate', 3);
-    insert into user_roles values('mike', 2);
-    insert into user_roles values('dmitry', 3);
+insert into user_roles values('johndoe', 1);
+insert into user_roles values('johndoe', 2);
+insert into user_roles values('johndoe', 3);
+insert into user_roles values('alex', 3);
+insert into user_roles values('kate', 3);
+insert into user_roles values('mike', 2);
+insert into user_roles values('dmitry', 3);
+```
 
 Информация о пользователях хранится в нескольких таблицах. Для того,
 чтобы получить данные "вместе", придется использовать соединения.
@@ -76,10 +78,12 @@ toc: true
 Получим список пользователей вместе с ролями, которыми они обладают в
 системе:
 
-    select au.login, au.email, ar.role_name
-    from app_users au
-    JOIN user_roles ur on au.login = ur.login
-    JOIN app_roles ar on ar.role_id = ur.role_id
+```sql
+select au.login, au.email, ar.role_name
+from app_users au
+JOIN user_roles ur on au.login = ur.login
+JOIN app_roles ar on ar.role_id = ur.role_id
+```
 
 Получим следующий результат:
 
@@ -134,10 +138,12 @@ toc: true
 строки из уже имеющегося набора данных когда "приклеивает" справа новые
 данные.
 
-    select au.login, au.email, ar.role_name
-    from app_users au
-    LEFT JOIN user_roles ur on au.login = ur.login
-    LEFT JOIN app_roles ar on ar.role_id = ur.role_id
+```sql
+select au.login, au.email, ar.role_name
+from app_users au
+LEFT JOIN user_roles ur on au.login = ur.login
+LEFT JOIN app_roles ar on ar.role_id = ur.role_id
+```
 
 ![](/img/5_joins/left_join_result.png)
 
@@ -168,17 +174,19 @@ toc: true
 Пример из части, где описывалось соединение `join`, может быть записан и
 без использования этого самого `join`.
 
-    select au.login, au.email, ar.role_name
-    from app_users au
-    JOIN user_roles ur on au.login = ur.login
-    JOIN app_roles ar on ar.role_id = ur.role_id
+```sql
+select au.login, au.email, ar.role_name
+from app_users au
+JOIN user_roles ur on au.login = ur.login
+JOIN app_roles ar on ar.role_id = ur.role_id
 
-    select au.login, au.email, ar.role_name
-    from app_users au,
-    user_roles ur,
-    app_roles ar
-    where au.login = ur.login
-    and   ar.role_id = ur.role_id
+select au.login, au.email, ar.role_name
+from app_users au,
+user_roles ur,
+app_roles ar
+where au.login = ur.login
+and   ar.role_id = ur.role_id
+```
 
 Эти два запроса идентичны.
 

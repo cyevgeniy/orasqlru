@@ -14,33 +14,35 @@ toc: true
 
 Создадим таблицу, которая будет содержать список блюд ресторана:
 
-    create table dishes(
-        name varchar2(100) not null,
-        price number(5,2) not null,
-        rating number(5)
-    );
+```sql
+create table dishes(
+    name varchar2(100) not null,
+    price number(5,2) not null,
+    rating number(5)
+);
 
-    comment on column dishes.name is 'Наименование блюда';
-    comment on column dishes.price is 'Стоимость за одну порцию';
-    comment on column dishes.rating is 'Популярность блюда';
+comment on column dishes.name is 'Наименование блюда';
+comment on column dishes.price is 'Стоимость за одну порцию';
+comment on column dishes.rating is 'Популярность блюда';
 
-    insert into dishes(name, price, rating)
-    values ('Макароны с сыром', 20.56, 320);
+insert into dishes(name, price, rating)
+values ('Макароны с сыром', 20.56, 320);
 
-    insert into dishes(name, price, rating)
-    values ('Борщ', 10, 130);
+insert into dishes(name, price, rating)
+values ('Борщ', 10, 130);
 
-    insert into dishes(name, price, rating)
-    values ('Чай с лимоном', 1.34, 270);
+insert into dishes(name, price, rating)
+values ('Чай с лимоном', 1.34, 270);
 
-    insert into dishes(name, price, rating)
-    values ('Чай с молоком', 1.20, 280);
+insert into dishes(name, price, rating)
+values ('Чай с молоком', 1.20, 280);
 
-    insert into dishes(name, price, rating)
-    values ('Свиная отбивная', 30.50, 320);
+insert into dishes(name, price, rating)
+values ('Свиная отбивная', 30.50, 320);
 
-    insert into dishes(name, price, rating)
-    values ('Овощной салат', 5.70, null);
+insert into dishes(name, price, rating)
+values ('Овощной салат', 5.70, null);
+```
 
 Овощной салат - новинка в меню, и его еще не успели оценить посетители;
 Именно поэтому в колонке `rating` содержится `null`. Конечно, здесь
@@ -57,9 +59,11 @@ toc: true
 Получим все блюда в из меню и отсортируем их по стоимости начиная с
 дешевых и заканчивая самыми дорогими:
 
-    select *
-    from dishes
-    order by price asc
+```sql
+select *
+from dishes
+order by price asc
+```
 
 ![](/img/3_select/price_asc.png)
 
@@ -68,9 +72,11 @@ toc: true
 заканчивая самыми популярными блюдами. При этом, кроме рейтинга мы будем
 сортировать блюда по стоимости - от дешевых к дорогим:
 
-    select *
-    from dishes
-    order by rating asc, price asc
+```sql
+select *
+from dishes
+order by rating asc, price asc
+```
 
 ![](/img/3_select/rating_asc_price_asc.png)
 
@@ -84,9 +90,11 @@ toc: true
 Например, для получения списка блюд начиная от самых популярных и
 заканчивая самыми непопулярными, можно написать следующий запрос:
 
-    select *
-    from dishes
-    order by rating desc
+```sql
+select *
+from dishes
+order by rating desc
+```
 
 ![](/img/3_select/rating_desc.png)
 
@@ -97,15 +105,19 @@ toc: true
 
 Т.е. следующий запрос:
 
-    select *
-    from dishes
-    order by price asc, rating asc
+```sql
+select *
+from dishes
+order by price asc, rating asc
+```
 
 Аналогичен следующему:
 
-    select *
-    from dishes
-    order by price, rating
+```sql
+select *
+from dishes
+order by price, rating
+```
 
 ## Сортировка по порядковому номеру
 
@@ -113,21 +125,27 @@ toc: true
 можно указать ее порядковый номер в выборке. Следующие 2 запроса
 идентичны:
 
-    select price, rating
-    from dishes
-    order by price, rating
+```sql
+select price, rating
+from dishes
+order by price, rating
+```
 
-    select price, rating
-    from dishes
-    order by 1, 2
+```sql
+select price, rating
+from dishes
+order by 1, 2
+```
 
 Однако, такого подхода следует избегать, и вот почему.
 
 Предположим, мы написали следующий запрос:
 
-    select name, price
-    from dishes
-    order by 2 desc
+```sql
+select name, price
+from dishes
+order by 2 desc
+```
 
 Этот запрос выводит список блюд начиная от самых дорогих и заканчивая
 самыми дешевыми:
@@ -137,9 +155,11 @@ toc: true
 Проходит несколько месяцев, и мы решаем извлекать кроме наименования
 блюда и его цены еще и рейтинг. Пишется следующий запрос:
 
-    select name, rating, price
-    from dishes
-    order by 2 desc
+```sql
+select name, rating, price
+from dishes
+order by 2 desc
+```
 
 ![](/img/3_select/2_desc_v2.png)
 
@@ -161,14 +181,18 @@ toc: true
 конструкций `nulls last` и `nulls first`. Использование первой разместит
 все `null` - значения в конце, а второй - в начале.
 
-    select *
-    from dishes
-    order by rating nulls first
+```sql
+select *
+from dishes
+order by rating nulls first
+```
 
 ![](/img/3_select/rating_nulls_first.png)
 
-    select *
-    from dishes
-    order by rating nulls last
+```sql
+select *
+from dishes
+order by rating nulls last
+```
 
 ![](/img/3_select/rating_nulls_last.png)

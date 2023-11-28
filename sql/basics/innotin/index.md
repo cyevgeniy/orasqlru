@@ -13,28 +13,34 @@ toc: true
 
 Следующий пример вернет все блюда, рейтинг которых равен 320 либо 270:
 
-    select d.*
-    from dishes d
-    where d.rating IN (320, 270)
+```sql
+select d.*
+from dishes d
+where d.rating IN (320, 270)
+```
 
 ![](/img/3_select/rating_in_320_270.png)
 
 Использовать можно любые типы, не только числа:
 
-    select d.*
-    from dishes d
-    where d.name IN
-        ('Макароны с сыром', 'Овощной салат', 'Борщ')
+```sql
+select d.*
+from dishes d
+where d.name IN
+    ('Макароны с сыром', 'Овощной салат', 'Борщ')
+```
 
 ![](/img/3_select/dishes_name_in.png)
 
 Следует помнить, что при сравнении строк учитывается регистр, т.е.
 cледующий запрос:
 
-    select d.*
-    from dishes d
-    where d.name IN
-        ('Макароны с сыром', 'ОВОЩНОЙ салат', 'БОРЩ')
+```sql
+select d.*
+from dishes d
+where d.name IN
+    ('Макароны с сыром', 'ОВОЩНОЙ салат', 'БОРЩ')
+```
 
 Не вернет строки с овощным салатом и борщом:
 
@@ -44,10 +50,12 @@ cледующий запрос:
 функцией `UPPER`. Напомним, что эта функция приводит строку к верхнему
 регистру:
 
-    select d.*
-    from dishes d
-    where UPPER(d.name) IN
-        ('Макароны с сыром', 'ОВОЩНОЙ салат', 'БОРЩ')
+```sql
+select d.*
+from dishes d
+where UPPER(d.name) IN
+    ('Макароны с сыром', 'ОВОЩНОЙ салат', 'БОРЩ')
+```
 
 ![](/img/3_select/name_in_upper_borsch.png)
 
@@ -70,13 +78,15 @@ cледующий запрос:
 
 Следующий запрос выдаст список всех интересующих нас блюд:
 
-    select d.*
-    from dishes d
-    where UPPER(d.name) IN (
-        upper('Макароны с сыром'),
-        upper('ОВОЩНОЙ салат'),
-        upper('БОРЩ')
-    )
+```sql
+select d.*
+from dishes d
+where UPPER(d.name) IN (
+    upper('Макароны с сыром'),
+    upper('ОВОЩНОЙ салат'),
+    upper('БОРЩ')
+)
+```
 
 ![](/img/3_select/dishes_name_in.png)
 
@@ -88,9 +98,11 @@ cледующий запрос:
 Например, нам требуется получить список блюд, за исключением чая с
 молоком и овощного салата:
 
-    select *
-    from dishes
-    where name not in ('Овощной салат', 'Чай с молоком')
+```sql
+select *
+from dishes
+where name not in ('Овощной салат', 'Чай с молоком')
+```
 
 Получим следующий результат:
 
@@ -99,10 +111,12 @@ cледующий запрос:
 Для понимания того, как работает конструкция NOT IN, лучше рассматривать
 приведенный пример как следующий, эквивалентный запрос:
 
-    select *
-    from dishes
-    where name <> 'Овощной салат'
-    and name <> 'Чай с молоком'
+```sql
+select *
+from dishes
+where name <> 'Овощной салат'
+and name <> 'Чай с молоком'
+```
 
 При использовании `NOT IN`, проверяемое значение будет поочередно
 сравнено с каждым из значений, перечисленных в скобках после `NOT IN`, и
@@ -119,9 +133,11 @@ cледующий запрос:
 Предположим, мы хотим получить список блюд, рейтинг которых не 320 и не
 NULL. Для этого мы написали следующий запрос:
 
-    select *
-    from dishes
-    where rating not in (320, null)
+```sql
+select *
+from dishes
+where rating not in (320, null)
+```
 
 ![](/img/3_select/no_data_found.png)
 
@@ -129,10 +145,12 @@ NULL. Для этого мы написали следующий запрос:
 понять, почему не было получено никаких данных, рассмотрим, как
 работает данный запрос:
 
-    select *
-    from dishes
-    where rating <> 320
-    and rating <> null
+```sql
+select *
+from dishes
+where rating <> 320
+and rating <> null
+```
 
 Теперь все должно быть более понятным. Причина кроется в выражении
 `rating <> null`. Сравнение с `NULL` всегда

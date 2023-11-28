@@ -4,45 +4,53 @@ weight: 5
 toc: true
 ---
 
+# Агрегирующие функции
+
 Агрегирующие функции - это такие функции, которые выполняются не для
 каждой строки отдельно, а для определенных групп данных.
 
 ## Подготовка данных
 
-    create table employees(
-        id number not null,
-        first_name varchar2(50 char) not null,
-        last_name varchar2(100 char),
-        bd date not null,
-        job varchar2(100)
-    );
+```sql
+create table employees(
+    id number not null,
+    first_name varchar2(50 char) not null,
+    last_name varchar2(100 char),
+    bd date not null,
+    job varchar2(100)
+);
 
-    insert into employees
-    values(1, 'Василий', 'Петров',
-        to_date('07.10.1990', 'dd.mm.yyyy'), 'Машинист');
+insert into employees
+values(1, 'Василий', 'Петров',
+    to_date('07.10.1990', 'dd.mm.yyyy'), 'Машинист');
 
-    insert into employees
-    values(2, 'Александр', 'Сидоров',
-        to_date('18.07.1980', 'dd.mm.yyyy'), 'Бухгалтер');
+insert into employees
+values(2, 'Александр', 'Сидоров',
+    to_date('18.07.1980', 'dd.mm.yyyy'), 'Бухгалтер');
 
-    insert into employees
-    values(3, 'Евгения', 'Цветочкина',
-        to_date('18.07.1978', 'dd.mm.yyyy'), 'Бухгалтер');
+insert into employees
+values(3, 'Евгения', 'Цветочкина',
+    to_date('18.07.1978', 'dd.mm.yyyy'), 'Бухгалтер');
 
-    insert into employees
-    values(4, 'Владимир', 'Столяров', 
-        to_date('18.07.1977', 'dd.mm.yyyy'), 'Слесарь');
+insert into employees
+values(4, 'Владимир', 'Столяров', 
+    to_date('18.07.1977', 'dd.mm.yyyy'), 'Слесарь');
+```
 
 Например, следующий запрос найдет минимальную дату рождения среди всех
 сотрудников:
 
-    select min(bd)
-    from employees
+```sql
+select min(bd)
+from employees
+```
 
 ![](/img/9_aggregations/minbd.png)
 
-    select min(bd) minbd, max(bd) maxbd
-    from employees
+```sql
+select min(bd) minbd, max(bd) maxbd
+from employees
+```
 
 ![](/img/9_aggregations/minbd_maxbd.png)
 
@@ -50,9 +58,11 @@ toc: true
 
 Агрегирующие функции могут быть использованы в выражениях:
 
-    select min(bd) + 1 minbd,
-           add_months(max(bd), 2) maxbd
-    from employees
+```sql
+select min(bd) + 1 minbd,
+       add_months(max(bd), 2) maxbd
+from employees
+```
 
 ![](/img/9_aggregations/minbd_maxbd_modified.png)
 
@@ -60,9 +70,11 @@ toc: true
 больше данных, соответствующих минимальной или максимальной дате в
 наборе данных.
 
+```sql
     select min(bd), max(bd), first_name
     from employees
     group by first_name
+```
 
 ![](/img/9_aggregations/groupby_1.png)
 
@@ -70,19 +82,23 @@ toc: true
 что дают в этом примере добавление имени и группировка записей по нему.
 Для лучшего понимания добавим в таблицу еще пару записей:
 
-    insert into employees
-    values(5, 'Евгения', 'Кукушкина',
-        to_date('18.07.1989', 'dd.mm.yyyy'), 'Арт-директор');
+```sql
+insert into employees
+values(5, 'Евгения', 'Кукушкина',
+    to_date('18.07.1989', 'dd.mm.yyyy'), 'Арт-директор');
 
-    insert into employees
-    values(6, 'Владимир', 'Кукушкин', 
-        to_date('22.05.1959', 'dd.mm.yyyy'), 'Начальник департамента охраны');
+insert into employees
+values(6, 'Владимир', 'Кукушкин', 
+    to_date('22.05.1959', 'dd.mm.yyyy'), 'Начальник департамента охраны');
+```
 
 Теперь выполним запрос еще раз:
 
-    select min(bd), max(bd), first_name
-    from employees
-    group by first_name
+```sql
+select min(bd), max(bd), first_name
+from employees
+group by first_name
+```
 
 ![](/img/9_aggregations/groupby_2.png)
 
@@ -107,10 +123,12 @@ toc: true
 
 Выведем список имен, которые встречаются более одного раза:
 
-    select first_name, count(*)
-    from employees
-    group by first_name
-    having count(*) > 1
+```sql
+select first_name, count(*)
+from employees
+group by first_name
+having count(*) > 1
+```
 
 ![](/img/9_aggregations/having.png)
 

@@ -22,31 +22,37 @@ toc: true
 
 Комментарий может быть однострочным:
 
-    -- Получить базовую информацию о записях в блоге
-    select a.title,
-           a.name,
-           a.create_date
-    from posts a
+```sql
+-- Получить базовую информацию о записях в блоге
+select a.title,
+       a.name,
+       a.create_date
+from posts a
+```
 
 Многострочные комментарии также поддерживаются:
 
-    /* Отобразить записи в блоге
-       для пользователя johndoe
-       в порядке их публикации
-    */
-    select a.title,
-           a.post
-    from posts a
-    where a.username = 'JOHNDOE'
-    order by a.publish_date
+```sql
+/* Отобразить записи в блоге
+   для пользователя johndoe
+   в порядке их публикации
+*/
+select a.title,
+       a.post
+from posts a
+where a.username = 'JOHNDOE'
+order by a.publish_date
+```
 
 Многострочные комментарии начинаются с символов "/\\\*" и заканчиваются
 символами "\*/". Вообще говоря, такой комментарий может быть и
 однострочным:
 
-    /* Однострочный комментарий */
-    select a.title
-    from posts a
+```sql
+/* Однострочный комментарий */
+select a.title
+from posts a
+```
 
 ## Разделение команд SQL
 
@@ -56,12 +62,13 @@ toc: true
 Например, скрипт ниже создает таблицу `tst`, после чего добавляет в нее
 данные.
 
+```sql
+create table tst(x number);
 
-    create table tst(x number);
-
-    insert into tst values(1);
-    insert into tst values(2);
-    insert into tst values(3);
+insert into tst values(1);
+insert into tst values(2);
+insert into tst values(3);
+```
 
 Многие IDE позволяют выполнять только одну определенную команду из всех
 присутствующих в скрипте. В каждой это работает по-своему, но как
@@ -69,6 +76,7 @@ toc: true
 
 
 ## Регистр
+
 В Oracle ключевые слова(create, delete, select, join и т.д.)
 являются регистронезависимыми. С названиями таблиц и колонками дела обстоят иначе.
 По умолчанию, наименования таблиц и колонок регистронезависимы.

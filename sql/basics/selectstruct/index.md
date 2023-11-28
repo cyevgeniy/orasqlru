@@ -6,15 +6,17 @@ Title: "Пример SELECT запроса"
 
 Рассмотрим простой SQL запрос:
 
-    -- данные, которые мы извлекаем
-    select emp.name,
-           emp.last_name,
-           emp.age,
-           dept.name
-    from employees emp
-    join departments dept on dept.id = emp.department_id -- соединение
-    where (emp.id = 10 and emp.age > 25) -- условие выборки
-    order by name desc -- сортировка
+```sql
+-- данные, которые мы извлекаем
+select emp.name,
+       emp.last_name,
+       emp.age,
+       dept.name
+from employees emp
+join departments dept on dept.id = emp.department_id -- соединение
+where (emp.id = 10 and emp.age > 25) -- условие выборки
+order by name desc -- сортировка
+```
 
 Конечно, запрос может выглядеть и по-другому, но в целом данный пример
 раскрывает большую часть из структуры SELECT запроса.

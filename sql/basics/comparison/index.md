@@ -11,37 +11,38 @@ Title: "Оператор WHERE. Операторы сравнения"
 Для демонстрации будем использовать те же данные, что и в примере с
 [order by](../orderby/index.html) :
 
+```sql
+create table dishes(
+name varchar2(100) not null,
+price number(5,2) not null,
+rating number(5)
+);
 
-    create table dishes(
-    name varchar2(100) not null,
-    price number(5,2) not null,
-    rating number(5)
-    );
+comment on column dishes.name is
+    'Наименование блюда';
+comment on column dishes.price is
+    'Стоимость за одну порцию';
+comment on column dishes.rating is
+    'Популярность блюда';
 
-    comment on column dishes.name is
-        'Наименование блюда';
-    comment on column dishes.price is
-        'Стоимость за одну порцию';
-    comment on column dishes.rating is
-        'Популярность блюда';
+insert into dishes(name, price, rating)
+values ('Макароны с сыром', 20.56, 320);
 
-    insert into dishes(name, price, rating)
-    values ('Макароны с сыром', 20.56, 320);
+insert into dishes(name, price, rating)
+values ('Борщ', 10, 130);
 
-    insert into dishes(name, price, rating)
-    values ('Борщ', 10, 130);
+insert into dishes(name, price, rating)
+values ('Чай с лимоном', 1.34, 270);
 
-    insert into dishes(name, price, rating)
-    values ('Чай с лимоном', 1.34, 270);
+insert into dishes(name, price, rating)
+values ('Чай с молоком', 1.20, 280);
 
-    insert into dishes(name, price, rating)
-    values ('Чай с молоком', 1.20, 280);
+insert into dishes(name, price, rating)
+values ('Свиная отбивная', 30.50, 320);
 
-    insert into dishes(name, price, rating)
-    values ('Свиная отбивная', 30.50, 320);
-
-    insert into dishes(name, price, rating)
-    values ('Овощной салат', 5.70, null);
+insert into dishes(name, price, rating)
+values ('Овощной салат', 5.70, null);
+```
 
 ## Операторы сравнения
 
@@ -55,9 +56,11 @@ Title: "Оператор WHERE. Операторы сравнения"
 
 ### Оператор "Меньше"(\<)
 
-    select d.*
-    from dishes d
-    where d.rating < 320
+```sql
+select d.*
+from dishes d
+where d.rating < 320
+```
 
 Данный запрос вернет список всех блюд, рейтинг которых меньше, чем 320:
 
@@ -65,9 +68,11 @@ Title: "Оператор WHERE. Операторы сравнения"
 
 ### Оператор "Больше"(>)
 
-    select d.*
-    from dishes d
-    where d.rating > 270
+```sql
+select d.*
+from dishes d
+where d.rating > 270
+```
 
 Данный запрос вернет список блюд с рейтингом, большим, чем 270:
 
@@ -75,9 +80,11 @@ Title: "Оператор WHERE. Операторы сравнения"
 
 ### Оператор "Больше либо равно"(≥)
 
-    select d.*
-    from dishes d
-    where d.rating >= 270
+```sql
+select d.*
+from dishes d
+where d.rating >= 270
+```
 
 Данный запрос вернет список блюд с рейтингом, большим либо равным 270:
 
@@ -85,9 +92,11 @@ Title: "Оператор WHERE. Операторы сравнения"
 
 ### Оператор "Меньше либо равно"(≤)
 
-    select d.*
-    from dishes d
-    where d.rating ≤ 320
+```sql
+select d.*
+from dishes d
+where d.rating ≤ 320
+```
 
 Данный запрос возвращает все блюда, рейтинг которых меньше либо равен
 320:
