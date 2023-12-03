@@ -4,6 +4,8 @@ weight: 7
 toc: true
 ---
 
+# Аналитические функции
+
 Аналитические функции - очень мощный инструмент в SQL. Со слов Тома
 Кайта, можно написать отдельную книгу по аналитическим функциям,
 настолько они полезны.
@@ -18,33 +20,39 @@ toc: true
 Для примера возьмем данные, которые мы использовали при разборе
 агрегирующих функций:
 
-    alter table employees
-    add (exp number);
+```sql
+alter table employees
+add (exp number);
 
-    merge into employees emp
-    using (select level lvl, rownum * 10 exp
-           from dual
-           connect by level <= 4) val
-    on (emp.id = val.lvl)
-    when matched then
-        update
-        set emp.exp = val.exp;
+merge into employees emp
+using (select level lvl, rownum * 10 exp
+       from dual
+       connect by level <= 4) val
+on (emp.id = val.lvl)
+when matched then
+    update
+    set emp.exp = val.exp;
+```
 
 Посмотрим, какие данные теперь хранятся в таблице:
 
-    select *
-    from employees
+```sql
+select *
+from employees
+```
 
 ![](/img/16_analytic/all_employees.png)
 
 Теперь напишем запрос, который бы возвращал максимальный стаж среди всех
 сотрудников отдельной колонкой. Для этого можно использовать подзапрос:
 
-    select id,
-           first_name,
-           last_name,
-           (select max(exp) from employees) max_exp
-    from employees
+```sql
+select id,
+       first_name,
+       last_name,
+       (select max(exp) from employees) max_exp
+from employees
+```
 
 ![](/img/16_analytic/subq_max_exp.png)
 
@@ -52,27 +60,33 @@ toc: true
 колонкой максимальный стаж на должности каждого сотрудника. Для этого
 также можно использовать подзапрос, только уже коррелированный:
 
-    select emp.first_name,
-           emp.last_name,
-           emp.job,
-           (select max(exp) from employees where job = emp.job) max_exp
-    from employees emp
+```sql
+select emp.first_name,
+       emp.last_name,
+       emp.job,
+       (select max(exp) from employees where job = emp.job) max_exp
+from employees emp
+```
 
 ![](/img/16_analytic/subq_max_job.png)
 
 Теперь решим эти же задачи при помощи аналитический функций:
 
-    select emp.first_name,
-           emp.last_name,
-           emp.job,
-           max(exp) over () max_exp
-    from employees emp
+```sql
+select emp.first_name,
+       emp.last_name,
+       emp.job,
+       max(exp) over () max_exp
+from employees emp
+```
 
-    select emp.first_name,
-           emp.last_name,
-           emp.job,
-           max(exp) over (partition by job) max_exp
-    from employees emp
+```sql
+select emp.first_name,
+       emp.last_name,
+       emp.job,
+       max(exp) over (partition by job) max_exp
+from employees emp
+```
 
 Аналитические функции позволяют использовать агрегирующие функции без
 подзапросов, что уменьшает размер запроса( примеры, когда использование
@@ -80,15 +94,17 @@ toc: true
 
 Помимо этого, вот еще два примера запросов с аналитическими функциями.
 
-    select id,
-           first_name,
-           last_name,
-           job,
-           bd,
-           exp,
-           max(exp) over (order by first_name) max_exp_asc,
-           max(exp) over (order by first_name desc) max_exp_desc
-    from employees emp
+```sql
+select id,
+       first_name,
+       last_name,
+       job,
+       bd,
+       exp,
+       max(exp) over (order by first_name) max_exp_asc,
+       max(exp) over (order by first_name desc) max_exp_desc
+from employees emp
+```
 
 ![](/img/16_analytic/analytics_min_max_exp.png)
 
@@ -112,11 +128,13 @@ toc: true
 использовать конструкцию `partition by`, в которой нужно указать
 колонки, по которым будет производиться вычисление.
 
-    select emp.first_name,
-           emp.last_name,
-           emp.job,
-           max(exp) over (partition by job) max_exp
-    from employees emp
+```sql
+select emp.first_name,
+       emp.last_name,
+       emp.job,
+       max(exp) over (partition by job) max_exp
+from employees emp
+```
 
 В данном примере, который уже приводился раньше, максимальный стаж
 вычисляется в отдельности для каждой из профессий, и затем добавляется к
@@ -125,11 +143,13 @@ toc: true
 Посчитаем количество сотрудников по должностям и выведем отдельной
 колонкой:
 
-    select emp.first_name,
-           emp.last_name,
-           emp.job,
-           count(*) over (partition by job) job_cnt
-    from employees emp
+```sql
+select emp.first_name,
+       emp.last_name,
+       emp.job,
+       count(*) over (partition by job) job_cnt
+from employees emp
+```
 
 ![](/img/16_analytic/job_cnt_analytics.png)
 
@@ -138,18 +158,20 @@ toc: true
 `mnth_cnt`) и количество сотрудников, родившихся в том же месяце и
 занимающих такую же должность:
 
-    select emp.id,
-           emp.first_name,
-           emp.last_name,
-           emp.job,
-           emp.bd,
-           count(*) over(
-               partition by extract(month from emp.bd)
-           ) mnth_cnt,
-           count(*) over (
-               partition by extract(month from emp.bd), job
-           ) mnth_cnt
-    from employees emp
+```sql
+select emp.id,
+       emp.first_name,
+       emp.last_name,
+       emp.job,
+       emp.bd,
+       count(*) over(
+           partition by extract(month from emp.bd)
+       ) mnth_cnt,
+       count(*) over (
+           partition by extract(month from emp.bd), job
+       ) mnth_cnt
+from employees emp
+```
 
 ![](/img/16_analytic/partition_by_few.png)
 
@@ -168,14 +190,16 @@ toc: true
 Пронумеруем строки в нашей таблице в порядке возрастания и убывания дней
 рождения сотрудников.
 
-    select emp.id,
-           emp.first_name,
-           emp.last_name,
-           emp.job,
-           emp.bd,
-           row_number() over (order by bd) bd_asc,
-           row_number() over (order by bd desc) bd_desc
-    from employees emp
+```sql
+select emp.id,
+       emp.first_name,
+       emp.last_name,
+       emp.job,
+       emp.bd,
+       row_number() over (order by bd) bd_asc,
+       row_number() over (order by bd desc) bd_desc
+from employees emp
+```
 
 ![](/img/16_analytic/order_by_1.png)
 
@@ -188,18 +212,20 @@ toc: true
 определенном порядке, но и в определенном порядке в пределах заданной
 группы:
 
-    select emp.id,
-           emp.first_name,
-           emp.last_name,
-           emp.job,
-           emp.bd,
-           row_number() over (
-               partition by job order by bd
-           ) bd_asc,
-           row_number() over (
-               partition by job order by bd desc
-           ) bd_desc
-    from employees emp
+```sql
+select emp.id,
+       emp.first_name,
+       emp.last_name,
+       emp.job,
+       emp.bd,
+       row_number() over (
+           partition by job order by bd
+       ) bd_asc,
+       row_number() over (
+           partition by job order by bd desc
+       ) bd_desc
+from employees emp
+```
 
 ![](/img/16_analytic/partitionby_orderby.png)
 
@@ -221,80 +247,86 @@ toc: true
 в которой будем хранить данные о начисленных зарплатах сотрудникам по
 месяцам:
 
-    create table emp_salary(
-        emp_id number not null,
-        sal_date date not null,
-        sal_value number not null,
-        -- Начисления в данной таблице должны быть
-        -- "сбитыми" по месяцам, и чтобы в данных не
-        -- возникло ошибки, создаем уникальный ключ на
-        -- поля с id сотрудника и месяцем начисления
-        constraint emp_salary_uk unique(emp_id, sal_date)
-    );
+```sql
+create table emp_salary(
+    emp_id number not null,
+    sal_date date not null,
+    sal_value number not null,
+    -- Начисления в данной таблице должны быть
+    -- "сбитыми" по месяцам, и чтобы в данных не
+    -- возникло ошибки, создаем уникальный ключ на
+    -- поля с id сотрудника и месяцем начисления
+    constraint emp_salary_uk unique(emp_id, sal_date)
+);
 
-    comment on table emp_salary is
-        'Зачисленные средства по месяцам';
-    comment on column emp_salary.emp_id is 
-        'id сотрудника';
-    comment on column emp_salary.sal_date is 
-        'Месяц начисления';
-    comment on column emp_salary.sal_value is 
-        'Начисленные средства';
+comment on table emp_salary is
+    'Зачисленные средства по месяцам';
+comment on column emp_salary.emp_id is
+    'id сотрудника';
+comment on column emp_salary.sal_date is
+    'Месяц начисления';
+comment on column emp_salary.sal_value is
+    'Начисленные средства';
 
-    insert into emp_salary(emp_id, sal_date, sal_value)
-    values(1, to_date('01.01.2020', 'dd.mm.yyyy'), 1000);
+insert into emp_salary(emp_id, sal_date, sal_value)
+values(1, to_date('01.01.2020', 'dd.mm.yyyy'), 1000);
 
-    insert into emp_salary(emp_id, sal_date, sal_value)
-    values(1, to_date('01.02.2020', 'dd.mm.yyyy'), 1320);
+insert into emp_salary(emp_id, sal_date, sal_value)
+values(1, to_date('01.02.2020', 'dd.mm.yyyy'), 1320);
 
-    insert into emp_salary(emp_id, sal_date, sal_value)
-    values(1, to_date('01.03.2020', 'dd.mm.yyyy'), 850);
-
-
-    insert into emp_salary(emp_id, sal_date, sal_value)
-    values(2, to_date('01.01.2020', 'dd.mm.yyyy'), 1000);
-
-    insert into emp_salary(emp_id, sal_date, sal_value)
-    values(2, to_date('01.02.2020', 'dd.mm.yyyy'), 800);
-
-    insert into emp_salary(emp_id, sal_date, sal_value)
-    values(2, to_date('01.03.2020', 'dd.mm.yyyy'), 1200);
+insert into emp_salary(emp_id, sal_date, sal_value)
+values(1, to_date('01.03.2020', 'dd.mm.yyyy'), 850);
 
 
-    insert into emp_salary(emp_id, sal_date, sal_value)
-    values(3, to_date('01.01.2020', 'dd.mm.yyyy'), 1030);
+insert into emp_salary(emp_id, sal_date, sal_value)
+values(2, to_date('01.01.2020', 'dd.mm.yyyy'), 1000);
+
+insert into emp_salary(emp_id, sal_date, sal_value)
+values(2, to_date('01.02.2020', 'dd.mm.yyyy'), 800);
+
+insert into emp_salary(emp_id, sal_date, sal_value)
+values(2, to_date('01.03.2020', 'dd.mm.yyyy'), 1200);
 
 
-    insert into emp_salary(emp_id, sal_date, sal_value)
-    values(4, to_date('01.01.2020', 'dd.mm.yyyy'), 3700);
+insert into emp_salary(emp_id, sal_date, sal_value)
+values(3, to_date('01.01.2020', 'dd.mm.yyyy'), 1030);
+
+
+insert into emp_salary(emp_id, sal_date, sal_value)
+values(4, to_date('01.01.2020', 'dd.mm.yyyy'), 3700);
+```
 
 Общие данные выглядят следующим образом:
 
-    select e.first_name,
-           e.last_name,
-           e.job,
-           es.sal_date,
-           es.sal_value
-    from emp_salary es
-    join employees e on e.id = es.emp_id
+```sql
+select e.first_name,
+       e.last_name,
+       e.job,
+       es.sal_date,
+       es.sal_value
+from emp_salary es
+join employees e on e.id = es.emp_id
+```
 
 ![](/img/16_analytic/emp_sal.png)
 
 Теперь добавим колонку к выборке, которая будет показывать, как
 изменялась минимальная заработная плата сотрудников с течением времени.
 
-    select e.first_name,
-           e.last_name,
-           e.job,
-           es.sal_date,
-           es.sal_value,
-           min(es.sal_value) over (
-               order by sal_date
-               rows between unbounded preceding and
-                   current row
-           ) min
-    from emp_salary es
-    join employees e on e.id = es.emp_id
+```sql
+select e.first_name,
+       e.last_name,
+       e.job,
+       es.sal_date,
+       es.sal_value,
+       min(es.sal_value) over (
+           order by sal_date
+           rows between unbounded preceding and
+               current row
+       ) min
+from emp_salary es
+join employees e on e.id = es.emp_id
+```
 
 ![](/img/16_analytic/unb_preceding_1.png)
 
@@ -303,14 +335,16 @@ toc: true
 текущих данных запрос без добавления лишних ключевых слов выдает такой
 же результат:
 
-    select e.first_name,
-           e.last_name,
-           e.job,
-           es.sal_date,
-           es.sal_value,
-           sum(es.sal_value) over (order by sal_date) min
-    from emp_salary es
-    join employees e on e.id = es.emp_id
+```sql
+select e.first_name,
+       e.last_name,
+       e.job,
+       es.sal_date,
+       es.sal_value,
+       sum(es.sal_value) over (order by sal_date) min
+from emp_salary es
+join employees e on e.id = es.emp_id
+```
 
 ![](/img/16_analytic/unb_preceding_1.png)
 
@@ -373,18 +407,20 @@ toc: true
 
 Теперь посмотрим на один из предыдущих запросов:
 
-    select e.first_name,
-           e.last_name,
-           e.job,
-           es.sal_date,
-           es.sal_value,
-           min(es.sal_value) over (
-               order by sal_date
-               rows between unbounded preceding
-                   and current row
-           ) min
-    from emp_salary es
-    join employees e on e.id = es.emp_id
+```sql
+select e.first_name,
+       e.last_name,
+       e.job,
+       es.sal_date,
+       es.sal_value,
+       min(es.sal_value) over (
+           order by sal_date
+           rows between unbounded preceding
+               and current row
+       ) min
+from emp_salary es
+join employees e on e.id = es.emp_id
+```
 
 Рассмотрим, как будет работать аналитическая функция.
 
@@ -409,11 +445,13 @@ toc: true
 и не меняющимся. В данном случае мы можем дополнительно сортировать
 данные по id сотрудника:
 
-    min(es.sal_value) over (
-        order by sal_date, id
-        rows between unbounded preceding 
-            and current row
-    ) min
+```sql
+min(es.sal_value) over (
+    order by sal_date, id
+    rows between unbounded preceding
+    and current row
+) min
+```
 
 В общем, когда несколько колонок имеют одинаковые значения,
 аналитические функции работают по определенным правилам:
@@ -433,26 +471,28 @@ toc: true
 
 Размеры окна можно задавать в виде смещений:
 
-    select e.first_name,
-           e.last_name,
-           e.job,
-           es.sal_date,
-           es.sal_value,
-           round(
-               avg(es.sal_value)over (
-                   order by sal_date, id
-                   rows between 2 preceding and current row
-               ),
-           2) avg_sal
-    from emp_salary es
-    join employees e on e.id = es.emp_id
+```sql
+select e.first_name,
+       e.last_name,
+       e.job,
+       es.sal_date,
+       es.sal_value,
+       round(
+           avg(es.sal_value)over (
+               order by sal_date, id
+               rows between 2 preceding and current row
+           ),
+       2) avg_sal
+from emp_salary es
+join employees e on e.id = es.emp_id
+```
 
 ![](/img/16_analytic/rows_2_preceding_curr_row.png)
 
-Здесь в колонке avg_sal считается средняя заработная плата по трем
+Здесь в колонке `avg_sal` считается средняя заработная плата по трем
 строкам - двум предшествующим и текущей. Порядок следования, как мы
-помним, задается при помощи ORDER BY, поэтому две предшествующие строки
-- это строки, у которых значение в колонках sal_date будет меньше либо
+помним, задается при помощи `ORDER BY`, поэтому две предшествующие строки
+- это строки, у которых значение в колонках `sal_date` будет меньше либо
 равным значению в текущей строке.
 
 Значение функции округляется до двух знаков после запятой при помощи
@@ -462,38 +502,44 @@ toc: true
 функции или операторы - например, можно было бы добавить 100 к среднему
 значению:
 
-    avg(es.sal_value)over (
-        order by sal_date
-        rows between 2 preceding and current row
-    ) + 100 avg_sal
+```sql
+avg(es.sal_value)over (
+    order by sal_date
+    rows between 2 preceding and current row
+) + 100 avg_sal
+```
 
 Или даже получить разность между значениями двух аналитических функций:
 
-    max(es.sal_value)
-        over (
-            order by sal_date
-            range between 1 preceding and current row
-        ) -
-    min(es.sal_value)
-        over (
-            order by sal_date
-            rows between 1 preceding and current row
-        )
+```sql
+max(es.sal_value)
+    over (
+        order by sal_date
+        range between 1 preceding and current row
+    ) -
+min(es.sal_value)
+    over (
+        order by sal_date
+        rows between 1 preceding and current row
+    )
+```
 
 В следующем примере смещение задается не в строках, а в диапазоне
-значений, которые содержит колонка sal_value:
+значений, которые содержит колонка `sal_value`:
 
-    select e.first_name,
-           e.last_name,
-           e.job,
-           es.sal_date,
-           es.sal_value,
-           sum(es.sal_value) over (
-               order by sal_value
-               range between 1000 preceding and current row
-           ) max_sal
-    from emp_salary es
-    join employees e on e.id = es.emp_id
+```sql
+select e.first_name,
+       e.last_name,
+       e.job,
+       es.sal_date,
+       es.sal_value,
+       sum(es.sal_value) over (
+           order by sal_value
+           range between 1000 preceding and current row
+       ) max_sal
+from emp_salary es
+join employees e on e.id = es.emp_id
+```
 
 ![](/img/16_analytic/preceding_range_1.png)
 
@@ -511,17 +557,19 @@ toc: true
 предшествующие строки, текущая строка и одна строка, следующая за
 текущей:
 
-    select e.first_name,
-           e.last_name,
-           e.job,
-           es.sal_date,
-           es.sal_value,
-           sum(es.sal_value) over (
-               order by sal_value
-               rows between 2 preceding and 1 following
-           ) sum_sal
-    from emp_salary es
-    join employees e on e.id = es.emp_id
+```sql
+select e.first_name,
+       e.last_name,
+       e.job,
+       es.sal_date,
+       es.sal_value,
+       sum(es.sal_value) over (
+           order by sal_value
+           rows between 2 preceding and 1 following
+       ) sum_sal
+from emp_salary es
+join employees e on e.id = es.emp_id
+```
 
 ![](/img/16_analytic/sum_rows_3.png)
 

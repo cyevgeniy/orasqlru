@@ -1,8 +1,8 @@
 ---
 Title: "Работа с датами в Oracle"
-weight: 6
-toc: true
 ---
+
+# Работа с датами в Oracle
 
 В БД Oracle для работы с датами предназначены 2 типа - `DATE` и
 `TIMESTAMP`.
@@ -26,11 +26,13 @@ toc: true
 собственно дату, и строку, которая указывает, как нужно интерпретировать
 первый параметр, т.е. где в этой дате год, где месяц, число и т.п.
 
-    -- 1 марта 2020 года
-    select to_date('2020-03-01', 'yyyy-mm-dd') d1,
-    -- 3 января 2020 года
-    to_date('2020-03-01', 'yyyy-dd-mm') d2 -- <2>
-    from dual
+```sql
+-- 1 марта 2020 года
+select to_date('2020-03-01', 'yyyy-mm-dd') d1,
+-- 3 января 2020 года
+to_date('2020-03-01', 'yyyy-dd-mm') d2 -- <2>
+from dual
+```
 
 На самом деле, функция `to_date` может работать и без строки с форматом
 даты, а также с еще одним дополнительным параметром, который будет
@@ -47,19 +49,23 @@ toc: true
 Данная функция возвращает текущую дату. В зависимости от того, когда
 следующий запрос выполнится, значение `SYSDATE` будет всегда разным.
 
-    select sysdate -- вернет текущую дату
-    from dual
+```sql
+select sysdate -- вернет текущую дату
+from dual
+```
 
 ## Приведение даты к строке
 
 Чтобы отобразить дату в нужном нам формате, используется функция
 `to_char`.
 
-    select to_char(sysdate, 'yyyy-mm-dd') d1,
-           to_char(sysdate, 'dd.mm.yyyy') d2,
-           to_char(sysdate, 'dd.mm.yyyy hh24:mi') d3,
-           to_char(sysdate, 'hh24:ss yyyy.mm.dd') d4
-    from dual
+```sql
+select to_char(sysdate, 'yyyy-mm-dd') d1,
+to_char(sysdate, 'dd.mm.yyyy') d2,
+to_char(sysdate, 'dd.mm.yyyy hh24:mi') d3,
+to_char(sysdate, 'hh24:ss yyyy.mm.dd') d4
+from dual
+```
 
 ![](/img/10_dates/dates_to_char.png)
 
@@ -70,12 +76,14 @@ toc: true
 минута), которая не будет приведена к единице, а будет такой же, как и в
 исходной дате.
 
-    select trunc(sysdate, 'hh24'),
-           trunc(sysdate, 'dd'), -- <2>
-           trunc(sysdate), -- <3>
-           trunc(sysdate, 'mm'),
-           trunc(sysdate, 'yyyy')
-    from dual
+```sql
+select trunc(sysdate, 'hh24'),
+       trunc(sysdate, 'dd'), -- <2>
+       trunc(sysdate), -- <3>
+       trunc(sysdate, 'mm'),
+       trunc(sysdate, 'yyyy')
+from dual
+```
 
 Если не указывать формат округления, то trunc округлит до дней, т.е.
 колонки "2" и "3" будут содержать одинаковое значение.
@@ -86,12 +94,14 @@ toc: true
 того, чтобы отнять месяцы от даты, нужно передать в качестве второго
 параметра отрицательное число:
 
-    select add_months(sysdate, 1) d1,
-           -- полгода после текущей даты
-           add_months(sysdate, 6) d2, -- <1>
-           -- полгода до текущей даты
-           add_months(sysdate, -6) d3 -- <2>
-    from dual
+```sql
+select add_months(sysdate, 1) d1,
+       -- полгода после текущей даты
+       add_months(sysdate, 6) d2, -- <1>
+       -- полгода до текущей даты
+       add_months(sysdate, -6) d3 -- <2>
+from dual
+```
 
 ![](/img/10_dates/add_months.png)
 
@@ -101,11 +111,13 @@ toc: true
 ними в днях. Также, к датам можно прибавлять и отнимать обычные числа, и
 Oracle будет оперировать ими как днями:
 
-    select to_date('2020-03-05', 'yyyy-mm-dd') - to_date('2020-03-01', 'yyyy-mm-dd') a,
-           to_date('2020-03-05 01:00', 'yyyy-mm-dd hh24:mi') - to_date('2020-03-05', 'yyyy-mm-dd')  b,
-           sysdate + 1 tomorrow, -- на 1 день большe
-           sysdate - 1 yesterday-- на 1 день меньше
-    from dual
+```sql
+select to_date('2020-03-05', 'yyyy-mm-dd') - to_date('2020-03-01', 'yyyy-mm-dd') a,
+       to_date('2020-03-05 01:00', 'yyyy-mm-dd hh24:mi') - to_date('2020-03-05', 'yyyy-mm-dd')  b,
+       sysdate + 1 tomorrow, -- на 1 день большe
+       sysdate - 1 yesterday-- на 1 день меньше
+from dual
+```
 
 ![](/img/10_dates/dates_days.png)
 
@@ -113,14 +125,16 @@ Oracle будет оперировать ими как днями:
 
 Функция `months_between` возвращает разницу между датами в месяцах:
 
-    select months_between(
-        to_date('2020-04-01', 'yyyy-mm-dd'),
-        to_date('2020-02-01', 'yyyy-mm-dd')) months_diff_1,
+```sql
+select months_between(
+    to_date('2020-04-01', 'yyyy-mm-dd'),
+    to_date('2020-02-01', 'yyyy-mm-dd')) months_diff_1,
 
-        months_between(
-        to_date('2020-04-01', 'yyyy-mm-dd'),
-        to_date('2020-02-10', 'yyyy-mm-dd')) months_diff_2
-    from dual
+    months_between(
+    to_date('2020-04-01', 'yyyy-mm-dd'),
+    to_date('2020-02-10', 'yyyy-mm-dd')) months_diff_2
+from dual
+```
 
 ![](/img/10_dates/months_between.png)
 
@@ -139,11 +153,13 @@ ORACLE уже нет.
 
 Пример создания таблицы с колонкой типа `TIMESTAMP`:
 
-    create table user_log(
-      username varchar2(50 char) not null,
-      login_time timestamp(8) not null,
-      logout_time timestamp -- эквивалентно TIMESTAMP(6)
-    );
+```sql
+create table user_log(
+  username varchar2(50 char) not null,
+  login_time timestamp(8) not null,
+  logout_time timestamp -- эквивалентно TIMESTAMP(6)
+);
+```
 
 Колонка `logout_time` может хранить доли секунды с точностью до 6 знаков
 после запятой, а колонка `login_time` - с точностью до 8 знаков.
@@ -153,8 +169,10 @@ ORACLE уже нет.
 Данная функция работает так же, как и `SYSDATE`, только она возвращает
 текущую дату в формате `TIMESTAMP`:
 
-    select systimestamp
-    from dual
+```sql
+select systimestamp
+from dual
+```
 
 ![](/img/10_dates/systimestamp.png)
 
@@ -163,10 +181,12 @@ ORACLE уже нет.
 Функция extract позволяет извлечь из даты определенные составные части,
 например получить только год, или только месяц и т.п.
 
-    select extract (year from to_date('01.01.2020', 'dd.mm.yyyy')) year,
-           extract (month from to_date('01.01.2020', 'dd.mm.yyyy')) month,
-           extract (day from to_date('01.01.2020', 'dd.mm.yyyy')) day
-    from dual
+```sql
+select extract (year from to_date('01.01.2020', 'dd.mm.yyyy')) year,
+       extract (month from to_date('01.01.2020', 'dd.mm.yyyy')) month,
+       extract (day from to_date('01.01.2020', 'dd.mm.yyyy')) day
+from dual
+```
 
 ![](/img/10_dates/extract_1.png)
 
@@ -176,8 +196,10 @@ ORACLE уже нет.
 Несмотря на то, что тип `DATE` хранит также время вплоть до секунд,
 получить часы, минуты или секунды нельзя:
 
-    select extract (hour from to_date('01.01.2020 21:40:13', 'dd.mm.yyyy hh24:mi:ss'))
-    from dual
+```sql
+select extract (hour from to_date('01.01.2020 21:40:13', 'dd.mm.yyyy hh24:mi:ss'))
+from dual
+```
 
 В ответ мы получим ошибку
 `ORA-30076: invalid extract field for extract source`.
@@ -186,10 +208,12 @@ ORACLE уже нет.
 помощью функции `EXTRACT` можно по отдельности получить значение часов,
 минут и секунд:
 
-    select extract(hour from systimestamp) hour,
-           extract(minute from systimestamp) minute,
-           extract(second from systimestamp) second
-    from dual
+```sql
+select extract(hour from systimestamp) hour,
+       extract(minute from systimestamp) minute,
+       extract(second from systimestamp) second
+from dual
+```
 
 ![](/img/10_dates/extract_2.png)
 
@@ -198,9 +222,11 @@ ORACLE уже нет.
 Для приведения строки к типу `timestamp` используется фукнция
 `TO_TIMESTAMP`:
 
-    select TO_TIMESTAMP('2020-01-01 14:43:00.99', 'yyyy-mm-dd hh24:mi:ss.ff') d1,
-           TO_TIMESTAMP('2020-01-01 14:43:00.997836765', 'yyyy-mm-dd hh24:mi:ss.ff9') d2
-    from dual
+```sql
+select TO_TIMESTAMP('2020-01-01 14:43:00.99', 'yyyy-mm-dd hh24:mi:ss.ff') d1,
+       TO_TIMESTAMP('2020-01-01 14:43:00.997836765', 'yyyy-mm-dd hh24:mi:ss.ff9') d2
+from dual
+```
 
 В запросе выше следует обратить внимание на то, как указывается точность
 долей секунды. `ff3` будет сохранять точность до тысячных долей секунды,
