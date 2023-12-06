@@ -2,9 +2,11 @@
 Title: "Distinct. Удаление дубликатов"
 ---
 
+# Distinct. Удаление дубликатов
+
 Оператор `DISTINCT` в SELECT запросах используется для удаления дублирующихся строк из выборки. В общем виде запрос выглядит следующим образом:
 
-```sl
+```sql
 select distinct col_name1, col_name2, col_name3, ...
 from table_name
 ```
@@ -33,23 +35,23 @@ values(3, 'Евгения', 'Цветочкина',
     to_date('18.07.1978', 'dd.mm.yyyy'), 'Бухгалтер');
 
 insert into employees
-values(4, 'Владимир', 'Столяров', 
+values(4, 'Владимир', 'Столяров',
     to_date('18.07.1977', 'dd.mm.yyyy'), 'Слесарь');
 
 insert into employees
-values(5, 'Владимир', 'Иванов', 
+values(5, 'Владимир', 'Иванов',
     to_date('01.10.1987', 'dd.mm.yyyy'), 'Сторож');
 
 insert into employees
-values(6, 'Ирина', 'Васина', 
+values(6, 'Ирина', 'Васина',
     to_date('20.03.1962', 'dd.mm.yyyy'), 'Специалист отдела кадров');
 
 insert into employees
-values(7, 'Ирина', 'Иванова', 
+values(7, 'Ирина', 'Иванова',
     to_date('31.12.1990', 'dd.mm.yyyy'), 'Арт-директор');
 
 insert into employees
-values(8, 'Евгения', NULL, 
+values(8, 'Евгения', NULL,
     to_date('18.07.1978', 'dd.mm.yyyy'), 'Бухгалтер');
 ```
 
@@ -207,7 +209,7 @@ CD | CNT
 
 ```sql
 select first_name, count(job) job_cnt
-from employees 
+from employees
 group by first_name
 ```
 
@@ -222,13 +224,13 @@ group by first_name
 
 Здесь должно быть всё понятно — у нас есть по два сотрудника с
 именем «Евгения», «Владимир» и «Ирина», у которых указаны значения
-в поле `JOB`. 
+в поле `JOB`.
 
 А теперь посчитаем, сколько уникальных наименований должностей приходится на каждое имя:
 
 ```sql
 select first_name, count(distinct job) job_cnt
-from employees 
+from employees
 group by first_name
 ```
 
