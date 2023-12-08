@@ -4,6 +4,8 @@ weight: 4
 toc: false
 ---
 
+# DBMS_OUTPUT.PUT_LINE. Вывод на экран
+
 При изучении любого языка программирования очень важно иметь возможность
 выводить информацию на экран.
 
@@ -13,13 +15,15 @@ toc: false
 
 Пример вызова:
 
-    begin
-        dbms_output.put_line('Hello, World');
-        dbms_output.put_line(23);
-        dbms_output.put_line('Hello, ' || 'World');
-        dbms_output.put_line(sysdate);
-    end;
-    /
+```sql
+begin
+    dbms_output.put_line('Hello, World');
+    dbms_output.put_line(23);
+    dbms_output.put_line('Hello, ' || 'World');
+    dbms_output.put_line(sysdate);
+end;
+/
+```
 
 Вывод программы:
 
