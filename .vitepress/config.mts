@@ -13,7 +13,7 @@ export default defineConfig({
     // https://vitepress.dev/reference/default-theme-config
     nav: [
       { text: 'SQL', link: '/sql/intro/sqlintro/' },
-      { text: 'PL/SQL', link: '/plsql/' }
+      { text: 'PL/SQL', link: '/plsql/intro/plsql_intro/' }
     ],
 
     sidebar: {
