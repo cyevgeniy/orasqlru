@@ -43,10 +43,11 @@ select login,
 from profiles
 ```
 
-    | LOGIN   | STATUS                      | HAS_STATUS       |
-    | johndoe | -                           | Статус не указан |
-    | admin   | Я админ. Все вопросы ко мне | Статус указан    |
-    | nelsol  | -                           | Статус не указан |
+| LOGIN   | STATUS                      | HAS_STATUS       |
+|-|-|-|
+| johndoe | -                           | Статус не указан |
+| admin   | Я админ. Все вопросы ко мне | Статус указан    |
+| nelsol  | -                           | Статус не указан |
 
 Перед сравнением Oracle автоматически приводит первый параметр и все
 значения к типу первого значения в списке параметров. Результат функции
@@ -99,10 +100,11 @@ select login,
 from profiles
 ```
 
-    | LOGIN   | LOGIN_LENGTH | ADMIN_LOGIN_LENGTH |
-    | admin   |            5 | Пять               |
-    | johndoe |            7 | Не пять и не шесть |
-    | nelsol  |            6 | Шесть              |
+| LOGIN   | LOGIN_LENGTH | ADMIN_LOGIN_LENGTH |
+|-|-|-|
+| admin   |            5 | Пять               |
+| johndoe |            7 | Не пять и не шесть |
+| nelsol  |            6 | Шесть              |
 
 Максимальное количество параметров в функции `DECODE` - 255.
 
@@ -171,10 +173,11 @@ expression) и поисковом(англ. searched case expression).
     from profiles
 ```
 
-    | LOGIN   | USER_FLAG           |
-    | admin   | Администратор       |
-    | johndoe | Джон До             |
-    | nelsol  | Другой пользователь |
+| LOGIN   | USER_FLAG           |
+|-|-|
+| admin   | Администратор       |
+| johndoe | Джон До             |
+| nelsol  | Другой пользователь |
 
 `user_flag` здесь - псевдоним для столбца. Само выражение начинается с
 ключевого слова `case` и заканчивается ключевым словом `end`.
@@ -200,10 +203,11 @@ select login,
 from profiles
 ```
 
-    | LOGIN   | IS_ADMIN         |
-    | admin   | Администратор    |
-    | johndoe | Не администратор |
-    | nelsol  | Не администратор |
+| LOGIN   | IS_ADMIN         |
+|-|-|
+| admin   | Администратор    |
+| johndoe | Не администратор |
+| nelsol  | Не администратор |
 
 ```sql
     select login,
@@ -215,10 +219,11 @@ from profiles
     from profiles
 ```
 
-    | LOGIN   | LOGIN_LENGTH_STATS |
-    | admin   | Пять               |
-    | johndoe | Больше пяти        |
-    | nelsol  | Больше пяти        |
+| LOGIN   | LOGIN_LENGTH_STATS |
+|-|-|
+| admin   | Пять               |
+| johndoe | Больше пяти        |
+| nelsol  | Больше пяти        |
 
 В общем и целом, лучше использовать `DECODE` для небольших, простых
 сравнений, и `CASE` для более сложных, т.к. он лучше читается.
@@ -239,9 +244,10 @@ where case
        end = 0
 ```
 
-    | LOGIN   | LAST_UPDATED | STATUS |
-    | johndoe | 01-JAN-09    | -      |
-    | nelsol  | -            | -      |
+| LOGIN   | LAST_UPDATED | STATUS |
+|-|-|-|
+| johndoe | 01-JAN-09    | -      |
+| nelsol  | -            | -      |
 
 В примере выше выражение case вернет 0 в тех случаях, когда логин
 пользователя не будет логином администратора. Сразу после окончания
@@ -286,9 +292,10 @@ group by case
        end
 ```
 
-    | LOGIN_LENGTH | CNT |
-    | = 5          |   1 |
-    | > 5          |   2 |
+| LOGIN_LENGTH | CNT |
+|-|-|
+| = 5          |   1 |
+| > 5          |   2 |
 
 Запрос выше выведет статистику о количестве логинов пользователей с
 определенной длиной - меньше пяти символов, больше пяти символов, или с
