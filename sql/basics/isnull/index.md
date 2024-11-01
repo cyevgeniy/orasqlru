@@ -15,18 +15,22 @@ Title: "Проверка значения на NULL"
 Например, следующий запрос не вернет ни одной строки, хотя мы вроде как
 и указываем в запросе необходимый критерий - равенство `NULL`:
 
-    select d.*
-    from dishes d
-    where d.rating = NULL
+```sql
+select d.*
+from dishes d
+where d.rating = NULL
+```
 
 ![](/img/3_select/no_data_found.png)
 
 Теперь попробуем получить все блюда, у которых рейтинг указан, т.е. те
 строки из таблицы, где значение rating не равно `NULL`:
 
-    select d.*
-    from dishes d
-    where d.rating <> NULL
+```sql
+select d.*
+from dishes d
+where d.rating <> NULL
+```
 
 Получим аналогичный результат - ни одной строки не будет получено:
 
@@ -43,17 +47,21 @@ Title: "Проверка значения на NULL"
 Получим блюда, которые еще не получили никакой оценки, т.е. те блюда,
 которые в колонке `rating` содержат NULL:
 
-    select d.*
-    from dishes d
-    where d.rating IS NULL
+```sql
+select d.*
+from dishes d
+where d.rating IS NULL
+```
 
 ![](/img/3_select/rating_is_null.png)
 
 А теперь получим все блюда, которые уже получили оценку:
 
-    select d.*
-    from dishes d
-    where d.rating IS NOT NULL
+```sql
+select d.*
+from dishes d
+where d.rating IS NOT NULL
+```
 
 Как видно, `IS NOT NULL` возвращает все строки, кроме тех, которые
 содержат `NULL`:
