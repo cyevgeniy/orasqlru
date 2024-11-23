@@ -68,4 +68,7 @@ where d.rating IS NOT NULL
 
 ![](/img/3_select/rating_is_not_null.png)
 
+
+::: tip
 В Oracle пустая строка эквивалентна `NULL`.
+:::
