@@ -70,7 +70,9 @@ from dishes d
 where d.rating IS NULL
 ```
 
-![](/img/3_select/rating_is_null.png)
+NAME | PRICE | RATING|
+-|-|-|
+Овощной салат | 5.7 | -
 
 А теперь получим все блюда, которые уже получили оценку:
 
@@ -83,7 +85,13 @@ where d.rating IS NOT NULL
 Как видно, `IS NOT NULL` возвращает все строки, кроме тех, которые
 содержат `NULL`:
 
-![](/img/3_select/rating_is_not_null.png)
+NAME | PRICE | RATING|
+-|-|-|
+Макароны с сыром | 20.56 | 320
+Борщ | 10 | 130
+Чай с лимоном | 1.34 | 270
+Чай с молоком | 1.2 | 280
+Свиная отбивная | 30.5 | 320
 
 
 ::: tip
