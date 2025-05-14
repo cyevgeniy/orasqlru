@@ -24,7 +24,14 @@ select car_model, release_year
 from car_offers
 ```
 
-![](/img/7_unions/col_order_with_error.png)
+|MODEL | RELEASE_YEAR |
+|-|-|
+| Lexus S300 | 4 | 
+| Mersedes SL | 3 | 
+| Mersedes SL | 5 | 
+| Volkswagen passat | 1 | 
+| Volkswagen passat | 2 | 
+
 
 В запросе выше, в первой его части, вместо колонки `release_year` по
 ошибке была указана колонка `car_id`. Так как обе имеют числовой тип,
@@ -106,7 +113,20 @@ select car_model, release_year
 from cars
 ```
 
-![](/img/7_unions/sets_priority_1.png)
+| CAR_MODEL | RELEASE_YEAR |
+|-|-|
+| Lexus S300 | 2005 | 
+| Mersedes SL | 2008 | 
+| Mersedes SL | 2010 | 
+| Volkswagen passat | 1998 | 
+| Volkswagen passat | 1998 | 
+| Mersedes SL | 2010 | 
+| Lexus S300 | 2005 | 
+| Mersedes SL | 2008 | 
+
+
+
+
 
 В данном примере сначала был выполнен оператор `MINUS`, и уже после к
 полученному результату был применен оператор `UNION ALL`.

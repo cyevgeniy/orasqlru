@@ -7,12 +7,14 @@ title: "Разница запросов. MINUS"
 Подготовим тестовые данные:
 
 ```sql
+-- Список автомобилей, которые имеются в нашем автопарке
 create table cars(
     car_id number not null,
     car_model varchar2(100) not null,
     release_year number
 );
 
+-- Список автомобилей, доступных для закупки
 create table car_offers(
     car_model varchar2(100) not null,
     release_year number
@@ -50,16 +52,28 @@ values('Volkswagen passat', 2003);
 
 Таблица `cars`
 
-![](/img/7_unions/minus_cars.png)
+
+|CAR_ID| CAR_MODEL | RELEASE_YEAR |
+|-|-|-|
+|1| Volkswagen passat | 1998 | 
+|2| Volkswagen passat | 1998 | 
+|3| Mersedes SL | 2010 | 
+|4| Lexus S300 | 2005 | 
+|5| Mersedes SL | 2008 | 
 
 Таблица `car_offers`
 
-![](/img/7_unions/minus_car_offers.png)
+| CAR_MODEL | RELEASE_YEAR |
+|-|-|
+| Lexus S300 | 2010 | 
+| Tesla | 2017 | 
+| Volkswagen passat | 1998 | 
+| Volkswagen passat | 2003 | 
 
-Получим список предлагаемых нам моделей автомобилей, которых нет среди
-нашего автопарка. Для этого будем использовать оператор `MINUS`, который
-возвращает уникальные строки из первого запроса, которых нет во втором
-запросе:
+
+Получим список предлагаемых нам моделей автомобилей, которых нет среди автопарка. Для этого будем использовать оператор `MINUS`, который
+возвращает **уникальные строки из первого запроса, которых нет во втором
+запросе**:
 
 ```sql
 select car_model
@@ -71,10 +85,11 @@ select car_model
 from cars
 ```
 
-![](/img/7_unions/minus_car_model_result.png)
+|CAR_MODEL|
+|-|
+| Tesla |
 
-Если искать только отсутствующие у нас марки авто, то найдется лишь одна
-модель, которой нет у нас - "Tesla".
+Итак, в нашем автопарке отсутствует лишь одна модель - "Tesla".
 
 Теперь получим предложения автомобилей, у которых либо год, либо модель
 не совпадают с теми авто, что есть у нас:
@@ -89,10 +104,16 @@ select car_model, release_year
 from cars
 ```
 
-![](/img/7_unions/minus_car_model_year_result.png)
+| CAR_MODEL | RELEASE_YEAR |
+|-|-|
+| Lexus S300 | 2010 | 
+| Tesla | 2017 | 
+| Volkswagen passat | 2003 | 
 
+:::warning
 Типы данных в колонках и их количество в каждом из запросов должны
 совпадать.
+:::
 
 Если мы в первом запросе поменяем местами колонки, то запрос не
 выполнится и мы получим ошибку
@@ -142,7 +163,10 @@ where car_model = 'Volkswagen passat'
 
 Теперь данные в таблице `car_offers` выглядят вот так:
 
-![](/img/7_unions/minus_car_offers_without_passat.png)
+| CAR_MODEL | RELEASE_YEAR |
+|-|-|
+| Lexus S300 | 2010 | 
+| Tesla | 2017 | 
 
 Теперь получим список моделей авто, которые есть у нас, но отсутствуют в
 списке предложений:
@@ -157,9 +181,13 @@ select car_model, release_year
 from car_offers
 ```
 
-![](/img/7_unions/minus_unique_passat.png)
+| CAR_MODEL | RELEASE_YEAR |
+|-|-|
+| Lexus S300 | 2010 | 
+| Mersedes SL | 2008 | 
+| Mersedes SL | 2010 | 
+| Volkswagen passat | 1998 | 
 
-В результате мы видим всего одну строку с моделью Volkswagen passat 1998
-года, несмотря на то, что в таблице `cars` таких записей две. Как было
-сказано, это произошло потому, что оператор `MINUS` удаляет дубликаты и
-возвращает только уникальные строки.
+Обратите внимание, что в результате мы видим всего одну строку с моделью *Volkswagen passat 1998
+года*, несмотря на то, что в таблице `cars` таких записей две. Это произошло потому, что оператор `MINUS` **удаляет дубликаты и
+возвращает только уникальные строки**.

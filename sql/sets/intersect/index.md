@@ -30,7 +30,9 @@ select car_model, release_year
 from car_offers
 ```
 
-![](/img/7_unions/intersect_1.png)
+| CAR_MODEL | RELEASE_YEAR |
+|-|-|
+| Volkswagen passat | 1998 | 
 
 Как и в случае с `MINUS`, `INTERSECT` убрал дубликаты и оставил только
 одну модель авто, которая встречается и в таблице `cars`(2 раза), и в
