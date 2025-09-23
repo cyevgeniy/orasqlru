@@ -54,10 +54,15 @@ nvl(pf.status, '') status
 from profiles pf
 ```
 
-![](/img/4_1_nulls/nvl.png)
+|LOGIN| LAST_UPDATED | STATUS |
+|-|-|-|
+|johndoe| 01-JAN-09 | <нет данных> |
+|admin| 01-JAN-19 | Я админ. Все вопросы ко мне |
+|nelsol| - |<нет данных> |
+
 
 Здесь мы получаем данные из таблицы профилей, и в том случае, если
-статус пуст, выводим строку "".
+статус пуст, выводим пустую строку.
 
 ## Nvl2
 
@@ -72,7 +77,11 @@ select pf.login,
 from profiles pf
 ```
 
-![](/img/4_1_nulls/nvl2.png)
+|LOGIN| LAST_UPDATED | STATUS |
+|-|-|-|
+|johndoe| 01-JAN-09 |статус не указан |
+|admin| 01-JAN-19 | статус указан |
+|nelsol| - |статус не указан |
 
 ## Coalesce
 
@@ -87,7 +96,11 @@ select login,
 from profiles
 ```
 
-![](/img/4_1_nulls/coalesce.png)
+|LOGIN| FIRST_NOT_NULL | FIRST_NOT_NULL_1 | FIRST_NOT_NULL_2|
+|-|-|-|-|
+|johndoe|статус пуст |статус пуст | статус всегда заполнен |
+|admin| Я админ. Все вопросы ко мне |Я админ. Все вопросы ко мне | статус всегда заполнен |
+|nelsol| статус пуст |статус пуст | статус всегда заполнен |
 
 В том случае, если в функцию `COALESCE` передаются параметры разных
 типов, то все параметры будут приведены к типу первого `NOT NULL`
@@ -100,14 +113,16 @@ select coalesce(null, 'String', 'String_2') not_null_str
 from dual
 ```
 
-![](/img/4_1_nulls/coalesce_1.png)
+| NOT_NULL_STR |
+|-|
+|String|
 
 ```sql
 select coalesce(null, 'String', 23.4) not_null_str
 from dual
 ```
 
-![](/img/4_1_nulls/coalesce_error.png)
+`ORA-00932: inconsistent datatypes: expected CHAR got NUMBER`
 
 При этом, если число привести к строке самим, все будет работать, как
 ожидается:
@@ -117,4 +132,6 @@ select coalesce(null, 'String', to_char(23.4)) not_null_str
 from dual
 ```
 
-![](/img/4_1_nulls/coalesce_1.png)
+| NOT_NULL_STR |
+|-|
+|String|
